@@ -1,0 +1,50 @@
+{
+  "name": "maryam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@babel/polyfill": ">=7.0.0",
+    "grapnel": ">=0.7.0"
+  },
+  "devDependencies": {
+    "jsx-dom": "ScottORLY/jsx-dom",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-syntax-jsx": "^7.0.0",
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "babel-preset-minify": "^0.5.0",
+    "css-loader": ">=1.0.0",
+    "cssnano": "^4.1.4",
+    "eslint": "^5.7.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "file-loader": ">=2.0.0",
+    "html-webpack-plugin": ">=3.2.0",
+    "mini-css-extract-plugin": "^0.4.3",
+    "node-sass": ">=4.9.3",
+    "postcss-cssnext": ">=3.1.0",
+    "postcss-import": ">=12.0.0",
+    "postcss-loader": ">=3.0.0",
+    "postcss-preset-env": "^6.1.1",
+    "style-loader": ">=0.23.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": ">=3.1.2",
+    "webpack-dev-server": ">=3.0.0",
+    "webpack-sources": "^1.3.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dist": "webpack -p",
+    "start": "NODE_ENV=development webpack-dev-server --mode development"
+  },
+  "keywords": [],
+  "author": "Scott Orlyck",
+  "license": "MIT",
+  "browserslist": [
+    "last 1 version",
+    "> 1%"
+  ]
+}
