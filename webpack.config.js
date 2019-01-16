@@ -12,7 +12,20 @@ module.exports = {
     output: {
         path: __dirname + '/dist',
         publicPath: '/',
-        filename: 'bundle.js'
+        filename: '[name].bundle.js',
+        chunkFilename: '[name].bundle.js',
+    },
+    optimization: {
+        runtimeChunk: 'single',
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
+                    chunks: 'all'
+                }
+            }
+        }
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -28,7 +41,7 @@ module.exports = {
             f: ['jsx-dom', 'f']
         })
     ],
-    devtool: 'inline-source-map',
+    devtool: isDEV ?  'inline-source-map' : 'none',
     module: {
         rules: [
             {

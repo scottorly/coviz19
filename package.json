@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@babel/polyfill": ">=7.0.0",
+    "d3": "^5.7.0",
     "grapnel": ">=0.7.0"
   },
   "devDependencies": {
@@ -37,7 +38,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dist": "webpack -p",
+    "dist": "webpack -p --optimize-minimize",
     "start": "NODE_ENV=development webpack-dev-server --mode development"
   },
   "keywords": [],
