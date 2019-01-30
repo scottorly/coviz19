@@ -3,3 +3,7 @@
     border: 1px solid steelblue;
     width: 360px;
 }
+
+.rows {
+    padding: 8px;
+}

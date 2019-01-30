@@ -5,35 +5,73 @@ import styles from './styles.css'
 
 const router = new Grapnel({ pushState: true });
 
-const data = [
-    'z','a','b','c'
+let numbers = [    
+    ["c","a", "z", "b"],
+    ["n","w", "d", "b"],
+    ["a","a", "z", "i"],
+    ["x","b", "e", "m"],
 ]
 
-const update = data => {
+const update = data => {    
     const main = select('main')
-    let div = main.selectAll('div').data(data, d => d)
-    div.enter().append(() => (
-        <div className={styles.classy} eventListener={['click', e => {
-            console.log(e.target)
-        }]}>
-        </div>)).merge(div).text(d => d)
-    div.exit().remove()
-    setTimeout(() => {
-        data.sort((a, b) => {
-            console.log(a)
-            console.log(b)
-            return a - b
-        })
-        console.log(data)
-    }, 1000)
+    const table = main.select('tbody')
+    
+    const t = table.transition().duration(750)
 
+    const rows = table.selectAll('tr').data(data, d => d)
+    const rowsUpdate = rows.join(
+        enter => enter.append(() => <tr className={styles.rows} />),
+        update => update,
+        exit => exit.remove()
+    )
+    
+    rowsUpdate.selectAll('td').data(d => d).join(
+        enter => enter.append(d => <td>{`${d}`}</td>),
+        update => update,
+        exit => exit.remove()
+    )
+}
+
+const sort = i => {
+    numbers.sort((a,b) => {
+        return a[i] > b[i]
+    })
+    update(numbers)
 }
 
 router.get('/', async req => {
-    document.body.appendChild(<main></main>)
-    update(data)
+    document.body.appendChild(
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th eventListener={['click', e => {
+                            sort(0)
+                        }]}>
+                        0
+                        </th>
+                        <th eventListener={['click', e => {
+                            sort(1)
+                        }]}>
+                        1
+                        </th>
+                        <th eventListener={['click', e => {
+                            sort(2)
+                        }]}>
+                        2
+                        </th>
+                        <th eventListener={['click', e => {
+                            sort(3)
+                        }]}>
+                        3
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </main>
+    )
+    update(numbers)
 })
 
-setTimeout(() => {
-
-}, 500)
