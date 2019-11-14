@@ -7,3 +7,7 @@
 .rows {
     padding: 8px;
 }
+
+#user {
+    @apply flex flex-col;
+}
