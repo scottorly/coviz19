@@ -4,7 +4,6 @@ import "regenerator-runtime/runtime";
 import Grapnel from 'grapnel'
 import { select, selectAll } from 'd3-selection'
 import styles from './styles.css'
-import { fromEvent } from 'rxjs'
 
 const router = new Grapnel({ pushState: true });
 
