@@ -1,4 +1,5 @@
-# miri
+# d3act.js
+
 d3-selection + JSX
 
 install
