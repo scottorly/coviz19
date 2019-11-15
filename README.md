@@ -1,6 +1,6 @@
 # d3act.js
 
-d3-selection + JSX
+demo of d3-selection + JSX pattern
 
 install
 
