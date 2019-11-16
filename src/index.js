@@ -15,7 +15,7 @@ const Counter = () => {
             <button eventListener={['click', e => {
                 select(element).text(`${++count}`)
             }]}>+</button>
-            { element }
+            {element}
             <button eventListener={['click', e => {
                 select(element).text(`${--count}`)
             }]}>-</button>
@@ -23,71 +23,34 @@ const Counter = () => {
     )
 }
 
-let user = {
-    username: 'ghostface killer',
-    email: 'tony@wu.tang'
-}
-
-let counters = [
-   [0, 1, 2, 3],
-   [0, 1, 2, 3]
-]
-
 const id = d => d
 
 const update = data => {
-    const table = select('tbody')
-    const rows = table.selectAll('tr').data(data)
+
+    const rows = select('tbody').selectAll('tr').data(data)
 
     const rowsUpdate = rows.join(
-        enter => enter.append(() => <tr className={styles.rows} />),
-        update => update,
-        exit => exit.remove()
-    ).order()
-
-    rowsUpdate.selectAll('td').data(id, id).join(
-        enter => enter.append(d => <td>{`${d}`}</td>),
-        update => update,
-        exit => exit.remove()
+        enter => enter.append(() => <tr className={styles.rows} />)
     )
 
-    const userList = select(`#${styles.user}`)
+    rowsUpdate.selectAll('td')
+        .data(id, id)
+        .join(
+            enter => enter.append(d => <td>{`${d}`}</td>)
+        )
+}
 
-    userList.selectAll('li').data(Object.values(user), id).join(
-        enter => enter.append(d => <li>{d}</li>)
-        // update => update,
-        // exit => exit.remove()
-    )
+const updateUser = user => {
+    select(`#${styles.user}`)
+        .selectAll('li').data(Object.values(user), id).join(
+            enter => enter.append(d => <li>{d}</li>)
+        )
 }
 
 router.get('/', async req => {
     document.body.appendChild(
         <main>
             <table>
-                <thead>
-                    <tr>
-                        <th eventListener={['click', e => {
-
-                        }]}>
-                        0
-                        </th>
-                        <th eventListener={['click', e => {
-
-                        }]}>
-                        1
-                        </th>
-                        <th eventListener={['click', e => {
-
-                        }]}>
-                        2
-                        </th>
-                        <th eventListener={['click', e => {
-
-                        }]}>
-                        3
-                        </th>
-                    </tr>
-                </thead>
                 <tbody></tbody>
             </table>
             <button eventListener={['click', e => {
@@ -95,9 +58,14 @@ router.get('/', async req => {
                     [0, 1, 4, 3],
                     [1, 3, 2, 3],
                     [1, 3, 2, 3],
-                 ]
-                 user.email = 'please@change'
+                ]
+
+                let user = {
+                    username: 'ghostface killer',
+                    email: 'ironman@wu.tang'
+                }
                 update(data)
+                updateUser(user)
             }]}>update</button>
 
             <ul id={styles.user}>
@@ -106,6 +74,13 @@ router.get('/', async req => {
             <Counter />
         </main>
     )
-    update(counters)
+    update([
+        [0, 1, 2, 3],
+        [0, 1, 2, 3]
+    ])
+    updateUser({
+        username: 'ghostface killer',
+        email: 'tstark@wu.tang'
+    })
 })
 
