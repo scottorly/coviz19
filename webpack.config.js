@@ -20,7 +20,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "wearabouts",
+            title: "d3act",
             chunksSortMode: "none"
         }),
         new MiniCssExtractPlugin({

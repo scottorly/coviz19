@@ -42,33 +42,39 @@ const wutangClan = [
 router.get('/', async req => {
     document.body.appendChild(
         <main>
+            <div id={styles.container}>
+                <table>
+                    <tbody/>
+                </table>
 
-            <table>
-                <tbody/>
-            </table>
+                <button eventListener={['click', e => {
+                    const data = [
+                        [0, 1, 4, 3],
+                        [1, 3, 2, 3],
+                        [1, 3, 2, 3],
+                    ]
+                    update(data)
+                }]}>update data</button>
 
-            <button eventListener={['click', e => {
-                const data = [
-                    [0, 1, 4, 3],
-                    [1, 3, 2, 3],
-                    [1, 3, 2, 3],
-                ]
+                <ul id={styles.user} />
 
-                let user = {
-                    username: 'ghostface killer',
-                    email: 'ironman@wu.tang'
-                }
-                update(data)
-                updateUser(user)
-            }]}>update</button>
+                <button eventListener={['click', e => {
+                    let user = {
+                        username: 'ghostface killer',
+                        email: 'ironman@wu.tang'
+                    }
+                    updateUser(user)
+                }]}>update user</button>
 
-            <ul id={styles.user} />
+                <div>
+                    <label>List of Wu Tang artists</label>
+                    <ul id={styles.list}>
+                        <Fragment items={wutangClan} />
+                    </ul>
+                </div>
 
-            <TextInput name='Foo' className={styles.inputContainer}/>
-            <ul>
-                <Fragment items={wutangClan} />
-            </ul>
-
+                <TextInput name='Foo' className={styles.inputContainer}/>
+            </div>
         </main>
     )
     update([
