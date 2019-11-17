@@ -3,25 +3,13 @@ import "regenerator-runtime/runtime";
 
 import Grapnel from 'grapnel'
 import { select, selectAll } from 'd3-selection'
+
+import TextInput from './component'
+import Fragment from './fragment'
+
 import styles from './styles.css'
 
 const router = new Grapnel({ pushState: true });
-
-const Counter = () => {
-    let count = 0
-    const element = <p>{`${count}`}</p>
-    return (
-        <div>
-            <button eventListener={['click', e => {
-                select(element).text(`${++count}`)
-            }]}>+</button>
-            {element}
-            <button eventListener={['click', e => {
-                select(element).text(`${--count}`)
-            }]}>-</button>
-        </div>
-    )
-}
 
 const id = d => d
 
@@ -47,12 +35,18 @@ const updateUser = user => {
         )
 }
 
+const wutangClan = [
+    'Inspectah Deck', 'RZA', 'GZA', 'U-God', 'Ghostface Killah', 'Method Man', 'Cappadonna', 'Raekwon'
+]
+
 router.get('/', async req => {
     document.body.appendChild(
         <main>
+
             <table>
-                <tbody></tbody>
+                <tbody/>
             </table>
+
             <button eventListener={['click', e => {
                 const data = [
                     [0, 1, 4, 3],
@@ -68,10 +62,13 @@ router.get('/', async req => {
                 updateUser(user)
             }]}>update</button>
 
-            <ul id={styles.user}>
+            <ul id={styles.user} />
 
+            <TextInput name='Foo' className={styles.inputContainer}/>
+            <ul>
+                <Fragment items={wutangClan} />
             </ul>
-            <Counter />
+
         </main>
     )
     update([
