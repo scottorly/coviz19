@@ -1,8 +1,10 @@
-# d3act.js
+# d3activated
 
-d3act.js is a pattern combining d3 & JSX that can be used to render d3 data visualizations or as a JS browser application framework.
+*pronounced "d3-activated"
 
-d3act.js uses d3-selection's [join](https://github.com/d3/d3-selection#joining-data) API to bind data to DOM Elements created with the [React.createElement](https://reactjs.org/docs/react-api.html#createelement) API (JSX) transpiled using [JSX-Pragma](https://github.com/ScottORLY/jsx-dom).
+The d3activated pattern uses [d3-selection.join](https://github.com/d3/d3-selection#joining-data) to bind data to DOM Elements created with [JSX](https://reactjs.org/docs/react-api.html#createelement). The JSX is transpiled using [JSX-Pragma](https://github.com/ScottORLY/jsx-dom).
+
+D3activated can be used for d3 data visualizations or as the basis for a UI application library or framework.
 
 ## Basic usage
 
@@ -10,20 +12,29 @@ d3act.js uses d3-selection's [join](https://github.com/d3/d3-selection#joining-d
 import { select, selectAll } from 'd3-selection'
 import styles from './styles.css'
 
-const ul = (<ul id={styles.list}/>)
+const ul = (<ul />)
 
 const update = data => {
-    select(`#${styles.list}`)
+    select('ul')
         .selectAll('li')
         .data(data, d => d)
         .join(
-            enter => enter.append(d => <li className={styles.listItem}>{d}</li>)
+            enter => enter.append(d => <li>{d}</li>)
         )
 }
 
 document.body.appendChild(ul)
 
 const data = ['36th Chamber of Shaolin', 'Clan of the White Lotus', 'Sleeping Kung Fu', 'Dance of the Drunken Mantis']
+
+update(data)
+```
+
+To update the bound data simply call the update function again with the updated data.
+
+```javascript
+data.unshift('Shaolin Executioner')
+data.pop()
 
 update(data)
 ```
