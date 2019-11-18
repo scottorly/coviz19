@@ -2,15 +2,14 @@
 
 *pronounced "d3-activated"
 
-The d3activated pattern uses [d3-selection.join](https://github.com/d3/d3-selection#joining-data) to bind data to DOM Elements created with [JSX](https://reactjs.org/docs/react-api.html#createelement). The JSX is transpiled using [JSX-Pragma](https://github.com/ScottORLY/jsx-dom).
+The d3activated pattern uses [d3-selection.join](https://github.com/d3/d3-selection#selection_join) to bind data to DOM Elements created with [JSX](https://reactjs.org/docs/react-api.html#createelement). The JSX is transpiled using [jsx-pragma](https://github.com/ScottORLY/jsx-dom).
 
 D3activated can be used for d3 data visualizations or as the basis for a UI application library or framework.
 
 ## Basic usage
 
 ```javascript
-import { select, selectAll } from 'd3-selection'
-import styles from './styles.css'
+import { select } from 'd3-selection'
 
 const ul = (<ul />)
 
@@ -38,6 +37,8 @@ data.pop()
 
 update(data)
 ```
+
+For more about d3's general update pattern see https://observablehq.com/@d3/selection-join & [Thinking with Joins](https://bost.ocks.org/mike/join/).
 
 ## Setup
 
