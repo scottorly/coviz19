@@ -1,7 +1,6 @@
 import "core-js/stable";
-import "regenerator-runtime/runtime";
 
-import { select, selectAll } from 'd3-selection'
+import { select } from 'd3-selection'
 
 import TextInput from './component'
 import Fragment from './fragment'
