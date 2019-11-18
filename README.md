@@ -6,7 +6,7 @@ d3act.js uses d3-selection's [join](https://github.com/d3/d3-selection#joining-d
 
 ## Basic usage
 
-```
+```javascript
 import { select, selectAll } from 'd3-selection'
 import styles from './styles.css'
 
