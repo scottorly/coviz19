@@ -6,6 +6,9 @@ import TextInput from './component'
 import Fragment from './fragment'
 
 import styles from './styles.css'
+import multiline from './multiline'
+
+document.body.appendChild(multiline)
 
 const id = d => d
 
@@ -24,10 +27,14 @@ const update = data => {
         )
 }
 
+const liProps = {
+    className: styles.listItem
+}
+
 const updateUser = user => {
     select(`#${styles.user}`)
         .selectAll('li').data(Object.values(user), id).join(
-            enter => enter.append(d => <li>{d}</li>)
+            enter => enter.append(d => <li {...liProps}>{d}</li>)
         )
 }
 
@@ -80,4 +87,3 @@ updateUser({
     username: 'ghostface killer',
     email: 'tstark@wu.tang'
 })
-

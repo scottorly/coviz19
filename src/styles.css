@@ -22,6 +22,10 @@ button {
     @apply list-none;
 }
 
+.listItem {
+    @apply p-2
+}
+
 .inputContainer {
     @apply flex flex-col;
 }
