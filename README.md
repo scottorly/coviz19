@@ -1,6 +1,8 @@
 # d3activated
 
-*pronounced "d3-activated"
+![](src/d3activated.png)
+
+"d3-activated"
 
 The d3activated pattern uses [d3-selection.join](https://github.com/d3/d3-selection#selection_join) to bind data to DOM Elements created with [JSX](https://reactjs.org/docs/react-api.html#createelement). The JSX is transpiled using [jsx-pragma](https://github.com/ScottORLY/jsx-dom).
 
