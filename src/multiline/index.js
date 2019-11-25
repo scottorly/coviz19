@@ -65,26 +65,26 @@ dot.append(() => <circle {...ns} r={2.5} />)
 dot.append(() => <text {...ns} text-anchor='middle' y={-8} />)
 
 const moved = () => {
-    event.preventDefault();
-    const ym = y.invert(event.layerY);
-    const xm = x.invert(event.layerX);
-    const i1 = bisectLeft(data.dates, xm, 1);
-    const i0 = i1 - 1;
-    const i = xm - data.dates[i0] > data.dates[i1] - xm ? i1 : i0;
-    const s = data.series.reduce((a, b) => Math.abs(a.values[i] - ym) < Math.abs(b.values[i] - ym) ? a : b);
-    path.attr("stroke", d => d === s ? null : "#ddd").filter(d => d === s).raise();
-    dot.attr("transform", `translate(${x(data.dates[i])},${y(s.values[i])})`);
-    dot.select("text").text(s.name);
+    event.preventDefault()
+    const ym = y.invert(event.layerY)
+    const xm = x.invert(event.layerX)
+    const i1 = bisectLeft(data.dates, xm, 1)
+    const i0 = i1 - 1
+    const i = xm - data.dates[i0] > data.dates[i1] - xm ? i1 : i0
+    const s = data.series.reduce((a, b) => Math.abs(a.values[i] - ym) < Math.abs(b.values[i] - ym) ? a : b)
+    path.attr("stroke", d => d === s ? null : "#ddd").filter(d => d === s).raise()
+    dot.attr("transform", `translate(${x(data.dates[i])},${y(s.values[i])})`)
+    dot.select("text").text(s.name)
 }
 
 const entered = () => {
-    path.style("mix-blend-mode", null).attr("stroke", "#ddd");
-    dot.attr("display", null);
+    path.style("mix-blend-mode", null).attr("stroke", "#ddd")
+    dot.attr("display", null)
 }
 
 const left = () => {
-    path.style("mix-blend-mode", "multiply").attr("stroke", null);
-    dot.attr("display", "none");
+    path.style("mix-blend-mode", "multiply").attr("stroke", null)
+    dot.attr("display", "none")
 }
 
 svg.on('mousemove', moved)

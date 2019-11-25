@@ -8,6 +8,8 @@ The d3activated pattern uses [d3-selection.join](https://github.com/d3/d3-select
 
 D3activated can be used for d3 data visualizations or as the basis for a UI application library or framework.
 
+[Demo](https://scottorly.github.io/d3activated)
+
 ## Basic usage
 
 ```javascript

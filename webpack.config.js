@@ -9,8 +9,8 @@ module.exports = {
         './src/index.js'
     ],
     output: {
-        path: __dirname + '/dist',
-        publicPath: '/',
+        path: __dirname + '/docs',
+        publicPath: '/d3activated',
         filename: 'bundle.js'
     },
     optimization: {
@@ -20,7 +20,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "d3act",
+            title: "d3activated",
             chunksSortMode: "none"
         }),
         new MiniCssExtractPlugin({
@@ -37,7 +37,7 @@ module.exports = {
             },
         })
     ],
-    devtool: 'inline-source-map',
+    devtool: isDEV ? 'inline-source-map': 'none',
     module: {
         rules: [
             {
