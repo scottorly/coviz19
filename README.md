@@ -1,16 +1,31 @@
 # d3activated
 
-![](src/resources/d3activated.png)
-
 "d3-activated"
 
-The d3activated pattern uses [d3-selection.join](https://github.com/d3/d3-selection#selection_join) to bind data to DOM Elements created with [JSX](https://reactjs.org/docs/react-api.html#createelement). The JSX is transpiled using [jsx-pragma](https://github.com/ScottORLY/jsx-dom).
+*tldr - thinking with d3 like it's the new jquery*
 
-D3activated can be used for d3 data visualizations or as the basis for a UI application library or framework.
+The d3activated pattern uses [**d3-selection.join**](https://github.com/d3/d3-selection#selection_join) to bind data to DOM Elements created with [**JSX**](https://reactjs.org/docs/jsx-in-depth.html). The JSX is transpiled using [**jsx-pragma**](https://github.com/ScottORLY/jsx-dom).
 
-[Demo](https://scottorly.github.io/d3activated)
+d3activated can be used for data visualizations or to bind data to HTML Elements.
 
-## Basic usage
+[**Demonstration**](https://scottorly.github.io/d3activated)
+
+## Motivation
+
+The most compelling thing about react was not the double buffered, top down, virtual dom diffing library but the discovery of JSX. A discovery comparable to Crockford's discovery of [**JSON**](https://json.org/).
+
+JSX is great but what if you don't want to bootstrap a videogame engine to build a web UI?
+
+[**D3**](https://d3js.org) has been the premier data visualization library for the web since it's debut in 2011. The famously verbose syntax can be painful to follow and remains a significant source of frustration for beginners. Meanwhile d3-selection provides a performant method of binding data to dom elements with a small footprint.
+
+d3activated uses  [**jsx-pragma**](https://github.com/ScottORLY/jsx-dom), a simple library used with [**babel**](https://babeljs.io) to transpile JSX to vanilla dom elements instead of react components. These elements can then be used with d3 for binding data to HTML Elements or SVG data visualizations.
+
+## Data Visualization
+
+d3activated can help clean up your d3 code a little.
+![](src/resources/d3activated.png)
+
+## Basic Data Binds
 
 ```javascript
 import { select } from 'd3-selection'
@@ -28,7 +43,7 @@ const update = data => {
 
 document.body.appendChild(ul)
 
-const data = ['36th Chamber of Shaolin', 'Clan of the White Lotus', 'Sleeping Kung Fu', 'Dance of the Drunken Mantis']
+const data = ['36th Chamber of Shaolin', 'Clan of the White Lotus', 'Sleeping Fist', 'Dance of the Drunken Mantis']
 
 update(data)
 ```
