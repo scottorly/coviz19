@@ -16,7 +16,7 @@ The most compelling thing about react was not the double buffered, top down, vir
 
 JSX is great but what if you don't want to bootstrap a videogame engine to build a web UI?
 
-[**D3**](https://d3js.org) has been the premier data visualization library for the web since it's debut in 2011. The famously verbose syntax can be painful to follow and remains a significant source of frustration for beginners. Meanwhile d3-selection provides a performant method of binding data to dom elements with a small footprint.
+[**D3**](https://d3js.org) has been the premier data visualization library for the web since it's release in 2011. The famously verbose syntax can be painful to follow and remains a significant source of frustration for beginners. Meanwhile d3-selection provides a performant method of binding data to dom elements with a small footprint.
 
 d3activated uses  [**jsx-pragma**](https://github.com/ScottORLY/jsx-dom), a simple library used with [**babel**](https://babeljs.io) to transpile JSX to vanilla dom elements instead of react components. These elements can then be used with d3 for binding data to HTML Elements or SVG data visualizations.
 
