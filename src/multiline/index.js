@@ -1,7 +1,7 @@
 import styles from './styles.css'
 import file from './unemployment.js'
 
-import { select, namespaces, event } from 'd3-selection'
+import { select, event } from 'd3-selection'
 import { line } from 'd3-shape'
 import { axisLeft, axisBottom } from 'd3-axis'
 import { scaleUtc, scaleLinear } from 'd3-scale'
@@ -9,14 +9,12 @@ import { tsvParse } from 'd3-dsv'
 import { max, extent, bisectLeft } from 'd3-array'
 import { utcParse } from 'd3-time-format'
 
-const ns = { xmlns: namespaces.svg }
-
 const margin = { top: 20, right: 20, bottom: 30, left: 30 }
 
 const width = 800
 const height = 400
 const viewBox = [0, 0, width, height]
-const svgProps = {...ns, width, height, viewBox }
+const svgProps = { width, height, viewBox }
 
 const svg = select(<svg {...svgProps} />)
 
@@ -30,22 +28,31 @@ const data = {
     dates: unemployment.columns.slice(1).map(utcParse("%Y-%m"))
 }
 
-const multLine = line().defined(d => !isNaN(d)).x((d, i) => x(data.dates[i])).y(d => y(d))
-const y = scaleLinear().domain([0, max(data.series, d => max(d.values))]).nice().range([height - margin.bottom, margin.top])
-const x = scaleUtc().domain(extent(data.dates)).range([margin.left, width - margin.right])
+const multiLine = line()
+    .defined(d => !isNaN(d))
+    .x((d, i) => x(data.dates[i]))
+    .y(d => y(d))
 
-const yGroup = () => <g {...ns} transform={`translate(${margin.left},0)`} />
-const xGroup = () => <g {...ns} transform={`translate(0,${height - margin.bottom})`} />
+const y = scaleLinear()
+    .domain([0, max(data.series, d => max(d.values))])
+    .nice()
+    .range([height - margin.bottom, margin.top])
 
-const lineProps = {
-    ...ns,
-    fill: 'none',
-    stroke: 'steelblue',
-    'stroke-linejoin': 'round',
-    'stroke-linecap': 'round'
-}
+const x = scaleUtc()
+    .domain(extent(data.dates))
+    .range([margin.left, width - margin.right])
 
-const lineGroup = () => <g {...lineProps} />
+const yGroup = () => <g transform={`translate(${margin.left},0)`} />
+const xGroup = () => <g transform={`translate(0,${height - margin.bottom})`} />
+
+const lineGroup = () => (
+    <g
+        fill='none'
+        stroke='steelblue'
+        stroke-linejoin='round'
+        stroke-linecap='round'
+    />
+)
 
 svg.append(yGroup).call(axisLeft(y))
 svg.append(xGroup).call(axisBottom(x).ticks(width / 80).tickSizeOuter(0))
@@ -53,16 +60,15 @@ svg.append(xGroup).call(axisBottom(x).ticks(width / 80).tickSizeOuter(0))
 const path = svg.append(lineGroup).selectAll('path').data(data.series).join(
     enter => enter.append(d => (
         <path
-            {...ns}
             className={styles.path}
-            d={multLine(d.values)}
+            d={multiLine(d.values)}
         />
     ))
 )
 
-const dot = svg.append(() => <g {...ns} display='none' />)
-dot.append(() => <circle {...ns} r={2.5} />)
-dot.append(() => <text {...ns} text-anchor='middle' y={-8} />)
+const dot = svg.append(() => <g display='none' />)
+dot.append(() => <circle r={2.5} />)
+dot.append(() => <text text-anchor='middle' y={-8} />)
 
 const moved = () => {
     event.preventDefault()
