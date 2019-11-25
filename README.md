@@ -1,6 +1,6 @@
 # d3activated
 
-![](src/d3activated.png)
+![](src/resources/d3activated.png)
 
 "d3-activated"
 

@@ -1,11 +1,10 @@
 import "core-js/stable";
 
 import { select } from 'd3-selection'
+import styles from './styles.css'
 
 import TextInput from './component'
 import Fragment from './fragment'
-
-import styles from './styles.css'
 import multiline from './multiline'
 
 document.body.appendChild(multiline)
