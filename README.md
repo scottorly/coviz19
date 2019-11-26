@@ -24,7 +24,7 @@ d3activated can help clean up your d3 code a little.
 
 ![](src/resources/d3activated.png)
 
-The examle code above is a port of [this example](https://observablehq.com/@d3/multi-line-chart) & can be found [here](src/multiline/index.js)
+The example code above is a port of [this example](https://observablehq.com/@d3/multi-line-chart) & can be found [here](src/multiline/index.js)
 
 
 ## Basic Data Binds
