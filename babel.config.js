@@ -5,7 +5,6 @@ module.exports =  {
         }
     },
     plugins: [
-        ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": true }],
         [
             "@babel/plugin-transform-react-jsx",
             {
@@ -14,9 +13,19 @@ module.exports =  {
                 "throwIfNamespace": false
             }
         ],
-        ["@babel/plugin-syntax-dynamic-import"]
+        ["@babel/plugin-syntax-dynamic-import"],
+        [
+            "@babel/plugin-transform-runtime",
+            {
+              "absoluteRuntime": false,
+              "corejs": false,
+              "helpers": true,
+              "regenerator": true,
+              "useESModules": false
+            }
+        ]
     ],
     presets: [
-        ["@babel/preset-env", {"useBuiltIns": "entry", "corejs": "3.4.1" }]
+        ["@babel/preset-env", { targets: "> 0.25%, not dead" }]
     ]
 }

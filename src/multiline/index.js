@@ -18,6 +18,7 @@ const svgProps = { width, height, viewBox }
 
 const svg = select(<svg {...svgProps} />)
 
+
 const unemployment = tsvParse(file, (d, i, columns) => ({
     name: d.name.replace(/, ([\w-]+).*/, " $1"),
     values: columns.slice(1).map(k => +d[k])
@@ -70,7 +71,7 @@ const dot = svg.append(() => <g display='none' />)
 dot.append(() => <circle r={2.5} />)
 dot.append(() => <text text-anchor='middle' y={-8} />)
 
-const moved = () => {
+const moved = (path, dot) => () => {
     event.preventDefault()
     const ym = y.invert(event.layerY)
     const xm = x.invert(event.layerX)
@@ -83,18 +84,18 @@ const moved = () => {
     dot.select("text").text(s.name)
 }
 
-const entered = () => {
+const entered = (path, dot) => () => {
     path.style("mix-blend-mode", null).attr("stroke", "#ddd")
     dot.attr("display", null)
 }
 
-const left = () => {
+const left = (path, dot) => () => {
     path.style("mix-blend-mode", "multiply").attr("stroke", null)
     dot.attr("display", "none")
 }
 
-svg.on('mousemove', moved)
-svg.on('mouseenter', entered)
-svg.on('mouseleave', left)
+svg.on('mousemove', moved(path, dot))
+svg.on('mouseenter', entered(path, dot))
+svg.on('mouseleave', left(path, dot))
 
 export default svg.node()

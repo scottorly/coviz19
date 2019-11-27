@@ -1,5 +1,3 @@
-import "core-js/stable";
-
 import { select } from 'd3-selection'
 import styles from './styles.css'
 
