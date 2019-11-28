@@ -1,0 +1,17 @@
+body {
+    font: 1em sans-serif;
+}
+
+svg, h1 {
+    @apply m-8;
+}
+
+.label {
+    font: bold 12px sans-serif;
+    font-variant-numeric: tabular-nums;
+}
+
+.ticker {
+    font: bold 48px sans-serif;
+    font-variant-numeric: tabular-nums;
+}

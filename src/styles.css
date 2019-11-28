@@ -3,29 +3,13 @@ main {
 }
 
 button {
-    @apply px-4 py-2 my-4 bg-gray-400 border rounded
+    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded justify-center
 }
 
-#container {
-    @apply flex-col justify-center w-auto inline-block m-auto;
+button:hover {
+    @apply bg-blue-700
 }
 
-.rows {
-    @apply p-2 m-2;
-}
-
-#user {
-    @apply flex-col list-none;
-}
-
-#list {
-    @apply list-none;
-}
-
-.listItem {
-    @apply p-2
-}
-
-.inputContainer {
-    @apply flex flex-col;
+.link {
+    @apply text-black
 }

@@ -18,7 +18,6 @@ const svgProps = { width, height, viewBox }
 
 const svg = select(<svg {...svgProps} />)
 
-
 const unemployment = tsvParse(file, (d, i, columns) => ({
     name: d.name.replace(/, ([\w-]+).*/, " $1"),
     values: columns.slice(1).map(k => +d[k])
@@ -59,12 +58,7 @@ svg.append(yGroup).call(axisLeft(y))
 svg.append(xGroup).call(axisBottom(x).ticks(width / 80).tickSizeOuter(0))
 
 const path = svg.append(lineGroup).selectAll('path').data(data.series).join(
-    enter => enter.append(d => (
-        <path
-            className={styles.path}
-            d={multiLine(d.values)}
-        />
-    ))
+    enter => enter.append(d => <path className={styles.path} d={multiLine(d.values)} />)
 )
 
 const dot = svg.append(() => <g display='none' />)
