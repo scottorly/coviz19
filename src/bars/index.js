@@ -82,7 +82,7 @@ const y = scaleBand()
 
 const bars = svg => {
     let bar = svg.append(() => <g fill-opacity='0.6' />).selectAll('rect')
-    return ([date, data], transition) => bar = bar
+    return ([, data], transition) => bar = bar
         .data(data.slice(0, n), d => d.name)
         .join(
             enter => enter.append(d => (
@@ -109,7 +109,7 @@ const bars = svg => {
 
 const labels = svg => {
     let label = svg.append(() => <g className={styles.label} text-anchor='end' />).selectAll('text')
-    return ([date, data], transition) => label = label
+    return ([, data], transition) => label = label
         .data(data.slice(0, n), d => d.name)
         .join(
             enter => enter.append(d => (

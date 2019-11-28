@@ -24,7 +24,7 @@ module.exports = {
             chunksSortMode: "none"
         }),
         new MiniCssExtractPlugin({
-            filename: 'd3activated/[name].[hash].css',
+            filename: '[name].[hash].css',
             chunkFilename: '[id].[hash].css'
         }),
         new webpack.ProvidePlugin({

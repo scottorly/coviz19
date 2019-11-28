@@ -5,9 +5,6 @@ import node, { start } from './bars'
 
 document.body.appendChild(
     <>
-        <h1>Multi Line</h1>
-        {multiline}
-
         <div className={styles.bars}>
         <h1>Brand Bar Chart Race</h1>
             {node}
@@ -17,6 +14,10 @@ document.body.appendChild(
                 replay
             </button>
         </div>
+
+        <h1>Multi Line with Tooltip</h1>
+        {multiline}
+
     </>
 )
 

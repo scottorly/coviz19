@@ -65,10 +65,20 @@ const dot = svg.append(() => <g display='none' />)
 dot.append(() => <circle r={2.5} />)
 dot.append(() => <text text-anchor='middle' y={-8} />)
 
+const svgNode = svg.node()
+const pt = svgNode.createSVGPoint()
+
+const cursorPoint = (evt) => {
+    pt.x = evt.clientX
+    pt.y = evt.clientY
+    return pt.matrixTransform(svgNode.getScreenCTM().inverse())
+}
+
 const moved = (path, dot) => () => {
     event.preventDefault()
-    const ym = y.invert(event.layerY)
-    const xm = x.invert(event.layerX)
+    const cursor = cursorPoint(event)
+    const ym = y.invert(cursor.y)
+    const xm = x.invert(cursor.x)
     const i1 = bisectLeft(data.dates, xm, 1)
     const i0 = i1 - 1
     const i = xm - data.dates[i0] > data.dates[i1] - xm ? i1 : i0
@@ -92,4 +102,4 @@ svg.on('mousemove', moved(path, dot))
 svg.on('mouseenter', entered(path, dot))
 svg.on('mouseleave', left(path, dot))
 
-export default svg.node()
+export default svgNode
