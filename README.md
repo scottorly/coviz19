@@ -12,7 +12,7 @@ d3activated can be used for data visualizations or to bind data to HTML Elements
 
 The most compelling thing about react was not the top down, double buffer, virtual dom diffing library but the discovery of JSX. A discovery comparable to Crockford's discovery of [**JSON**](https://json.org/).
 
-JSX is great but what if you don't want to bootstrap a [videogame engine](https://twitter.com/acdlite/status/978696799757086720) to build a user interface?
+JSX is a great way to represent HTML in JS but what if you don't want to bootstrap a [videogame engine](https://twitter.com/acdlite/status/978696799757086720) to build a user interface?
 
 [**D3**](https://d3js.org) has been the premier data visualization library for the web since it's release in 2011. Within it's famously verbose & oftentimes painful to follow syntax is a performant method of binding data to dom elements with a small footprint.
 
