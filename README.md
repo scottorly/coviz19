@@ -10,7 +10,7 @@ d3activated can be used for data visualizations or to bind data to HTML Elements
 
 ## Motivation
 
-The most compelling thing about react was not the top down, double buffer, virtual dom diffing library but the discovery of JSX. A discovery comparable to Crockford's discovery of [**JSON**](https://json.org/).
+The most compelling thing about react was not the top down, double buffer, virtual dom diffing, update scheduler library but the discovery of JSX. A discovery comparable to Crockford's discovery of [**JSON**](https://json.org/).
 
 JSX is a great way to represent HTML in JS but what if you don't want to bootstrap a [videogame engine](https://twitter.com/acdlite/status/978696799757086720) to build a user interface?
 
@@ -67,7 +67,7 @@ install
 
 `npm i`
 
-start dev server at http://localhost:8081/d3activated
+start dev server at http://localhost:8080/d3activated
 
 `npm start`
 
