@@ -68,7 +68,7 @@ dot.append(() => <text text-anchor='middle' y={-8} />)
 const svgNode = svg.node()
 const pt = svgNode.createSVGPoint()
 
-const cursorPoint = (evt) => {
+const cursorPoint = (pt, evt) => {
     pt.x = evt.clientX
     pt.y = evt.clientY
     return pt.matrixTransform(svgNode.getScreenCTM().inverse())
@@ -76,7 +76,7 @@ const cursorPoint = (evt) => {
 
 const moved = (path, dot) => () => {
     event.preventDefault()
-    const cursor = cursorPoint(event)
+    const cursor = cursorPoint(pt, event)
     const ym = y.invert(cursor.y)
     const xm = x.invert(cursor.x)
     const i1 = bisectLeft(data.dates, xm, 1)
