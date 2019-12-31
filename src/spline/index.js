@@ -11,6 +11,8 @@ const n = 40
 const random = randomNormal(0, .2)
 const data = range(n).map(random)
 
+const duration = 500
+
 const margin = {top: 20, right: 20, bottom: 20, left: 40}
 const width = 400 - margin.left - margin.right
 const height = 600 - margin.top - margin.bottom
@@ -20,16 +22,16 @@ const g = svg.append(() => <g transform={`translate(${margin.left}, ${margin.top
 
 const x = scaleLinear()
     .domain([1, n - 2])
-    .range([0, width]);
+    .range([0, width])
 
 const y = scaleLinear()
     .domain([-1, 1])
-    .range([height, 0]);
+    .range([height, 0])
 
 const pathLine = line()
     .curve(curveBasis)
-    .x(function(d, i) { return x(i); })
-    .y(function(d, i) { return y(d); });
+    .x((_, i) => x(i))
+    .y(d => y(d))
 
 g.append(() => (
     <defs>
@@ -60,14 +62,14 @@ function tick() {
 
   // Redraw the line.
   select(this)
-      .attr("d", pathLine)
-      .attr("transform", null)
+      .attr('d', pathLine)
+      .attr('transform', null)
 
   // Slide it to the left.
   active(this)
-      .attr("transform", `translate(${x(0)}, 0)`)
+      .attr('transform', `translate(${x(0)}, 0)`)
     .transition()
-      .on("start", tick)
+      .on('start', tick)
 
   // Pop the old data point off the front.
   data.shift()
