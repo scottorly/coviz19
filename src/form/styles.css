@@ -1,0 +1,19 @@
+#user {
+    @apply flex flex-col h-full m-4 overflow-scroll
+}
+
+#form {
+    @apply flex flex-col h-full m-4 max-w-md
+}
+
+.label {
+    @apply py-3
+}
+
+.input {
+    @apply border rounded border-gray-900 p-3
+}
+
+#info {
+    @apply border rounded border-gray-900 p-3
+}
