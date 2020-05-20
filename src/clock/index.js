@@ -10,18 +10,18 @@ const updateTime = () => {
     select(`#hand-seconds`).transition().attr('transform', `rotate(${(now - timeMinute(now)) / 6e4 * 360})`)
 }
 
-setInterval(updateTime, 60)
+setInterval(updateTime, 1000)
 
 const Clock = () => (<>
     <h1>Swiss Clock</h1>
-    <svg width="240" height="240" viewBox="50 50 500 500" style="max-width:100%;height:auto;">
+    <svg width="400" height="400" viewBox="50 50 500 500" style="max-width:100%;height:auto;">
         <g transform="translate(300,300)">
             <circle id="face" r="225" stroke-width="20" fill="none" stroke="lightgray"/>
                 {
                     range(12).map(i => 
-                        <g id="tick-major" transform={`"rotate(${i * 30})"`}>
+                        (<g id="tick-major" transform={`rotate(${i * 30})`}>
                             <line y1="-203" y2="-153" stroke="black" stroke-width="14" />
-                        </g>
+                        </g>)
                     )
                 }
                 {
