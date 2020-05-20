@@ -26,7 +26,7 @@ const update = (data) => {
     )
 }
 
-window.addEventListener('pageshow', () => update(user))
+window.addEventListener('mount', () => update(user))
 
 const Input = ({ attributes: { name }}) => (
     <input
@@ -41,7 +41,6 @@ const Input = ({ attributes: { name }}) => (
 
 const User = () => (
     <div id={styles.user}>
-        <h1>Form Data Binding Example</h1>
         <form id={styles.form}>
             <label className={styles.label}>First</label>
             <Input name='first'/>
@@ -57,7 +56,6 @@ const User = () => (
         <div id={styles.info}>
             <p/>
         </div>
-        <a href="https://github.com/ScottORLY/d3activated/blob/master/src/form/index.js">source</a>
     </div>
 )
 

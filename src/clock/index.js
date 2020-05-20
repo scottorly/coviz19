@@ -13,8 +13,7 @@ const updateTime = () => {
 setInterval(updateTime, 1000)
 
 const Clock = () => (<>
-    <h1>Swiss Clock</h1>
-    <svg width="400" height="400" viewBox="50 50 500 500" style="max-width:100%;height:auto;">
+    <svg width="640" height="640" viewBox="50 50 500 500">
         <g transform="translate(300,300)">
             <circle id="face" r="225" stroke-width="20" fill="none" stroke="lightgray"/>
                 {
@@ -45,6 +44,9 @@ const Clock = () => (<>
             </g>
         </g>
     </svg>
+    <p>
+        <a href="https://github.com/ScottORLY/d3activated/blob/master/src/clock/index.js">source</a>
+    </p>
 </>)
 
 export default Clock

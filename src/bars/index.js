@@ -20,9 +20,8 @@ let k = 10
 const duration = 250
 const height = margin.top + barSize * n + margin.bottom
 const width = 800
-
 const viewBox = [0, 0, width, height]
-const svgProps = { width, height, viewBox }
+const svgProps = { viewBox }
 
 const formatNumber = format(",d")
 const formatDate = utcFormat("%Y")

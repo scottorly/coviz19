@@ -1,4 +1,4 @@
-export default `date,name,category,value
+date,name,category,value
 2000-01-01,Coca-Cola,Beverages,72537
 2000-01-01,Microsoft,Technology,70196
 2000-01-01,IBM,Business Services,53183
@@ -1973,4 +1973,4 @@ export default `date,name,category,value
 2019-01-01,Shell,Energy,5105
 2019-01-01,LinkedIn,Media,4836
 2019-01-01,Harley-Davidson,Automotive,4793
-2019-01-01,Prada,Luxury,4781`
+2019-01-01,Prada,Luxury,4781

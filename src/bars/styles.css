@@ -2,10 +2,6 @@ body {
     font: 1em sans-serif;
 }
 
-svg, h1 {
-    @apply m-8;
-}
-
 .label {
     font: bold 12px sans-serif;
     font-variant-numeric: tabular-nums;
@@ -14,4 +10,8 @@ svg, h1 {
 .ticker {
     font: bold 48px sans-serif;
     font-variant-numeric: tabular-nums;
+}
+
+.bars {
+    @apply max-w-full max-h-full
 }
