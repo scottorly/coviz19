@@ -3,9 +3,11 @@ import multiline from './multiline'
 import node, { start } from './bars'
 import spline from './spline'
 import User from './form'
+import Clock from './clock'
 
 document.body.appendChild(
     <>
+        <Clock />
         <User />
         <div className={styles.bars}>
             <h1>Brand Bar Chart Race</h1>
@@ -24,4 +26,5 @@ document.body.appendChild(
     </>
 )
 
+window.dispatchEvent(new CustomEvent('mount'))
 start()
