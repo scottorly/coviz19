@@ -10,7 +10,7 @@ module.exports = {
     ],
     output: {
         path: __dirname + '/docs',
-        publicPath: '/d3activated',
+        publicPath: '/coviz19',
         filename: 'bundle.js'
     },
     optimization: {
@@ -20,7 +20,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "d3activated",
+            title: "COVIZ-19",
             chunksSortMode: "none"
         }),
         new MiniCssExtractPlugin({
