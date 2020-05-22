@@ -4,24 +4,40 @@ import { geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
-import { scaleSqrt, scaleSequential  } from 'd3-scale'
-import { max, extent, sum, group } from 'd3-array'
+import {  scaleSequential } from 'd3-scale'
+import {quantize, interpolate } from 'd3-interpolate'
+import 'd3-transition'
+import { group } from 'd3-array'
 import { interpolateReds, interpolateBlues } from 'd3-scale-chromatic'
 
 const counties = fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
 const covid = fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv')
 const cases = fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
+const globalCases = fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
 
 const width = 975
 const height = 610
 const parseDate = timeParse("%m/%d/%y")
 
-Promise.all([counties, covid, cases]).then(async ([countiesResponse, covidResponse, casesResponse]) => {
+function ramp(color, n = 256) {
+    const canvas = document.createElement('CANVAS')
+    const context = canvas.getContext("2d");
+    for (let i = 0; i < n; ++i) {
+      context.fillStyle = color(i / (n - 1));
+      context.fillRect(i, 0, 1, 1);
+    }
+    return canvas;
+  }
+
+Promise.all([counties, covid, cases, globalCases]).then(async ([countiesResponse, covidResponse, casesResponse, globalCasesResponse]) => {
     const covidCsv = await covidResponse.text()
     const us = await countiesResponse.json()
 
     const covidCases = await casesResponse.text()
     const casesData = csvParse(covidCases).filter(d => d.UID.slice(3).length > 0)
+
+    const globalCases = await globalCasesResponse.text()
+    const globalCasesData = csvParse(covidCases).filter(d => d.UID.slice(3).length > 0)
 
     const data = csvParse(covidCsv).filter(d => d.UID.slice(3).length > 0)
     const features = feature(us, us.objects.counties).features
@@ -82,7 +98,7 @@ Promise.all([counties, covid, cases]).then(async ([countiesResponse, covidRespon
         .join(
             enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)}/>)
         )
-
+      
     const casesGroup = casesSvg.append(() => <g />)
 
     const updateCases = (data) => {
@@ -118,14 +134,16 @@ Promise.all([counties, covid, cases]).then(async ([countiesResponse, covidRespon
         counter++
     }, 250)
 
-document.body.appendChild(
-    <>
-        <h1>COVIZ-19</h1>
-        <h1>Cases</h1>
-            <p className={styles.dateLabel}/>
-            {casesSvg.node()}
-            <h1>Deaths</h1>
-            <p className={styles.dateLabel}/>
-            {svg.node()}
-        </>)
+    const Coviz = () => (
+        <>
+            <h1>COVIZ-19</h1>
+            <h1>Cases</h1>
+                <p className={styles.dateLabel}/>
+                {casesSvg.node()}
+                <h1>Deaths</h1>
+                <p className={styles.dateLabel}/>
+                {svg.node()}
+            </>
+        )
+        document.body.appendChild(<Coviz />)
 })
