@@ -85,8 +85,9 @@ const Deaths = () => (
     <>
         <h1>US COVID-19 Deaths per day</h1>
         <h1 className={styles.dateLabel}/>
-        {svg.node()}
-        <Legend domain={[0, 100]} width={320} color={interpolateReds} label='Deaths per day' />
+        { svg.node() }
+        <Legend domain={[0, 100]} width={320} color={interpolateReds} />
+        <a href="https://github.com/ScottORLY/coviz19/blob/master/src/deaths/index.js">source code</a>
     </>)
 
 export default Deaths

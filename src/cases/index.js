@@ -86,8 +86,9 @@ cases()
 const ConfirmedCases = () => (<>
     <h1>US Confirmed COVID-19 Cases per day</h1>
     <h1 className={styles.dateLabel} />
-    {casesSvg.node()}
-    <Legend domain={[0, 100]} width={320} color={interpolateBlues} label='Confirmed cases per day' />
+    { casesSvg.node() }
+    <Legend domain={[0, 500]} width={320} color={interpolateBlues} />
+    <a href="https://github.com/ScottORLY/coviz19/blob/master/src/cases/index.js">source code</a>
 </>)
 
 export default ConfirmedCases
