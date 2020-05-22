@@ -25,3 +25,7 @@ button:hover {
 svg:global {
     @apply max-h-full max-w-full m-4
 }
+
+.footer {
+    @apply my-12 mx-4
+}

@@ -1,0 +1,93 @@
+import styles from './styles.css'
+import Legend from '../legend'
+import { csvParse } from 'd3-dsv'
+import { geoPath } from 'd3-geo'
+import { feature } from 'topojson-client'
+import { select , selectAll } from 'd3-selection'
+import { timeParse } from 'd3-time-format'
+import {  scaleSequential } from 'd3-scale'
+import 'd3-transition'
+import { group } from 'd3-array'
+import { interpolateBlues } from 'd3-scale-chromatic'
+
+const width = 975
+const height = 610
+const parseDate = timeParse("%m/%d/%y")
+
+const casesSvg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
+
+const cases = async () => {
+    const counties = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
+    const cases = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
+
+    const us = await counties.json()
+    const covidCases = await cases.text()
+
+    const casesData = csvParse(covidCases).filter(d => d.UID.slice(3).length > 0)
+
+    const features = feature(us, us.objects.counties).features
+    const states = feature(us, us.objects.states).features
+    const featuresById = group(features, feature => feature.id)
+
+    const sample = casesData[0]
+    const dates = Object.keys(sample).filter(parseDate).sort((a, b) => parseDate(a) > parseDate(b))
+    
+    const casesMapped = [...dates.map(key => {
+        return [key, casesData.map(d => ({
+            id: d.UID.slice(3),
+            cases: d[key],
+            feature: (featuresById.get(d.UID.slice(3)) || [])[0]
+        }))]
+    })]
+
+    const getCasesDay = counter => {
+        const pair = [...casesMapped][counter]
+        const date = parseDate(pair[0])
+        selectAll(`.${styles.dateLabel}`).text(date.toLocaleDateString())
+        return pair[1].filter(d => d.cases > 0)
+    }
+
+    const casesColor = scaleSequential([0, 500], interpolateBlues)
+    
+    const path = geoPath()
+    casesSvg.append(() => <g />)
+        .selectAll('path')
+        .data(states)
+        .join(
+            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)}/>)
+        )
+      
+    const casesGroup = casesSvg.append(() => <g />)
+
+    const updateCases = (data) => {
+        casesGroup
+        .selectAll('path')
+        .data(data, d => d.id)
+        .join(
+            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d.feature)}/>),
+            update => update.call(update => update.transition().style('fill', d => casesColor(d.cases)))
+        )
+    }
+
+    var counter = 0
+    setInterval(() => {
+        if (counter >= [...casesMapped].length) {
+            counter = 0
+            return
+        }
+        const casesDay = getCasesDay(counter)
+        updateCases(casesDay)
+        counter++
+    }, 250)
+}
+
+cases()
+
+const ConfirmedCases = () => (<>
+    <h1>US Confirmed COVID-19 Cases per day</h1>
+    <h1 className={styles.dateLabel} />
+    {casesSvg.node()}
+    <Legend domain={[0, 100]} width={320} color={interpolateBlues} label='Confirmed cases per day' />
+</>)
+
+export default ConfirmedCases
