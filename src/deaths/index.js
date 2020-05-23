@@ -62,15 +62,18 @@ const deaths = async () => {
         .selectAll('path')
         .data(data, d => d.id)
         .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill={color(d.deaths)} d={path(d.feature)}/>),
-            update => update.call(update => update.transition().style('fill', d => color(d.deaths)))
+            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill={color(d.deaths)} d={path(d.feature)}/>)
+                .call(enter => enter.style('opacity', 0).transition(250).style('opacity', 1)),
+            update => update.call(update => update.transition(250).style('fill', d => color(d.deaths))),
+            exit => exit.call(exit => exit.transition(250).style('opacity', 0).remove())
         )
     }
 
-    var counter = 0
-    setInterval(() => {
+    var counter = 0 
+    let interval
+    interval = setInterval(() => {
         if (counter >= [...mapped].length) {
-            counter = 0
+            clearInterval(interval)
             return
         }
         const day = getDay(counter)

@@ -64,15 +64,18 @@ const cases = async () => {
         .selectAll('path')
         .data(data, d => d.id)
         .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d.feature)}/>),
-            update => update.call(update => update.transition().style('fill', d => casesColor(d.cases)))
+            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d.feature)}/>)
+                .call(enter => enter.style('opacity', 0).transition(250).style('opacity', 1)),
+            update => update.call(update => update.transition(250).style('fill', d => casesColor(d.cases))),
+            exit => exit.call(exit => exit.transition(250).style('opacity', 0).remove())
         )
     }
 
     var counter = 0
-    setInterval(() => {
+    let interval
+    interval = setInterval(() => {
         if (counter >= [...casesMapped].length) {
-            counter = 0
+            clearInterval(interval)
             return
         }
         const casesDay = getCasesDay(counter)
