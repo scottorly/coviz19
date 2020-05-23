@@ -45,7 +45,7 @@ const deaths = async () => {
         return pair[1].filter(d => d.deaths > 0)
     }
 
-    const color = scaleSequential([0, 100], interpolateReds)
+    const color = scaleSequential([0, 500], interpolateReds)
     const path = geoPath()
 
     const deathGroup = svg.append(() => <g />)
@@ -86,10 +86,10 @@ deaths()
 
 const Deaths = () => (
     <>
-        <h1>US COVID-19 Deaths per day</h1>
+        <h1>US COVID-19 Deaths</h1>
         <h1 className={styles.dateLabel}/>
         { svg.node() }
-        <Legend domain={[0, 100]} width={320} color={interpolateReds} />
+        <Legend domain={[0, 500]} width={320} color={interpolateReds} />
         <a href="https://github.com/ScottORLY/coviz19/blob/master/src/deaths/index.js">source code</a>
     </>)
 

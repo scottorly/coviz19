@@ -47,7 +47,7 @@ const cases = async () => {
         return pair[1].filter(d => d.cases > 0)
     }
 
-    const casesColor = scaleSequential([0, 500], interpolateBlues)
+    const casesColor = scaleSequential([0, 1000], interpolateBlues)
     
     const path = geoPath()
     casesSvg.append(() => <g />)
@@ -87,10 +87,10 @@ const cases = async () => {
 cases()
 
 const ConfirmedCases = () => (<>
-    <h1>US Confirmed COVID-19 Cases per day</h1>
+    <h1>US Confirmed COVID-19 Cases</h1>
     <h1 className={styles.dateLabel} />
     { casesSvg.node() }
-    <Legend domain={[0, 500]} width={320} color={interpolateBlues} />
+    <Legend domain={[0, 1000]} width={320} color={interpolateBlues} />
     <a href="https://github.com/ScottORLY/coviz19/blob/master/src/cases/index.js">source code</a>
 </>)
 
