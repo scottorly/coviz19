@@ -18,7 +18,16 @@ const height = 610
 const domain = [1, 100000]
 const parseDate = timeParse("%m/%d/%y")
 
-const casesSvg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
+const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
+
+const svgNode = svg.node()
+const pt = svgNode.createSVGPoint()
+
+const cursorPoint = (evt) => {
+    pt.x = evt.clientX
+    pt.y = event.clientY
+    return pt.matrixTransform(svgNode.getScreenCTM().inverse())
+}
 
 const cases = async () => {
     const counties = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
@@ -54,6 +63,54 @@ const cases = async () => {
         })]
     })
 
+    const casesColor = scaleSequentialLog(interpolateBlues).domain(domain)
+    
+    const path = geoPath()
+    svg.append(() => <g />)
+        .selectAll('path')
+        .data(states)
+        .join(
+            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)} eventListener={['mousemove', e => {
+                
+            }]}/>)
+        )
+      
+    const casesGroup = svg.append(() => <g />)
+    const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
+    
+    const updateCases = (data) => {
+        casesGroup
+        .selectAll('path')
+        .data(data, d => d.id)
+        .join(
+            enter => enter.append(d => (
+                <path 
+                    stroke='#ccc' 
+                    stroke-linejoin='round' 
+                    fill={casesColor(d.cases)} 
+                    d={path(d.feature)}
+                    eventListeners={[
+                        ['mousemove', e => {
+                            const point = cursorPoint(e)
+                            nameLabel
+                                .style('opacity', 1)
+                                .attr('transform', `translate(${point.x + 12}, ${point.y})`)
+                                .text(d.label)
+                        }],
+                        ['mouseout', e => {
+                            nameLabel
+                                .style('opacity', 0)
+                                .text('')
+                        }]
+                    ]}
+                />))
+                .call(enter => enter.style('opacity', 0).transition().style('opacity', 1)),
+            update => update.call(update => update.transition().style('fill', d => casesColor(d.cases))),
+            exit => exit.call(exit => exit.transition().style('opacity', 0).remove())
+        )
+    }
+
+    var counter = 0
     const totals = casesMapped.map(d => sum(d[1], d => d.cases))
 
     const getCasesDay = counter => {
@@ -68,64 +125,7 @@ const cases = async () => {
             .text(date)
         return pair[1].filter(d => d.cases > 0)
     }
-
-    const casesColor = scaleSequentialLog(interpolateBlues).domain(domain)
     
-    const path = geoPath()
-    casesSvg.append(() => <g />)
-        .selectAll('path')
-        .data(states)
-        .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)} eventListener={['mousemove', e => {
-                
-            }]}/>)
-        )
-      
-    const casesGroup = casesSvg.append(() => <g />)
-
-   // Create an SVGPoint
-   const svgNode = casesSvg.node()
-   const pt = svgNode.createSVGPoint()
-
-   // Get point in global SVG space
-   const cursorPoint = (evt) => {
-       pt.x = evt.clientX
-       pt.y = event.clientY
-       return pt.matrixTransform(svgNode.getScreenCTM().inverse())
-   }
-    const nameLabel = casesSvg.append(() => <g/>).append(() => <text y={20}/>)
-
-    const updateCases = (data) => {
-        casesGroup
-        .selectAll('path')
-        .data(data, d => d.id)
-        .join(
-            enter => enter.append(d => <path 
-                stroke='#ccc' 
-                stroke-linejoin='round' 
-                fill={casesColor(d.cases)} 
-                d={path(d.feature)}
-                eventListeners={[
-                    ['mousemove', e => {
-                        const point = cursorPoint(e)
-                        nameLabel
-                            .style('opacity', 1)
-                            .attr('transform', `translate(${point.x + 12}, ${point.y})`)
-                            .text(d.label)
-                    }],
-                    ['mouseout', e => {
-                        nameLabel
-                            .style('opacity', 0)
-                            .text('')
-                    }]
-                ]}/>)
-                .call(enter => enter.style('opacity', 0).transition(250).style('opacity', 1)),
-            update => update.call(update => update.transition(250).style('fill', d => casesColor(d.cases))),
-            exit => exit.call(exit => exit.transition(250).style('opacity', 0).remove())
-        )
-    }
-
-    var counter = 0
     let interval
     interval = setInterval(() => {
         if (counter >= casesMapped.length) {
@@ -144,7 +144,7 @@ const ConfirmedCases = () => (<>
     <h1>US Confirmed COVID-19 Cases</h1>
     <h1 className={styles.dateLabel} />
     <h1 className={styles.totalLabel} />
-    { casesSvg.node() }
+    { svgNode }
     <Legend domain={domain} width={320} color={interpolateBlues} />
     <a href="https://github.com/ScottORLY/coviz19/blob/master/src/cases/index.js">source code</a>
 </>)

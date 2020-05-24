@@ -20,11 +20,9 @@ const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
 
-// Create an SVGPoint
 const svgNode = svg.node()
 const pt = svgNode.createSVGPoint()
 
-// Get point in global SVG space
 const cursorPoint = (evt) => {
     pt.x = evt.clientX
     pt.y = event.clientY
@@ -64,25 +62,11 @@ const deaths = async () => {
         })]
     })
 
-    const totals = mapped.map(d => sum(d[1], d => d.deaths))
-    
-    const getDay = counter => {
-        const pair = mapped[counter]
-        const date = parseDate(pair[0]).toLocaleDateString()
-
-        select(`.${styles.totalLabel}`)
-            .transition('text.tween')
-            .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
-
-        selectAll(`.${styles.dateLabel}`)
-            .text(date)
-        return pair[1].filter(d => d.deaths > 0)
-    }
-
     const color = scaleSequentialLog(interpolateReds).domain(domain)
     const path = geoPath()
 
     const deathGroup = svg.append(() => <g />)
+    const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
 
     svg.append(() => <g />)
         .selectAll('path')
@@ -91,14 +75,13 @@ const deaths = async () => {
             enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)}/>)
         )
 
-    const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
-
     const update = (data) => {
         deathGroup
         .selectAll('path')
         .data(data, d => d.id)
         .join(
-            enter => enter.append(d => <path 
+            enter => enter.append(d => (
+                <path 
                     stroke='#ccc' 
                     stroke-linejoin='round' 
                     fill={color(d.deaths)} 
@@ -116,14 +99,30 @@ const deaths = async () => {
                                 .style('opacity', 0)
                                 .text('')
                         }]
-                 ]}/>)
-                .call(enter => enter.style('opacity', 0).transition(250).style('opacity', 1)),
-            update => update.call(update => update.transition(250).style('fill', d => color(d.deaths))),
-            exit => exit.call(exit => exit.transition(250).style('opacity', 0).remove())
+                    ]}
+                />))
+                .call(enter => enter.style('opacity', 0).transition().style('opacity', 1)),
+            update => update.call(update => update.transition().style('fill', d => color(d.deaths))),
+            exit => exit.call(exit => exit.transition().style('opacity', 0).remove())
         )
     }
 
-    var counter = 0 
+    var counter = 0
+    const totals = mapped.map(d => sum(d[1], d => d.deaths))
+    
+    const getDay = counter => {
+        const pair = mapped[counter]
+        const date = parseDate(pair[0]).toLocaleDateString()
+
+        select(`.${styles.totalLabel}`)
+            .transition('text.tween')
+            .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
+
+        selectAll(`.${styles.dateLabel}`)
+            .text(date)
+        return pair[1].filter(d => d.deaths > 0)
+    }
+
     let interval
     interval = setInterval(() => {
         if (counter >= mapped.length) {
@@ -143,7 +142,7 @@ const Deaths = () => (
         <h1>US COVID-19 Deaths</h1>
         <h1 className={styles.dateLabel}/>
         <h1 className={styles.totalLabel}/>
-        { svg.node() }
+        { svgNode }
         <Legend domain={domain} width={320} color={interpolateReds} />
         <a href="https://github.com/ScottORLY/coviz19/blob/master/src/deaths/index.js">source code</a>
     </>)
