@@ -2,7 +2,10 @@ import styles from './styles.css'
 import Deaths from './deaths'
 import ConfirmedCases from './cases'
 
-document.head.appendChild(<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />)
+document.head.appendChild(<>
+    <meta property="og:image" content="https://raw.githubusercontent.com/ScottORLY/coviz19/master/screengrab.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</>)
 
 document.body.appendChild(
     <div id={styles.app}>

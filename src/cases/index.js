@@ -17,7 +17,6 @@ const parseDate = timeParse("%m/%d/%y")
 
 const casesSvg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
 
-
 const cases = async () => {
     const counties = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
     const cases = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
