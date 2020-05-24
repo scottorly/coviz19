@@ -4,15 +4,17 @@ import { geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
-import {  scaleSequential } from 'd3-scale'
+import { scaleSequential } from 'd3-scale'
 import 'd3-transition'
-import { group } from 'd3-array'
+import { group, sum } from 'd3-array'
 import { interpolateReds } from 'd3-scale-chromatic'
 import Legend from '../legend'
+import textTween from '../tween'
 
 const width = 975
 const height = 610
 const parseDate = timeParse("%m/%d/%y")
+
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
 
 const deaths = async () => {
@@ -30,22 +32,26 @@ const deaths = async () => {
     const sample = data[0]
     const dates = Object.keys(sample).filter(parseDate).sort((a, b) => parseDate(a) > parseDate(b))
 
-    const mapped = [...dates.map(key => {
+    const mapped = dates.map(key => {
         return [key, data.map(d => ({
             id: d.UID.slice(3),
             deaths: d[key],
             feature: (featuresById.get(d.UID.slice(3)) || [])[0]
         }))]
-    })]
+    })
+
+    const totals = mapped.map(d => sum(d[1], d => d.deaths))
     
     const getDay = counter => {
-        const pair = [...mapped][counter]
+        const pair = mapped[counter]
         const date = parseDate(pair[0])
+        const prior = totals[counter-1] || 0
+        select(`.${styles.totalLabel}`).transition(250).tween('text', d => textTween(prior, totals[counter]))
         selectAll(`.${styles.dateLabel}`).text(date.toLocaleDateString())
         return pair[1].filter(d => d.deaths > 0)
     }
 
-    const color = scaleSequential([0, 500], interpolateReds)
+    const color = scaleSequential([0, 1000], interpolateReds)
     const path = geoPath()
 
     const deathGroup = svg.append(() => <g />)
@@ -72,7 +78,7 @@ const deaths = async () => {
     var counter = 0 
     let interval
     interval = setInterval(() => {
-        if (counter >= [...mapped].length) {
+        if (counter >= mapped.length) {
             clearInterval(interval)
             return
         }
@@ -88,8 +94,9 @@ const Deaths = () => (
     <>
         <h1>US COVID-19 Deaths</h1>
         <h1 className={styles.dateLabel}/>
+        <h1 className={styles.totalLabel}/>
         { svg.node() }
-        <Legend domain={[0, 500]} width={320} color={interpolateReds} />
+        <Legend domain={[0, 1000]} width={320} color={interpolateReds} scale={scaleSequential} />
         <a href="https://github.com/ScottORLY/coviz19/blob/master/src/deaths/index.js">source code</a>
     </>)
 
