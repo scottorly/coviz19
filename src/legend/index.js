@@ -2,19 +2,16 @@ import styles from './styles.css'
 import { select  } from 'd3-selection'
 import { scaleSequentialLog } from 'd3-scale'
 import { axisBottom } from 'd3-axis'
-import { format } from 'd3-format'
 
 const ramp = (color) => {
     const n = 320
     const canvas = document.createElement('canvas')
-    const context = canvas.getContext("2d");
-    canvas.style.width = 320;
+    const context = canvas.getContext("2d")
+    canvas.style.width = 320
     canvas.style.height = 44
-    canvas.style.imageRendering = "-moz-crisp-edges";
-    canvas.style.imageRendering = "pixelated";
     for (let i = 0; i < n; ++i) {
-      context.fillStyle = color(i / (n - 1));
-      context.fillRect(i, 0, 1, 44);
+      context.fillStyle = color(i / (n - 1))
+      context.fillRect(i, 0, 1, 44)
     }
     return canvas;
 }
