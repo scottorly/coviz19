@@ -44,10 +44,14 @@ const deaths = async () => {
     
     const getDay = counter => {
         const pair = mapped[counter]
-        const date = parseDate(pair[0])
-        const prior = totals[counter-1] || 0
-        select(`.${styles.totalLabel}`).transition(250).tween('text', d => textTween(prior, totals[counter]))
-        selectAll(`.${styles.dateLabel}`).text(date.toLocaleDateString())
+        const date = parseDate(pair[0]).toLocaleDateString()
+
+        select(`.${styles.totalLabel}`)
+            .transition('text.tween')
+            .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
+
+        selectAll(`.${styles.dateLabel}`)
+            .text(date)
         return pair[1].filter(d => d.deaths > 0)
     }
 

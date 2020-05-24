@@ -46,9 +46,14 @@ const cases = async () => {
 
     const getCasesDay = counter => {
         const pair = casesMapped[counter]
-        const date = parseDate(pair[0])
-        selectAll(`.${styles.totalLabel}`).transition(250).tween('text', d => textTween(totals[counter-1] || 0, totals[counter]))
-        selectAll(`.${styles.dateLabel}`).text(date.toLocaleDateString())
+        const date = parseDate(pair[0]).toLocaleDateString()
+        
+        selectAll(`.${styles.totalLabel}`)
+            .transition('text.tween')
+            .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
+
+        selectAll(`.${styles.dateLabel}`)
+            .text(date)
         return pair[1].filter(d => d.cases > 0)
     }
 
