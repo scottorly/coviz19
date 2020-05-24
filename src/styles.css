@@ -1,3 +1,5 @@
+/* Copyright © 2020 Scott Orlyck. **/
+
 @import url('https://rsms.me/inter/inter.css');
 html { font-family: 'Inter', sans-serif; }
 @supports (font-variation-settings: normal) {
@@ -23,7 +25,7 @@ button:hover {
 }
 
 svg:global {
-    @apply max-h-full max-w-full m-4
+    @apply max-h-full max-w-full m-4 overflow-visible
 }
 
 .footer {

@@ -1,3 +1,5 @@
+//Copyright © 2020 Scott Orlyck.
+
 module.exports = {
   plugins: [
     require('postcss-import'),

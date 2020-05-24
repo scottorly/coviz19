@@ -1,3 +1,5 @@
+//Copyright © 2020 Scott Orlyck.
+
 import styles from './styles.css'
 import Legend from '../legend'
 import textTween from '../tween'
@@ -33,13 +35,23 @@ const cases = async () => {
 
     const sample = casesData[0]
     const dates = Object.keys(sample).filter(parseDate).sort((a, b) => parseDate(a) > parseDate(b))
-    
+
     const casesMapped = dates.map(key => {
-        return [key, casesData.map(d => ({
-            id: d.UID.slice(3),
-            cases: d[key],
-            feature: (featuresById.get(d.UID.slice(3)) || [])[0]
-        }))]
+        return [key, casesData.map(d => {
+            const id = d.UID.slice(3)
+            const feature = (featuresById.get(id) || [])[0] || { properties: {}}
+            const county = feature.properties.name || ''
+            const cases = d[key]
+            const state = d.Province_State
+            const label = `${county} County, ${state}`
+            return {
+                id,
+                cases,
+                feature,
+                label,
+                state
+            }
+        })]
     })
 
     const totals = casesMapped.map(d => sum(d[1], d => d.cases))
@@ -64,17 +76,49 @@ const cases = async () => {
         .selectAll('path')
         .data(states)
         .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)}/>)
+            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)} eventListener={['mousemove', e => {
+                
+            }]}/>)
         )
       
     const casesGroup = casesSvg.append(() => <g />)
+
+   // Create an SVGPoint
+   const svgNode = casesSvg.node()
+   const pt = svgNode.createSVGPoint()
+
+   // Get point in global SVG space
+   const cursorPoint = (evt) => {
+       pt.x = evt.clientX
+       pt.y = event.clientY
+       return pt.matrixTransform(svgNode.getScreenCTM().inverse())
+   }
+    const nameLabel = casesSvg.append(() => <g/>).append(() => <text y={20}/>)
 
     const updateCases = (data) => {
         casesGroup
         .selectAll('path')
         .data(data, d => d.id)
         .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill={casesColor(d.cases)} d={path(d.feature)}/>)
+            enter => enter.append(d => <path 
+                stroke='#ccc' 
+                stroke-linejoin='round' 
+                fill={casesColor(d.cases)} 
+                d={path(d.feature)}
+                eventListeners={[
+                    ['mousemove', e => {
+                        const point = cursorPoint(e)
+                        nameLabel
+                            .style('opacity', 1)
+                            .attr('transform', `translate(${point.x + 12}, ${point.y})`)
+                            .text(d.label)
+                    }],
+                    ['mouseout', e => {
+                        nameLabel
+                            .style('opacity', 0)
+                            .text('')
+                    }]
+                ]}/>)
                 .call(enter => enter.style('opacity', 0).transition(250).style('opacity', 1)),
             update => update.call(update => update.transition(250).style('fill', d => casesColor(d.cases))),
             exit => exit.call(exit => exit.transition(250).style('opacity', 0).remove())

@@ -1,3 +1,5 @@
+//Copyright © 2020 Scott Orlyck.
+
 import { interpolateNumber } from 'd3-interpolate'
 import { format  } from 'd3-format'
 

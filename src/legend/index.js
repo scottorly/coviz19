@@ -1,3 +1,5 @@
+//Copyright © 2020 Scott Orlyck.
+
 import styles from './styles.css'
 import { select  } from 'd3-selection'
 import { scaleSequentialLog } from 'd3-scale'

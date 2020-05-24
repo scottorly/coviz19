@@ -1,3 +1,5 @@
+//Copyright © 2020 Scott Orlyck.
+
 import styles from './styles.css'
 import { csvParse } from 'd3-dsv'
 import { geoPath } from 'd3-geo'
@@ -18,6 +20,17 @@ const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
 
+// Create an SVGPoint
+const svgNode = svg.node()
+const pt = svgNode.createSVGPoint()
+
+// Get point in global SVG space
+const cursorPoint = (evt) => {
+    pt.x = evt.clientX
+    pt.y = event.clientY
+    return pt.matrixTransform(svgNode.getScreenCTM().inverse())
+}
+
 const deaths = async () => {
     const counties = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
     const covid = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv')
@@ -34,11 +47,21 @@ const deaths = async () => {
     const dates = Object.keys(sample).filter(parseDate).sort((a, b) => parseDate(a) > parseDate(b))
 
     const mapped = dates.map(key => {
-        return [key, data.map(d => ({
-            id: d.UID.slice(3),
-            deaths: d[key],
-            feature: (featuresById.get(d.UID.slice(3)) || [])[0]
-        }))]
+        return [key, data.map(d => {
+            const id = d.UID.slice(3)
+            const feature = (featuresById.get(id) || [])[0] || { properties: {}}
+            const county = feature.properties.name || ''
+            const deaths = d[key]
+            const state = d.Province_State
+            const label = `${county} County, ${state}`
+            return {
+                id,
+                deaths,
+                feature,
+                label,
+                state
+            }
+        })]
     })
 
     const totals = mapped.map(d => sum(d[1], d => d.deaths))
@@ -68,12 +91,32 @@ const deaths = async () => {
             enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)}/>)
         )
 
+    const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
+
     const update = (data) => {
         deathGroup
         .selectAll('path')
         .data(data, d => d.id)
         .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill={color(d.deaths)} d={path(d.feature)}/>)
+            enter => enter.append(d => <path 
+                    stroke='#ccc' 
+                    stroke-linejoin='round' 
+                    fill={color(d.deaths)} 
+                    d={path(d.feature)}
+                    eventListeners={[
+                        ['mousemove', e => {
+                            const point = cursorPoint(e)
+                            nameLabel
+                                .style('opacity', 1)
+                                .attr('transform', `translate(${point.x + 12}, ${point.y})`)
+                                .text(d.label)
+                        }],
+                        ['mouseout', e => {
+                            nameLabel
+                                .style('opacity', 0)
+                                .text('')
+                        }]
+                 ]}/>)
                 .call(enter => enter.style('opacity', 0).transition(250).style('opacity', 1)),
             update => update.call(update => update.transition(250).style('fill', d => color(d.deaths))),
             exit => exit.call(exit => exit.transition(250).style('opacity', 0).remove())

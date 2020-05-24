@@ -1,3 +1,5 @@
+//Copyright © 2020 Scott Orlyck.
+
 import styles from './styles.css'
 import Deaths from './deaths'
 import ConfirmedCases from './cases'
