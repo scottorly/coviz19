@@ -1,7 +1,8 @@
 import styles from './styles.css'
 import { select  } from 'd3-selection'
-import {  scaleSequential } from 'd3-scale'
+import { scaleSequentialLog } from 'd3-scale'
 import { axisBottom } from 'd3-axis'
+import { format } from 'd3-format'
 
 const ramp = (color) => {
     const n = 320
@@ -29,8 +30,9 @@ const Legend = ({ attributes: { domain, width, color }}) => {
             preserveAspectRatio='none' 
             href={ramp(color).toDataURL()}
         />))
-    const x = scaleSequential().domain(domain).range([0, width])
-    legend.append(() => <g transform='translate(0, 20)'/>).call(axisBottom(x).ticks())
+
+    const x = scaleSequentialLog(color).domain(domain).range([0, width]).nice()
+    legend.append(() => <g transform='translate(0, 20)'/>).call(axisBottom(x).ticks(5, ","))
     return legend.node()
 }
 

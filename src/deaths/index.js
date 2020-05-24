@@ -4,7 +4,7 @@ import { geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
-import { scaleSequential } from 'd3-scale'
+import { scaleSequentialLog } from 'd3-scale'
 import 'd3-transition'
 import { group, sum } from 'd3-array'
 import { interpolateReds } from 'd3-scale-chromatic'
@@ -13,6 +13,7 @@ import textTween from '../tween'
 
 const width = 975
 const height = 610
+const domain = [1, 100000]
 const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
@@ -55,7 +56,7 @@ const deaths = async () => {
         return pair[1].filter(d => d.deaths > 0)
     }
 
-    const color = scaleSequential([0, 1000], interpolateReds)
+    const color = scaleSequentialLog(interpolateReds).domain(domain)
     const path = geoPath()
 
     const deathGroup = svg.append(() => <g />)
@@ -100,7 +101,7 @@ const Deaths = () => (
         <h1 className={styles.dateLabel}/>
         <h1 className={styles.totalLabel}/>
         { svg.node() }
-        <Legend domain={[0, 1000]} width={320} color={interpolateReds} scale={scaleSequential} />
+        <Legend domain={domain} width={320} color={interpolateReds} />
         <a href="https://github.com/ScottORLY/coviz19/blob/master/src/deaths/index.js">source code</a>
     </>)
 

@@ -6,13 +6,14 @@ import { geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
-import { scaleSequential } from 'd3-scale'
+import { scaleSequentialLog } from 'd3-scale'
 import 'd3-transition'
 import { group, sum } from 'd3-array'
 import { interpolateBlues } from 'd3-scale-chromatic'
 
 const width = 975
 const height = 610
+const domain = [1, 100000]
 const parseDate = timeParse("%m/%d/%y")
 
 const casesSvg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
@@ -56,7 +57,7 @@ const cases = async () => {
         return pair[1].filter(d => d.cases > 0)
     }
 
-    const casesColor = scaleSequential([0, 5000], interpolateBlues)
+    const casesColor = scaleSequentialLog(interpolateBlues).domain(domain)
     
     const path = geoPath()
     casesSvg.append(() => <g />)
@@ -73,7 +74,7 @@ const cases = async () => {
         .selectAll('path')
         .data(data, d => d.id)
         .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d.feature)}/>)
+            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill={casesColor(d.cases)} d={path(d.feature)}/>)
                 .call(enter => enter.style('opacity', 0).transition(250).style('opacity', 1)),
             update => update.call(update => update.transition(250).style('fill', d => casesColor(d.cases))),
             exit => exit.call(exit => exit.transition(250).style('opacity', 0).remove())
@@ -100,7 +101,7 @@ const ConfirmedCases = () => (<>
     <h1 className={styles.dateLabel} />
     <h1 className={styles.totalLabel} />
     { casesSvg.node() }
-    <Legend domain={[0, 5000]} width={320} color={interpolateBlues} />
+    <Legend domain={domain} width={320} color={interpolateBlues} />
     <a href="https://github.com/ScottORLY/coviz19/blob/master/src/cases/index.js">source code</a>
 </>)
 
