@@ -87,9 +87,9 @@ const deaths = async () => {
                     cursorPoint={cursorPoint} 
                     />
                 ))
-                .call(enter => enter.style('opacity', 0).transition().style('opacity', 1)),
-            update => update.call(update => update.transition().style('fill', d => color(d.deaths))),
-            exit => exit.call(exit => exit.transition().style('opacity', 0).remove())
+                .call(enter => enter.style('opacity', 0).transition().duration(500).style('opacity', 1)),
+            update => update.call(update => update.transition().duration(500).style('fill', d => color(d.deaths))),
+            exit => exit.call(exit => exit.transition().duration(500).style('opacity', 0).remove())
         )
     }
 
@@ -101,7 +101,7 @@ const deaths = async () => {
         const date = parseDate(pair[0]).toLocaleDateString()
 
         selectAll(`.${styles.totalLabel}`)
-            .transition('text.tween')
+            .transition('text.tween').duration(500)
             .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
 
         selectAll(`.${styles.dateLabel}`)
