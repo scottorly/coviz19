@@ -26,7 +26,6 @@ const cases = async () => {
 
     const casesData = csvParse(covidCases).filter(d => d.UID.slice(3).length > 0)
 
-    console.log(casesData)
     const features = feature(us, us.objects.counties).features
     const states = feature(us, us.objects.states).features
     const featuresById = group(features, feature => feature.id)
@@ -47,7 +46,7 @@ const cases = async () => {
     const getCasesDay = counter => {
         const pair = casesMapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
-        
+
         selectAll(`.${styles.totalLabel}`)
             .transition('text.tween')
             .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
@@ -84,7 +83,7 @@ const cases = async () => {
     var counter = 0
     let interval
     interval = setInterval(() => {
-        if (counter >= [...casesMapped].length) {
+        if (counter >= casesMapped.length) {
             clearInterval(interval)
             return
         }

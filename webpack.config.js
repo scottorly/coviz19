@@ -20,8 +20,9 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "COVIZ-19",
-            chunksSortMode: "none"
+            template: 'src/index.html',
+            chunksSortMode: "none",
+
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[hash].css',
