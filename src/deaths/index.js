@@ -59,7 +59,7 @@ const deaths = async () => {
                 label,
                 state
             }
-        })]
+        }).filter(d => d.deaths > 0)]
     })
 
     const color = scaleSequentialLog(interpolateReds).domain(domain)
@@ -100,19 +100,17 @@ const deaths = async () => {
         const pair = mapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
 
-        select(`.${styles.totalLabel}`)
+        selectAll(`.${styles.totalLabel}`)
             .transition('text.tween')
             .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
 
         selectAll(`.${styles.dateLabel}`)
             .text(date)
-        return pair[1].filter(d => d.deaths > 0)
+        return pair[1]
     }
 
-    let interval
-    interval = setInterval(() => {
+    window.addEventListener('tick', e => {
         if (counter >= mapped.length) {
-            clearInterval(interval)
             return
         }
         const day = getDay(counter)
@@ -120,8 +118,6 @@ const deaths = async () => {
         counter++
     }, 250)
 }
-
-deaths()
 
 const Deaths = () => (
     <>
@@ -133,4 +129,4 @@ const Deaths = () => (
         <a href="https://github.com/ScottORLY/coviz19/blob/master/src/deaths/index.js">source code</a>
     </>)
 
-export default Deaths
+export { Deaths as default, deaths }

@@ -1,8 +1,8 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from './styles.css'
-import Deaths from './deaths'
-import ConfirmedCases from './cases'
+import Deaths, { deaths } from './deaths'
+import ConfirmedCases, { cases } from './cases'
 // import Daily from './daily'
 
 document.body.appendChild(
@@ -16,3 +16,10 @@ document.body.appendChild(
     </div>
 
 )
+
+Promise.all([cases(), deaths()]).then(() => {
+    let interval
+    interval = setInterval(() => {
+        window.dispatchEvent(new CustomEvent('tick'))
+    }, 500)
+})

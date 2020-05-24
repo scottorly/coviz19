@@ -60,7 +60,7 @@ const cases = async () => {
                 label,
                 state
             }
-        })]
+        }).filter(d => d.cases > 0)]
     })
 
     const color = scaleSequentialLog(interpolateBlues).domain(domain)
@@ -107,22 +107,18 @@ const cases = async () => {
 
         selectAll(`.${styles.dateLabel}`)
             .text(date)
-        return pair[1].filter(d => d.cases > 0)
+        return pair[1]
     }
     
-    let interval
-    interval = setInterval(() => {
+    window.addEventListener('tick', e => {
         if (counter >= casesMapped.length) {
-            clearInterval(interval)
             return
         }
         const casesDay = getCasesDay(counter)
         updateCases(casesDay)
         counter++
-    }, 250)
+    })
 }
-
-cases()
 
 const ConfirmedCases = () => (
     <>
@@ -135,4 +131,4 @@ const ConfirmedCases = () => (
     </>
 )
 
-export default ConfirmedCases
+export { ConfirmedCases as default, cases }
