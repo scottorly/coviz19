@@ -4,7 +4,6 @@ import styles from './styles.css'
 import Legend from '../legend'
 import textTween from '../tween'
 import { csvParse } from 'd3-dsv'
-import { geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
@@ -12,6 +11,7 @@ import { scaleSequentialLog } from 'd3-scale'
 import 'd3-transition'
 import { group, sum } from 'd3-array'
 import { interpolateBlues } from 'd3-scale-chromatic'
+import { StatePath, FeaturePath } from '../paths'
 
 const width = 975
 const height = 610
@@ -63,49 +63,33 @@ const cases = async () => {
         })]
     })
 
-    const casesColor = scaleSequentialLog(interpolateBlues).domain(domain)
+    const color = scaleSequentialLog(interpolateBlues).domain(domain)
     
-    const path = geoPath()
     svg.append(() => <g />)
         .selectAll('path')
         .data(states)
         .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)} eventListener={['mousemove', e => {
-                
-            }]}/>)
+            enter => enter.append(d => <StatePath d={d} />)
         )
       
     const casesGroup = svg.append(() => <g />)
     const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
-    
+
     const updateCases = (data) => {
         casesGroup
         .selectAll('path')
         .data(data, d => d.id)
         .join(
             enter => enter.append(d => (
-                <path 
-                    stroke='#ccc' 
-                    stroke-linejoin='round' 
-                    fill={casesColor(d.cases)} 
-                    d={path(d.feature)}
-                    eventListeners={[
-                        ['mousemove', e => {
-                            const point = cursorPoint(e)
-                            nameLabel
-                                .style('opacity', 1)
-                                .attr('transform', `translate(${point.x + 12}, ${point.y})`)
-                                .text(d.label)
-                        }],
-                        ['mouseout', e => {
-                            nameLabel
-                                .style('opacity', 0)
-                                .text('')
-                        }]
-                    ]}
-                />))
+                <FeaturePath 
+                d={d} 
+                nameLabel={nameLabel} 
+                fill={color(d.cases)} 
+                cursorPoint={cursorPoint} 
+                />)
+            )
                 .call(enter => enter.style('opacity', 0).transition().style('opacity', 1)),
-            update => update.call(update => update.transition().style('fill', d => casesColor(d.cases))),
+            update => update.call(update => update.transition().style('fill', d => color(d.cases))),
             exit => exit.call(exit => exit.transition().style('opacity', 0).remove())
         )
     }
@@ -140,13 +124,15 @@ const cases = async () => {
 
 cases()
 
-const ConfirmedCases = () => (<>
-    <h1>US Confirmed COVID-19 Cases</h1>
-    <h1 className={styles.dateLabel} />
-    <h1 className={styles.totalLabel} />
-    { svgNode }
-    <Legend domain={domain} width={320} color={interpolateBlues} />
-    <a href="https://github.com/ScottORLY/coviz19/blob/master/src/cases/index.js">source code</a>
-</>)
+const ConfirmedCases = () => (
+    <>
+        <h1>US Confirmed COVID-19 Cases</h1>
+        <h1 className={styles.dateLabel} />
+        <h1 className={styles.totalLabel} />
+        { svgNode }
+        <Legend domain={domain} width={320} color={interpolateBlues} />
+        <a href="https://github.com/ScottORLY/coviz19/blob/master/src/cases/index.js">source code</a>
+    </>
+)
 
 export default ConfirmedCases

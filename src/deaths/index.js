@@ -2,7 +2,6 @@
 
 import styles from './styles.css'
 import { csvParse } from 'd3-dsv'
-import { geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
@@ -12,6 +11,7 @@ import { group, sum } from 'd3-array'
 import { interpolateReds } from 'd3-scale-chromatic'
 import Legend from '../legend'
 import textTween from '../tween'
+import { StatePath, FeaturePath } from '../paths'
 
 const width = 975
 const height = 610
@@ -63,16 +63,15 @@ const deaths = async () => {
     })
 
     const color = scaleSequentialLog(interpolateReds).domain(domain)
-    const path = geoPath()
 
     const deathGroup = svg.append(() => <g />)
     const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
-
+    
     svg.append(() => <g />)
         .selectAll('path')
         .data(states)
         .join(
-            enter => enter.append(d => <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)}/>)
+            enter => enter.append(d => <StatePath d={d} />)
         )
 
     const update = (data) => {
@@ -81,26 +80,13 @@ const deaths = async () => {
         .data(data, d => d.id)
         .join(
             enter => enter.append(d => (
-                <path 
-                    stroke='#ccc' 
-                    stroke-linejoin='round' 
+                <FeaturePath 
+                    d={d} 
+                    nameLabel={nameLabel} 
                     fill={color(d.deaths)} 
-                    d={path(d.feature)}
-                    eventListeners={[
-                        ['mousemove', e => {
-                            const point = cursorPoint(e)
-                            nameLabel
-                                .style('opacity', 1)
-                                .attr('transform', `translate(${point.x + 12}, ${point.y})`)
-                                .text(d.label)
-                        }],
-                        ['mouseout', e => {
-                            nameLabel
-                                .style('opacity', 0)
-                                .text('')
-                        }]
-                    ]}
-                />))
+                    cursorPoint={cursorPoint} 
+                    />
+                ))
                 .call(enter => enter.style('opacity', 0).transition().style('opacity', 1)),
             update => update.call(update => update.transition().style('fill', d => color(d.deaths))),
             exit => exit.call(exit => exit.transition().style('opacity', 0).remove())
