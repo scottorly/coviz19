@@ -15,7 +15,7 @@ import { StatePath, FeaturePath } from '../paths'
 
 const width = 975
 const height = 610
-const domain = [1, 100000]
+const domain = [1, 10000]
 const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
@@ -36,6 +36,13 @@ const deaths = async () => {
     const covidCsv = await covid.text()
     const us = await counties.json()
 
+    const pop = await fetch(`https://api.census.gov/data/2018/pep/population?get=POP&for=county`)
+    const population = await pop.json()
+
+    const rows = population.slice(1)
+        .map(([population, state, county]) => [`${state}${county}`, +population])
+    const popByCounty = new Map(rows)
+
     const data = csvParse(covidCsv).filter(d => d.UID.slice(3).length > 0)
     const features = feature(us, us.objects.counties).features
     const states = feature(us, us.objects.states).features
@@ -49,7 +56,9 @@ const deaths = async () => {
             const id = d.UID.slice(3)
             const feature = (featuresById.get(id) || [])[0] || { properties: {}}
             const county = feature.properties.name || ''
-            const deaths = d[key]
+            const total = d[key]
+            const pop = popByCounty.get(id)
+            const deaths = (d[key] / pop) * 1e5
             const state = d.Province_State
             const label = `${county} County, ${state}`
             return {
@@ -57,7 +66,9 @@ const deaths = async () => {
                 deaths,
                 feature,
                 label,
-                state
+                state,
+                pop,
+                total
             }
         }).filter(d => d.deaths > 0)]
     })
@@ -74,7 +85,7 @@ const deaths = async () => {
             enter => enter.append(d => <StatePath d={d} />)
         )
 
-    const update = (data) => {
+    const update = (data, t) => {
         deathGroup
         .selectAll('path')
         .data(data, d => d.id)
@@ -87,21 +98,21 @@ const deaths = async () => {
                     cursorPoint={cursorPoint} 
                     />
                 ))
-                .call(enter => enter.style('opacity', 0).transition().duration(500).style('opacity', 1)),
-            update => update.call(update => update.transition().duration(500).style('fill', d => color(d.deaths))),
-            exit => exit.call(exit => exit.transition().duration(500).style('opacity', 0).remove())
+                .call(enter => enter.style('opacity', 0).transition(t).style('opacity', 1)),
+            update => update.call(update => update.transition(t).style('fill', d => color(d.deaths))),
+            exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
         )
     }
 
     var counter = 0
-    const totals = mapped.map(d => sum(d[1], d => d.deaths))
+    const totals = mapped.map(d => sum(d[1], d => d.total))
     
-    const getDay = counter => {
+    const getDay = (counter, t) => {
         const pair = mapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
 
         selectAll(`.${styles.totalLabel}`)
-            .transition('text.tween').duration(500)
+            .transition(t)
             .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
 
         selectAll(`.${styles.dateLabel}`)
@@ -113,8 +124,9 @@ const deaths = async () => {
         if (counter >= mapped.length) {
             return
         }
-        const day = getDay(counter)
-        update(day)
+        const t = e.detail
+        const day = getDay(counter, t)
+        update(day, t)
         counter++
     }, 250)
 }
@@ -125,8 +137,7 @@ const Deaths = () => (
         <h1 className={styles.dateLabel}/>
         <h1 className={styles.totalLabel}/>
         { svgNode }
-        <Legend domain={domain} width={320} color={interpolateReds} />
-        <a href="https://github.com/ScottORLY/coviz19/blob/master/src/deaths/index.js">source code</a>
+        <Legend domain={domain} width={320} color={interpolateReds} label='COVID-19 deaths per 100k' />
     </>)
 
 export { Deaths as default, deaths }

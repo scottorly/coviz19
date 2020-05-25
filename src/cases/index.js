@@ -30,11 +30,19 @@ const cursorPoint = (evt) => {
 }
 
 const cases = async () => {
+    const pop = await fetch(`https://api.census.gov/data/2018/pep/population?get=POP&for=county`)
     const counties = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
     const cases = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
 
     const us = await counties.json()
     const covidCases = await cases.text()
+
+    const population = await pop.json()
+
+    const rows = population.slice(1) 
+        .map(([population, state, county]) => [`${state}${county}`, +population])
+
+    const popByCounty = new Map(rows)
 
     const casesData = csvParse(covidCases).filter(d => d.UID.slice(3).length > 0)
 
@@ -48,9 +56,11 @@ const cases = async () => {
     const casesMapped = dates.map(key => {
         return [key, casesData.map(d => {
             const id = d.UID.slice(3)
+            const total = d[key]
+            const pop = popByCounty.get(id)
             const feature = (featuresById.get(id) || [])[0] || { properties: {}}
             const county = feature.properties.name || ''
-            const cases = d[key]
+            const cases = (total/ pop) * 1e5
             const state = d.Province_State
             const label = `${county} County, ${state}`
             return {
@@ -58,51 +68,54 @@ const cases = async () => {
                 cases,
                 feature,
                 label,
-                state
+                state,
+                pop,
+                total
             }
-        }).filter(d => d.cases > 0)]
+        }).filter(d => d.total > 0)]
     })
 
     const color = scaleSequentialLog(interpolateBlues).domain(domain)
     
-    svg.append(() => <g />)
-        .selectAll('path')
-        .data(states)
-        .join(
-            enter => enter.append(d => <StatePath d={d} />)
-        )
-      
+
     const casesGroup = svg.append(() => <g />)
     const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
 
-    const updateCases = (data) => {
+    const updateCases = (data, t) => {
         casesGroup
         .selectAll('path')
         .data(data, d => d.id)
         .join(
             enter => enter.append(d => (
                 <FeaturePath 
-                d={d} 
-                nameLabel={nameLabel} 
-                fill={color(d.cases)} 
-                cursorPoint={cursorPoint} 
+                    d={d} 
+                    nameLabel={nameLabel} 
+                    fill={color(d.cases)} 
+                    cursorPoint={cursorPoint} 
                 />)
             )
-                .call(enter => enter.style('opacity', 0).transition().duration(500).style('opacity', 1)),
-            update => update.call(update => update.transition().duration(500).style('fill', d => color(d.cases))),
-            exit => exit.call(exit => exit.transition().style('opacity', 0).remove())
+                .call(enter => enter.style('opacity', 0).transition(t).style('opacity', 1)),
+            update => update.call(update => update.transition(t).style('fill', d => color(d.cases))),
+            exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
         )
     }
 
     var counter = 0
-    const totals = casesMapped.map(d => sum(d[1], d => d.cases))
+    const totals = casesMapped.map(d => sum(d[1], d => d.total))
 
-    const getCasesDay = counter => {
+    svg.append(() => <g />)
+        .selectAll('path')
+        .data(states)
+        .join(
+            enter => enter.append(d => <StatePath d={d} />)
+        )
+
+    const getCasesDay = (counter, t) => {
         const pair = casesMapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
 
         selectAll(`.${styles.totalLabel}`)
-            .transition('text.tween').duration(500)
+            .transition(t)
             .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
 
         selectAll(`.${styles.dateLabel}`)
@@ -111,11 +124,12 @@ const cases = async () => {
     }
     
     window.addEventListener('tick', e => {
+        const t = e.detail
         if (counter >= casesMapped.length) {
             return
         }
-        const casesDay = getCasesDay(counter)
-        updateCases(casesDay)
+        const casesDay = getCasesDay(counter, t)
+        updateCases(casesDay, t)
         counter++
     })
 }
@@ -126,8 +140,7 @@ const ConfirmedCases = () => (
         <h1 className={styles.dateLabel} />
         <h1 className={styles.totalLabel} />
         { svgNode }
-        <Legend domain={domain} width={320} color={interpolateBlues} />
-        <a href="https://github.com/ScottORLY/coviz19/blob/master/src/cases/index.js">source code</a>
+        <Legend domain={domain} width={320} color={interpolateBlues} label='COVID-19 cases per 100k' />
     </>
 )
 

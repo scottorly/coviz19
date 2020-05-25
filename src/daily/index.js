@@ -5,7 +5,6 @@ import { csvParse } from 'd3-dsv'
 import { timeParse, timeFormat } from 'd3-time-format'
 import { group, sum } from 'd3-array'
 import { timeDay } from 'd3-time'
-import { geoPath } from 'd3-geo'
 import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
 import { StatePath } from '../paths'
@@ -24,7 +23,6 @@ const daily = async () => {
     const us = await counties.json()
     const states = feature(us, us.objects.states).features
 
-    const path = geoPath()
     svg.append(() => <g />)
         .selectAll('path')
         .data(states)
@@ -44,12 +42,11 @@ const daily = async () => {
 
     const data = await Promise.all(requests)
     const byDay = new Map([...data])
+    console.log(byDay)
     return byDay
 }
 
-daily()
-
-const Dailys = () => (<>
+const StatesDaily = () => (<>
     <h1> US States daily reports</h1>
     <h1 className={styles.dateLabel} />
     <h1 className={styles.totalLabel} />
@@ -57,4 +54,4 @@ const Dailys = () => (<>
     <a href="https://github.com/ScottORLY/coviz19/blob/master/src/daily/index.js">source code</a>
 </>)
 
-export default Dailys
+export { StatesDaily as default, daily }

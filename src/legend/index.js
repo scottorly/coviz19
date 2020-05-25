@@ -18,7 +18,7 @@ const ramp = (color) => {
     return canvas;
 }
 
-const Legend = ({ attributes: { domain, width, color }}) => {
+const Legend = ({ attributes: { domain, width, color, label }}) => {
     const legend = select(<svg className={styles.legend} width={320} height={44}/>)
     legend.append(() => (
         <image 
@@ -32,6 +32,7 @@ const Legend = ({ attributes: { domain, width, color }}) => {
 
     const x = scaleSequentialLog(color).domain(domain).range([0, width]).nice()
     legend.append(() => <g transform='translate(0, 20)'/>).call(axisBottom(x).ticks(5, ","))
+    legend.append(() => <g transform='translate(0, -8)' />).append('text').text(label)
     return legend.node()
 }
 
