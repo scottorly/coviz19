@@ -15,7 +15,7 @@ import { zoom } from 'd3-zoom'
 
 const width = 975
 const height = 610
-const domain = [1, 10000]
+const domain = [1, 1000]
 const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
@@ -130,7 +130,12 @@ const Deaths = () => (
         <h1 className={styles.dateLabel}>1/22/2020</h1>
         <h1 className={styles.totalLabel}>0</h1>
         { svg.node() }
-        <Legend domain={domain} width={320} color={interpolateReds} label='COVID-19 deaths per 100k' />
+        <Legend 
+            domain={domain} 
+            width={320} 
+            scale={scaleSequentialLog} 
+            color={interpolateReds} 
+            label='COVID-19 deaths per 100k' />
     </>)
 
 export { Deaths as default, deaths }

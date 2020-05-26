@@ -6,7 +6,7 @@ import textTween from '../tween'
 import { csvParse } from 'd3-dsv'
 import { select , selectAll, event } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
-import { scaleSequentialLog } from 'd3-scale'
+import { scaleSequentialLog, scaleSequential } from 'd3-scale'
 import 'd3-transition'
 import { group, sum } from 'd3-array'
 import { interpolateBlues } from 'd3-scale-chromatic'
@@ -15,7 +15,7 @@ import { zoom } from 'd3-zoom'
 
 const width = 975
 const height = 610
-const domain = [1, 100000]
+const domain = [1, 10000]
 const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
@@ -130,7 +130,12 @@ const ConfirmedCases = () => (
         <h1 className={styles.dateLabel}>1/22/2020</h1>
         <h1 className={styles.totalLabel}>0</h1>
         { svg.node() }
-        <Legend domain={domain} width={320} color={interpolateBlues} label='COVID-19 cases per 100k' />
+        <Legend
+            domain={domain}
+            width={320}
+            scale={scaleSequentialLog}
+            color={interpolateBlues}
+            label='COVID-19 cases per 100k' />
     </>
 )
 
