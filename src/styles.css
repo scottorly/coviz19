@@ -16,14 +16,6 @@ h1:global {
     @apply p-1 m-1 mt-4
 }
 
-button {
-    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded justify-center w-20 ml-8
-}
-
-button:hover {
-    @apply bg-blue-700
-}
-
 svg:global {
     @apply max-h-full max-w-full m-4 overflow-visible
 }

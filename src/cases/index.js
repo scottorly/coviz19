@@ -48,18 +48,18 @@ const cases = async () => {
 
     const features = feature(us, us.objects.counties).features
     const states = feature(us, us.objects.states).features
-    const featuresById = group(features, feature => feature.id)
+    const featuresById = group(features, feature=> feature.id)
 
     const sample = casesData[0]
-    const dates = Object.keys(sample).filter(parseDate).sort((a, b) => parseDate(a) > parseDate(b))
+    const dates = Object.keys(sample).filter(parseDate)
 
     const casesMapped = dates.map(key => {
         return [key, casesData.map(d => {
             const id = d.UID.slice(3)
-            const total = d[key]
-            const pop = popByCounty.get(id)
+            const total = +d[key] || 0
+            const pop = +popByCounty.get(id) || 1
             const feature = (featuresById.get(id) || [])[0] || { properties: {}}
-            const county = feature.properties.name || ''
+            const county = feature.properties.name
             const cases = (total/ pop) * 1e5
             const state = d.Province_State
             const label = `${county} County, ${state}`
@@ -72,11 +72,9 @@ const cases = async () => {
                 pop,
                 total
             }
-        }).filter(d => d.total > 0)]
+        })]
     })
-
     const color = scaleSequentialLog(interpolateBlues).domain(domain)
-    
 
     const casesGroup = svg.append(() => <g />)
     const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
@@ -100,7 +98,6 @@ const cases = async () => {
         )
     }
 
-    var counter = 0
     const totals = casesMapped.map(d => sum(d[1], d => d.total))
 
     svg.append(() => <g />)
@@ -124,21 +121,22 @@ const cases = async () => {
     }
     
     window.addEventListener('tick', e => {
-        const t = e.detail
+        const counter = e.detail.counter
         if (counter >= casesMapped.length) {
             return
         }
+        const t = e.detail.t
         const casesDay = getCasesDay(counter, t)
         updateCases(casesDay, t)
-        counter++
+
     })
 }
 
 const ConfirmedCases = () => (
     <>
         <h1>US Confirmed COVID-19 Cases</h1>
-        <h1 className={styles.dateLabel} />
-        <h1 className={styles.totalLabel} />
+        <h1 className={styles.dateLabel}>1/22/2020</h1>
+        <h1 className={styles.totalLabel}>0</h1>
         { svgNode }
         <Legend domain={domain} width={320} color={interpolateBlues} label='COVID-19 cases per 100k' />
     </>

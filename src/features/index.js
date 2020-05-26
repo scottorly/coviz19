@@ -1,6 +1,8 @@
+//Copyright © 2020 Scott Orlyck.
+
 import { feature } from 'topojson-client'
 
-let json
+let json;
 
 (async function () {
     const request = fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')

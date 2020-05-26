@@ -70,7 +70,7 @@ const deaths = async () => {
                 pop,
                 total
             }
-        }).filter(d => d.deaths > 0)]
+        })]
     })
 
     const color = scaleSequentialLog(interpolateReds).domain(domain)
@@ -104,7 +104,6 @@ const deaths = async () => {
         )
     }
 
-    var counter = 0
     const totals = mapped.map(d => sum(d[1], d => d.total))
     
     const getDay = (counter, t) => {
@@ -121,21 +120,21 @@ const deaths = async () => {
     }
 
     window.addEventListener('tick', e => {
+        const counter = e.detail.counter
         if (counter >= mapped.length) {
             return
         }
-        const t = e.detail
+        const t = e.detail.t
         const day = getDay(counter, t)
         update(day, t)
-        counter++
     }, 250)
 }
 
 const Deaths = () => (
     <>
         <h1>US COVID-19 Deaths</h1>
-        <h1 className={styles.dateLabel}/>
-        <h1 className={styles.totalLabel}/>
+        <h1 className={styles.dateLabel}>1/22/2020</h1>
+        <h1 className={styles.totalLabel}>0</h1>
         { svgNode }
         <Legend domain={domain} width={320} color={interpolateReds} label='COVID-19 deaths per 100k' />
     </>)

@@ -3,12 +3,12 @@
 import styles from './styles.css'
 import ConfirmedCases, { cases } from './cases'
 import Deaths, { deaths } from './deaths'
-import { transition } from 'd3-transition'
-import { easeQuadIn } from 'd3-ease'
+import Controls from './controls'
 
 document.body.appendChild(
     <div id={styles.app}>
         <ConfirmedCases />
+        <Controls />
         <Deaths />
         <div className={styles.footer}>
             <p>
@@ -22,9 +22,5 @@ document.body.appendChild(
 )
 
 Promise.all([cases(), deaths()]).then(() => {
-    let interval
-    interval = setInterval(() => {
-        const t = transition().duration(500).ease(easeQuadIn)
-        window.dispatchEvent(new CustomEvent('tick'), { details: transition })
-    }, 500)
+  
 })
