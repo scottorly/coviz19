@@ -21,6 +21,14 @@ const parseDate = timeParse("%m/%d/%y")
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
 
 const deaths = async (states, counties, population) => {
+
+    svg.append(() => <g />)
+    .selectAll('path')
+    .data(states)
+    .join(
+        enter => enter.append(d => <StatePath d={d} />)
+    )
+
     const covid = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv')
     const covidCsv = await covid.text()
 
@@ -59,13 +67,6 @@ const deaths = async (states, counties, population) => {
     const color = scaleSequentialLog(interpolateReds).domain(domain)
 
     const deathGroup = svg.append(() => <g />)
-    
-    svg.append(() => <g />)
-        .selectAll('path')
-        .data(states)
-        .join(
-            enter => enter.append(d => <StatePath d={d} />)
-        )
 
     let updated = false
     const update = (data, t) => {

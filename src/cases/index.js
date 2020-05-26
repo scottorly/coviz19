@@ -22,6 +22,13 @@ const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={he
 
 const cases = async (states, counties, population) => {
 
+    svg.append(() => <g />)
+    .selectAll('path')
+    .data(states)
+    .join(
+        enter => enter.append(d => <StatePath d={d} />)
+    )
+    
     const cases = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
     const covidCases = await cases.text()
 
@@ -81,13 +88,6 @@ const cases = async (states, counties, population) => {
     }
 
     const totals = casesMapped.map(d => sum(d[1], d => d.total))
-
-    svg.append(() => <g />)
-        .selectAll('path')
-        .data(states)
-        .join(
-            enter => enter.append(d => <StatePath d={d} />)
-        )
 
     const getCasesDay = (counter, t) => {
         const pair = casesMapped[counter]

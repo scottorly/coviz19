@@ -21,8 +21,7 @@ const height = 50
 const props = {
     width,
     height,
-    id: styles.slider,
-    viewBox: [0,0, width, height]
+    id: styles.slider
 }
 
 const Slider = ({ attributes: { eventListener }}) => {
