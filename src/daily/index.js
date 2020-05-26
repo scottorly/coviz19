@@ -8,6 +8,7 @@ import { timeDay } from 'd3-time'
 import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
 import { StatePath } from '../paths'
+
 const format = '%m-%d-%Y'
 const parseDate = timeParse(format)
 const formatDate = timeFormat(format)

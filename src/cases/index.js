@@ -4,7 +4,6 @@ import styles from './styles.css'
 import Legend from '../legend'
 import textTween from '../tween'
 import { csvParse } from 'd3-dsv'
-import { feature } from 'topojson-client'
 import { select , selectAll, event } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
 import { scaleSequentialLog } from 'd3-scale'
@@ -21,15 +20,10 @@ const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
 
-const cases = async () => {
-    const pop = await fetch(`https://api.census.gov/data/2018/pep/population?get=POP&for=county`)
-    const counties = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
+const cases = async (states, counties, population) => {
+
     const cases = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
-
-    const us = await counties.json()
     const covidCases = await cases.text()
-
-    const population = await pop.json()
 
     const rows = population.slice(1) 
         .map(([population, state, county]) => [`${state}${county}`, +population])
@@ -37,10 +31,7 @@ const cases = async () => {
     const popByCounty = new Map(rows)
 
     const casesData = csvParse(covidCases).filter(d => d.UID.slice(3).length > 0)
-
-    const features = feature(us, us.objects.counties).features
-    const states = feature(us, us.objects.states).features
-    const featuresById = group(features, feature=> feature.id)
+    const featuresById = group(counties, feature=> feature.id)
 
     const sample = casesData[0]
     const dates = Object.keys(sample).filter(parseDate)
