@@ -8,9 +8,13 @@ import Controls from './controls'
 
 document.body.appendChild(
     <div id={styles.app}>
-        <ConfirmedCases />
-        <Controls />
-        <Deaths />
+        <div>
+            <ConfirmedCases />
+        </div>
+        <Controls />    
+        <div>
+            <Deaths />
+        </div>
         <div className={styles.footer}>
             <p>
                 <a href="https://github.com/CSSEGISandData/COVID-19">Novel Coronavirus (COVID-19) Cases data provided by JHU CSSE</a>
