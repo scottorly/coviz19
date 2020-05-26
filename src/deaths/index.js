@@ -42,6 +42,8 @@ const deaths = async (states, counties, population) => {
     const sample = data[0]
     const dates = Object.keys(sample).filter(parseDate).sort((a, b) => parseDate(a) > parseDate(b))
 
+    const color = scaleSequentialLog(interpolateReds).domain(domain)
+
     const mapped = dates.map(key => {
         return [key, data.map(d => {
             const id = d.UID.slice(3)
@@ -52,6 +54,7 @@ const deaths = async (states, counties, population) => {
             const deaths = (d[key] / pop) * 1e5
             const state = d.Province_State
             const label = `${county} County, ${state}`
+            const fill = color(deaths)
             return {
                 id,
                 deaths,
@@ -59,12 +62,11 @@ const deaths = async (states, counties, population) => {
                 label,
                 state,
                 pop,
-                total
+                total,
+                fill
             }
         })]
     })
-
-    const color = scaleSequentialLog(interpolateReds).domain(domain)
 
     const deathGroup = svg.append(() => <g />)
 
@@ -78,11 +80,11 @@ const deaths = async (states, counties, population) => {
             enter => enter.append(d => (
                 <FeaturePath 
                     d={d}
-                    fill={color(d.deaths)} 
+                    fill={d.fill} 
                     />
                 ))
                 .call(enter => enter.style('opacity', 0).transition(t).style('opacity', 1)),
-            update => update.call(update => update.transition(t).style('fill', d => color(d.deaths))),
+            update => update.call(update => update.transition(t).style('fill', d => d.fill)),
             exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
         )
     }

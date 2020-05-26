@@ -42,7 +42,7 @@ const cases = async (states, counties, population) => {
 
     const sample = casesData[0]
     const dates = Object.keys(sample).filter(parseDate)
-
+    const color = scaleSequentialLog(interpolateBlues).domain(domain)
     const casesMapped = dates.map(key => {
         return [key, casesData.map(d => {
             const id = d.UID.slice(3)
@@ -53,6 +53,7 @@ const cases = async (states, counties, population) => {
             const cases = (total/ pop) * 1e5
             const state = d.Province_State
             const label = `${county} County, ${state}`
+            const fill = color(cases)
             return {
                 id,
                 cases,
@@ -60,11 +61,12 @@ const cases = async (states, counties, population) => {
                 label,
                 state,
                 pop,
-                total
+                total,
+                fill
             }
         })]
     })
-    const color = scaleSequentialLog(interpolateBlues).domain(domain)
+    
 
     const casesGroup = svg.append(() => <g />)
 
@@ -78,11 +80,11 @@ const cases = async (states, counties, population) => {
             enter => enter.append(d => (
                 <FeaturePath 
                     d={d}
-                    fill={color(d.cases)} 
+                    fill={d.fill} 
                 />)
             )
                 .call(enter => enter.style('opacity', 0).transition(t).style('opacity', 1)),
-            update => update.call(update => update.transition(t).style('fill', d => color(d.cases))),
+            update => update.call(update => update.transition(t).style('fill', d => d.fill)),
             exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
         )
     }
