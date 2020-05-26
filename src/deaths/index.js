@@ -3,7 +3,7 @@
 import styles from './styles.css'
 import { csvParse } from 'd3-dsv'
 import { feature } from 'topojson-client'
-import { select , selectAll } from 'd3-selection'
+import { select , selectAll, event } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
 import { scaleSequentialLog } from 'd3-scale'
 import 'd3-transition'
@@ -12,6 +12,7 @@ import { interpolateReds } from 'd3-scale-chromatic'
 import Legend from '../legend'
 import textTween from '../tween'
 import { StatePath, FeaturePath } from '../paths'
+import { zoom } from 'd3-zoom'
 
 const width = 975
 const height = 610
@@ -19,15 +20,6 @@ const domain = [1, 10000]
 const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
-
-const svgNode = svg.node()
-const pt = svgNode.createSVGPoint()
-
-const cursorPoint = (evt) => {
-    pt.x = evt.clientX
-    pt.y = event.clientY
-    return pt.matrixTransform(svgNode.getScreenCTM().inverse())
-}
 
 const deaths = async () => {
     const counties = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
@@ -76,7 +68,6 @@ const deaths = async () => {
     const color = scaleSequentialLog(interpolateReds).domain(domain)
 
     const deathGroup = svg.append(() => <g />)
-    const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
     
     svg.append(() => <g />)
         .selectAll('path')
@@ -85,17 +76,17 @@ const deaths = async () => {
             enter => enter.append(d => <StatePath d={d} />)
         )
 
+    let updated = false
     const update = (data, t) => {
+        updated = true
         deathGroup
         .selectAll('path')
         .data(data, d => d.id)
         .join(
             enter => enter.append(d => (
                 <FeaturePath 
-                    d={d} 
-                    nameLabel={nameLabel} 
+                    d={d}
                     fill={color(d.deaths)} 
-                    cursorPoint={cursorPoint} 
                     />
                 ))
                 .call(enter => enter.style('opacity', 0).transition(t).style('opacity', 1)),
@@ -128,6 +119,17 @@ const deaths = async () => {
         const day = getDay(counter, t)
         update(day, t)
     }, 250)
+
+    const zooms = () => {
+        if (updated == true) {
+            svg.selectAll('path').attr('transform', event.transform)
+        }
+    }
+
+    svg.call(zoom()
+        .scaleExtent([1, 4])
+        .on('zoom', zooms)
+    )
 }
 
 const Deaths = () => (
@@ -135,7 +137,7 @@ const Deaths = () => (
         <h1>US COVID-19 Deaths</h1>
         <h1 className={styles.dateLabel}>1/22/2020</h1>
         <h1 className={styles.totalLabel}>0</h1>
-        { svgNode }
+        { svg.node() }
         <Legend domain={domain} width={320} color={interpolateReds} label='COVID-19 deaths per 100k' />
     </>)
 

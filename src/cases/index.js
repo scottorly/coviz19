@@ -5,13 +5,14 @@ import Legend from '../legend'
 import textTween from '../tween'
 import { csvParse } from 'd3-dsv'
 import { feature } from 'topojson-client'
-import { select , selectAll } from 'd3-selection'
+import { select , selectAll, event } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
 import { scaleSequentialLog } from 'd3-scale'
 import 'd3-transition'
 import { group, sum } from 'd3-array'
 import { interpolateBlues } from 'd3-scale-chromatic'
 import { StatePath, FeaturePath } from '../paths'
+import { zoom } from 'd3-zoom'
 
 const width = 975
 const height = 610
@@ -19,15 +20,6 @@ const domain = [1, 100000]
 const parseDate = timeParse("%m/%d/%y")
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
-
-const svgNode = svg.node()
-const pt = svgNode.createSVGPoint()
-
-const cursorPoint = (evt) => {
-    pt.x = evt.clientX
-    pt.y = event.clientY
-    return pt.matrixTransform(svgNode.getScreenCTM().inverse())
-}
 
 const cases = async () => {
     const pop = await fetch(`https://api.census.gov/data/2018/pep/population?get=POP&for=county`)
@@ -77,19 +69,18 @@ const cases = async () => {
     const color = scaleSequentialLog(interpolateBlues).domain(domain)
 
     const casesGroup = svg.append(() => <g />)
-    const nameLabel = svg.append(() => <g/>).append(() => <text y={20}/>)
 
+    var updated = false
     const updateCases = (data, t) => {
+        updated = true
         casesGroup
         .selectAll('path')
         .data(data, d => d.id)
         .join(
             enter => enter.append(d => (
                 <FeaturePath 
-                    d={d} 
-                    nameLabel={nameLabel} 
+                    d={d}
                     fill={color(d.cases)} 
-                    cursorPoint={cursorPoint} 
                 />)
             )
                 .call(enter => enter.style('opacity', 0).transition(t).style('opacity', 1)),
@@ -106,6 +97,7 @@ const cases = async () => {
         .join(
             enter => enter.append(d => <StatePath d={d} />)
         )
+
 
     const getCasesDay = (counter, t) => {
         const pair = casesMapped[counter]
@@ -128,8 +120,18 @@ const cases = async () => {
         const t = e.detail.t
         const casesDay = getCasesDay(counter, t)
         updateCases(casesDay, t)
-
     })
+
+    const zooms = () => {
+        if (updated == true) {
+            svg.selectAll('path').attr('transform', event.transform)
+        }
+    }
+
+    svg.call(zoom()
+        .scaleExtent([1, 4])
+        .on('zoom', zooms)
+    )
 }
 
 const ConfirmedCases = () => (
@@ -137,7 +139,7 @@ const ConfirmedCases = () => (
         <h1>US Confirmed COVID-19 Cases</h1>
         <h1 className={styles.dateLabel}>1/22/2020</h1>
         <h1 className={styles.totalLabel}>0</h1>
-        { svgNode }
+        { svg.node() }
         <Legend domain={domain} width={320} color={interpolateBlues} label='COVID-19 cases per 100k' />
     </>
 )

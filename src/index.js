@@ -21,6 +21,5 @@ document.body.appendChild(
     </div>
 )
 
-Promise.all([cases(), deaths()]).then(() => {
-  
-})
+cases()
+deaths()

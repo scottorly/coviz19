@@ -11,18 +11,18 @@ import { drag } from 'd3-drag'
 import { axisBottom } from 'd3-axis'
 import { extent } from 'd3-array'
 
-const height = 50
-const props = {
-    width,
-    height
-}
-
 const format = '%m-%d-%Y'
 const parseDate = timeParse(format)
 const jan = parseDate('1-22-2020')
 const now = new Date()
 const dates = timeDay.range(jan, now)
 const width = dates.length * 6
+const height = 50
+const props = {
+    width,
+    height,
+    id: styles.slider
+}
 
 const Slider = ({ attributes: { eventListener }}) => {
 
