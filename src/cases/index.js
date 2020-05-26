@@ -89,7 +89,6 @@ const cases = async (states, counties, population) => {
             enter => enter.append(d => <StatePath d={d} />)
         )
 
-
     const getCasesDay = (counter, t) => {
         const pair = casesMapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()

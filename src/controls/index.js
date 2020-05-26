@@ -35,8 +35,7 @@ const Slider = ({ attributes: { eventListener }}) => {
     const slider = svg.append(() => <g><line x1={x.range()[0]} x2={x.range()[1]} /></g>)
  
     slider.append(() => <g transform='translate(0, 20)'/>).call(axisBottom(x).ticks())
-    const dragging = drag()
-    dragging.container()
+    
     slider.insert(() => <circle className={styles.overlay} r={9}/>)
         .call(drag()
         .on("drag", function() {
