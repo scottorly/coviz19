@@ -135,7 +135,6 @@ const ConfirmedCases = () => (
         <Legend
             domain={domain}
             width={320}
-            scale={scaleSequentialLog}
             color={interpolateBlues}
             label='COVID-19 cases per 100k' />
     </>

@@ -135,7 +135,6 @@ const Deaths = () => (
         <Legend 
             domain={domain} 
             width={320} 
-            scale={scaleSequentialLog} 
             color={interpolateReds} 
             label='COVID-19 deaths per 100k' />
     </>)
