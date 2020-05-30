@@ -7,7 +7,7 @@ import { timeParse } from 'd3-time-format'
 import { scaleSequentialLog } from 'd3-scale'
 import 'd3-transition'
 import { group, sum } from 'd3-array'
-import { interpolateReds } from 'd3-scale-chromatic'
+import { interpolatePuRd } from 'd3-scale-chromatic'
 import Legend from '../legend'
 import textTween from '../tween'
 import { StatePath, FeaturePath } from '../paths'
@@ -42,7 +42,7 @@ const deaths = async (states, counties, population) => {
     const sample = data[0]
     const dates = Object.keys(sample).filter(parseDate).sort((a, b) => parseDate(a) > parseDate(b))
 
-    const color = scaleSequentialLog(interpolateReds).domain(domain)
+    const color = scaleSequentialLog(interpolatePuRd).domain(domain)
 
     const mapped = dates.map(key => {
         return [key, data.map(d => {
@@ -135,7 +135,7 @@ const Deaths = () => (
         <Legend 
             domain={domain} 
             width={320} 
-            color={interpolateReds} 
+            color={interpolatePuRd} 
             label='COVID-19 deaths per 100k' />
     </>)
 

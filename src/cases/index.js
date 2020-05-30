@@ -9,7 +9,7 @@ import { timeParse } from 'd3-time-format'
 import { scaleSequentialLog, scaleSequential } from 'd3-scale'
 import 'd3-transition'
 import { group, sum } from 'd3-array'
-import { interpolateBlues } from 'd3-scale-chromatic'
+import { interpolateBuPu, interpolateBuGn } from 'd3-scale-chromatic'
 import { StatePath, FeaturePath } from '../paths'
 import { zoom } from 'd3-zoom'
 
@@ -42,7 +42,7 @@ const cases = async (states, counties, population) => {
 
     const sample = casesData[0]
     const dates = Object.keys(sample).filter(parseDate)
-    const color = scaleSequentialLog(interpolateBlues).domain(domain)
+    const color = scaleSequentialLog(interpolateBuPu).domain(domain)
     const casesMapped = dates.map(key => {
         return [key, casesData.map(d => {
             const id = d.UID.slice(3)
@@ -135,7 +135,7 @@ const ConfirmedCases = () => (
         <Legend
             domain={domain}
             width={320}
-            color={interpolateBlues}
+            color={interpolateBuPu}
             label='COVID-19 cases per 100k' />
     </>
 )
