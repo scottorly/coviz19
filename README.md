@@ -4,4 +4,4 @@ Animated time lapse visualization of confirmed US COVID-19 cases and deaths from
 
 [https://scottorly.github.io/coviz19/](https://scottorly.github.io/coviz19/)
 
-![](screengrab.png)
+![](coviz19.gif)
