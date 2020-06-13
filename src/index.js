@@ -5,6 +5,7 @@ import { feature } from 'topojson-client'
 import ConfirmedCases, { cases } from './cases'
 import Deaths, { deaths } from './deaths'
 import Controls from './controls'
+import StatesDaily, { daily } from './daily'
 
 document.body.appendChild(
     <div id={styles.app}>
@@ -15,12 +16,20 @@ document.body.appendChild(
         <div>
             <Deaths />
         </div>
+        <div>
+            <StatesDaily />
+        </div>
         <div className={styles.footer}>
+            <h4>Datasources:</h4>
             <p>
-                <a href="https://github.com/CSSEGISandData/COVID-19">Novel Coronavirus (COVID-19) Cases data provided by JHU CSSE</a>
+                <a href="https://github.com/CSSEGISandData/COVID-19">
+                    COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University
+                </a>
             </p>
             <p>
-                <a href="https://api.census.gov/data/2018/pep/population?get=POP&for=county">Population data from US Census</a>
+                <a href="https://api.census.gov/data/2018/pep/population?get=POP&for=county">
+                    US Census
+                </a>
             </p>
         </div>
     </div>
@@ -36,5 +45,6 @@ Promise.all([
     const counties = feature(features, features.objects.counties).features
     cases(states, counties, population)
     deaths(states, counties, population)
+    daily()
 })
 

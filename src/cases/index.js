@@ -94,13 +94,16 @@ const cases = async (states, counties, population) => {
     const getCasesDay = (counter, t) => {
         const pair = casesMapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
+        const dateLabel = selectAll(`.${styles.dateLabel}`).text()
 
-        selectAll(`.${styles.totalLabel}`)
+        if (date != dateLabel) {
+            selectAll(`.${styles.totalLabel}`)
             .transition(t)
             .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
 
-        selectAll(`.${styles.dateLabel}`)
-            .text(date)
+            selectAll(`.${styles.dateLabel}`)
+                .text(date)
+        }
         return pair[1]
     }
     

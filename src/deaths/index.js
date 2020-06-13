@@ -95,12 +95,17 @@ const deaths = async (states, counties, population) => {
         const pair = mapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
 
-        selectAll(`.${styles.totalLabel}`)
+        const dateLabel = selectAll(`.${styles.dateLabel}`).text()
+
+        if (date != dateLabel) {
+            selectAll(`.${styles.totalLabel}`)
             .transition(t)
             .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
 
-        selectAll(`.${styles.dateLabel}`)
-            .text(date)
+            selectAll(`.${styles.dateLabel}`)
+                .text(date)
+        }
+
         return pair[1]
     }
 

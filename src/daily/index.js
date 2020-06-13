@@ -3,56 +3,85 @@
 import styles from './styles.css'
 import { csvParse } from 'd3-dsv'
 import { timeParse, timeFormat } from 'd3-time-format'
-import { group, sum } from 'd3-array'
+import { group, extent, max } from 'd3-array'
 import { timeDay } from 'd3-time'
-import { feature } from 'topojson-client'
 import { select , selectAll } from 'd3-selection'
-import { StatePath } from '../paths'
+import { scaleUtc, scaleLinear } from 'd3-scale'
+import { line } from 'd3-shape'
 
 const format = '%m-%d-%Y'
 const parseDate = timeParse(format)
 const formatDate = timeFormat(format)
 const template = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/'
 
-const width = 975
-const height = 610
+const width = 400
+const height = 80
 
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
 
-const daily = async () => {
-    const counties = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
-    const us = await counties.json()
-    const states = feature(us, us.objects.states).features
+const container = <div />
 
-    svg.append(() => <g />)
-        .selectAll('path')
-        .data(states)
-        .join(
-            enter => enter.append(d => <StatePath d={d} />)
-        )
-      
+const daily = async () => {
+
     const fourTwelve = parseDate('4-12-2020')
     const now = new Date()
     const dates = timeDay.range(fourTwelve, now)
-    const requests = dates.map(async d => {
-        const date = formatDate(d)
-        const response = await fetch(`${template}${date}.csv`)
+    const requests = dates.map(async date => {
+        const response = await fetch(`${template}${formatDate(date)}.csv`)
         const csv = await response.text()
-        return [date, group(csvParse(csv), d => d.Province_State)]
+        const grouped = group(csvParse(csv), d => d.Province_State)
+        return [date, grouped]
     })
 
     const data = await Promise.all(requests)
-    const byDay = new Map([...data])
-    console.log(byDay)
-    return byDay
+    
+    const x = scaleUtc()
+    .domain(extent(dates))
+    .range([0, width])
+    
+    const flattened = data.flatMap(([date, d]) => 
+        [...d].map(([_, v]) => (
+            { date, ...v[0]}
+        ))
+    )
+
+    const flatGroup = group(flattened, d => d.Province_State)
+    console.log(flatGroup)
+
+    const paths = [...flatGroup].map(([k ,v]) =>  {
+        const domain = extent(v, d => +d.Confirmed)
+        console.log(domain)
+        const y = scaleLinear().domain(domain).range([height, 0]) 
+        const path = line()
+            .x(d => x(d.date))
+            .y(d => y(+d.Confirmed))
+        return [k, path]
+    })
+
+    const ys = new Map([...paths])
+    console.log(ys)
+    select(container).selectAll('svg')
+        .data([...flatGroup])
+        .join(
+            enter => enter
+                .append(([state, d]) => (
+                <svg width={width} height={height} viewBox={[0, 0, width, height]}> 
+                        <text transform='translate(0, 20)'>{ state } </text>
+                        <path 
+                            stroke='#ccc' 
+                            stroke-linejoin='round'
+                            fill='none'
+                             d={ys.get(state)(d)}/>
+                </svg>)
+            )
+        )
 }
 
 const StatesDaily = () => (<>
     <h1> US States daily reports</h1>
     <h1 className={styles.dateLabel} />
     <h1 className={styles.totalLabel} />
-    { svg.node() }
-    <a href="https://github.com/ScottORLY/coviz19/blob/master/src/daily/index.js">source code</a>
+    { container }
 </>)
 
 export { StatesDaily as default, daily }
