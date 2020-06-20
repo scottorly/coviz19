@@ -18,8 +18,8 @@ const ramp = (color) => {
     return canvas;
 }
 
-const Legend = ({ attributes: { id, domain, width, color, label }}) => {
-    const legend = select(<svg id={id} className={styles.legend} width={320} height={44}/>)
+const Legend = ({ attributes: { domain, width, color, label }}) => {
+    const legend = select(<svg className={styles.legend} width={320} height={44}/>)
     legend.append(() => (
         <image 
             x={0} 

@@ -45,7 +45,6 @@
     "html-webpack-plugin": ">=4.3.0",
     "jsx-pragma": "^1.0.5",
     "mini-css-extract-plugin": "^0.9.0",
-    "postcss-autoreset": "^2.0.2",
     "postcss-css-reset": "^1.0.2",
     "postcss-import": "^12.0.1",
     "postcss-loader": ">=3.0.0",
