@@ -9,12 +9,12 @@ const StatePath = ({ attributes: { d }}) => (
     <path stroke='#ccc' stroke-linejoin='round' fill='none' d={path(d)}/>
 )
 
-const FeaturePath = ({ attributes: { d, fill }}) => (
+const FeaturePath = ({ attributes: { d }}) => (
     <path 
         stroke='#ccc' 
         stroke-linejoin='round' 
-        fill={fill}
-        d={path(d.feature)}
+        fill={d.fill || ''}
+        d={path(d.feature) || ''}
     />
 )
 

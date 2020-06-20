@@ -17,9 +17,9 @@ const template = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/mast
 const width = 400
 const height = 80
 
-const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
-
 const container = <div />
+
+const filter = ({ Province_State }) => Province_State != 'Diamond Princess' && Province_State != 'Grand Princess' && Province_State != 'Recovered'
 
 const daily = async () => {
 
@@ -29,19 +29,20 @@ const daily = async () => {
     const requests = dates.map(async date => {
         const response = await fetch(`${template}${formatDate(date)}.csv`)
         const csv = await response.text()
-        const grouped = group(csvParse(csv), d => d.Province_State)
+        const parsed = csvParse(csv).filter(filter)
+        const grouped = group(parsed, d => d.Province_State)
         return [date, grouped]
     })
 
     const data = await Promise.all(requests)
     
     const x = scaleUtc()
-    .domain(extent(dates))
-    .range([0, width])
+        .domain(extent(dates))
+        .range([0, width])
     
     const flattened = data.flatMap(([date, d]) => 
         [...d].map(([_, v]) => (
-            { date, ...v[0]}
+            { date, ...v[0] }
         ))
     )
 
@@ -50,28 +51,90 @@ const daily = async () => {
 
     const paths = [...flatGroup].map(([k ,v]) =>  {
         const domain = extent(v, d => +d.Confirmed)
-        console.log(domain)
         const y = scaleLinear().domain(domain).range([height, 0]) 
         const path = line()
             .x(d => x(d.date))
             .y(d => y(+d.Confirmed))
-        return [k, path]
+        const pathMap = new Map()
+
+        const deaths = line()
+        .x(d => x(d.date))
+        .y(d => scaleLinear()
+            .domain(extent(v, d => +d.Deaths))
+            .range([height, 0])(+d.Deaths)
+        )
+
+        const active = line()
+        .x(d => x(d.date))
+        .y(d => scaleLinear()
+            .domain(extent(v, d => +d.Active))
+            .range([height, 0])(+d.Active)
+        )
+
+        const recovered = line()
+        .x(d => x(d.date))
+        .y(d => scaleLinear()
+            .domain(extent(v, d => +d.Recovered))
+            .range([height, 0])(+d.Recovered)
+        )
+
+        const incidence = line()
+        .x(d => x(d.date))
+        .y(d => scaleLinear()
+            .domain(extent(v, d => +d.Incident_Rate))
+            .range([height, 0])(+d.Incident_Rate)
+        )
+
+        const hospitlization = line()
+        .x(d => x(d.date))
+        .y(d => scaleLinear()
+            .domain(extent(v, d => +d.Hospitilzation_Rate))
+            .range([height, 0])(+d.Hospitilzation_Rate)
+        )
+
+        const mortality = line()
+        .x(d => x(d.date))
+        .y(d => scaleLinear()
+            .domain(extent(v, d => +d.Mortality_Rate))
+            .range([height, 0])(+d.Mortality_Rate)
+        )
+
+        const testing = line()
+        .x(d => x(d.date))
+        .y(d => scaleLinear()
+            .domain(extent(v, d => +d.Testing_Rate))
+            .range([height, 0])(+d.Testing_Rate)
+        )
+
+        pathMap.set('confirmed', path)
+        pathMap.set('deaths', deaths)
+        pathMap.set('active', active)
+        pathMap.set('recovered', recovered)
+        pathMap.set('incidence', incidence)
+        pathMap.set('hospitlization', hospitlization)
+        pathMap.set('mortality', mortality)
+        pathMap.set('testing', testing)
+
+        return [k, pathMap]
     })
 
     const ys = new Map([...paths])
-    console.log(ys)
+
     select(container).selectAll('svg')
         .data([...flatGroup])
         .join(
             enter => enter
                 .append(([state, d]) => (
                 <svg width={width} height={height} viewBox={[0, 0, width, height]}> 
+                    <g>
                         <text transform='translate(0, 20)'>{ state } </text>
                         <path 
                             stroke='#ccc' 
                             stroke-linejoin='round'
                             fill='none'
-                             d={ys.get(state)(d)}/>
+                        
+                            d={ys.get(state).get('deaths')(d)}/>
+                    </g>
                 </svg>)
             )
         )

@@ -3,22 +3,15 @@
 import styles from './styles.css'
 import { feature } from 'topojson-client'
 import ConfirmedCases, { cases } from './cases'
-import Deaths, { deaths } from './deaths'
 import Controls from './controls'
-import StatesDaily, { daily } from './daily'
+
 
 document.body.appendChild(
     <div id={styles.app}>
         <div>
             <ConfirmedCases />
         </div>
-        <Controls />    
-        <div>
-            <Deaths />
-        </div>
-        <div>
-            <StatesDaily />
-        </div>
+        <Controls /> 
         <div className={styles.footer}>
             <h4>Datasources:</h4>
             <p>
@@ -44,7 +37,5 @@ Promise.all([
     const states = feature(features, features.objects.states).features
     const counties = feature(features, features.objects.counties).features
     cases(states, counties, population)
-    deaths(states, counties, population)
-    daily()
 })
 

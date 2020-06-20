@@ -4,12 +4,13 @@ import styles from './styles.css'
 import Legend from '../legend'
 import textTween from '../tween'
 import { csvParse } from 'd3-dsv'
-import { select , selectAll, event } from 'd3-selection'
+import { select, selectAll, event } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
-import { scaleSequentialLog, scaleSequential } from 'd3-scale'
-import 'd3-transition'
+import { scaleSequentialLog } from 'd3-scale'
+import { transition } from 'd3-transition'
+import { easeLinear } from 'd3-ease'
 import { group, sum } from 'd3-array'
-import { interpolateBuPu, interpolateBuGn } from 'd3-scale-chromatic'
+import { interpolateBuPu, interpolatePuRd } from 'd3-scale-chromatic'
 import { StatePath, FeaturePath } from '../paths'
 import { zoom } from 'd3-zoom'
 
@@ -18,19 +19,24 @@ const height = 610
 const domain = [1, 10000]
 const parseDate = timeParse("%m/%d/%y")
 
+let state = 'cases'
+let updated = false
+let lastCounter = 0
+
 const svg = select(<svg viewBox={[0, 0, width, height]} width={width} height={height}/>)
 
 const cases = async (states, counties, population) => {
 
     svg.append(() => <g />)
-    .selectAll('path')
-    .data(states)
-    .join(
-        enter => enter.append(d => <StatePath d={d} />)
-    )
-    
+        .selectAll('path')
+        .data(states)
+        .join(enter => enter.append(d => <StatePath d={d} />))
+        
     const cases = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
     const covidCases = await cases.text()
+
+    const deaths = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv')
+    const deathsCsv = await deaths.text()
 
     const rows = population.slice(1) 
         .map(([population, state, county]) => [`${state}${county}`, +population])
@@ -38,22 +44,31 @@ const cases = async (states, counties, population) => {
     const popByCounty = new Map(rows)
 
     const casesData = csvParse(covidCases).filter(d => d.UID.slice(3).length > 0)
-    const featuresById = group(counties, feature=> feature.id)
+    const deathsData = csvParse(deathsCsv).filter(d => d.UID.slice(3).length > 0)
+
+    const featuresById = group(counties, feature => feature.id)
 
     const sample = casesData[0]
     const dates = Object.keys(sample).filter(parseDate)
     const color = scaleSequentialLog(interpolateBuPu).domain(domain)
+    const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
+
+    const deathsGroup = group(deathsData, d => d.UID.slice(3))
+
     const casesMapped = dates.map(key => {
         return [key, casesData.map(d => {
             const id = d.UID.slice(3)
             const total = +d[key] || 0
-            const pop = +popByCounty.get(id) || 1
+            const pop = +popByCounty.get(id) || 0
             const feature = (featuresById.get(id) || [])[0] || { properties: {}}
             const county = feature.properties.name
             const cases = (total/ pop) * 1e5
             const state = d.Province_State
             const label = `${county} County, ${state}`
             const fill = color(cases)
+            const totalDeaths = deathsGroup.get(id)[0][key] || 0
+            const deathsPerCap = (totalDeaths / pop) * 1e5
+            const deathFill = deathsColor(deathsPerCap)
             return {
                 id,
                 cases,
@@ -62,15 +77,16 @@ const cases = async (states, counties, population) => {
                 state,
                 pop,
                 total,
-                fill
+                fill,
+                totalDeaths,
+                deathsPerCap,
+                deathFill
             }
-        })]
-    })
-    
+        })
+    ]})
 
     const casesGroup = svg.append(() => <g />)
 
-    var updated = false
     const updateCases = (data, t) => {
         updated = true
         casesGroup
@@ -80,28 +96,33 @@ const cases = async (states, counties, population) => {
             enter => enter.append(d => (
                 <FeaturePath 
                     d={d}
-                    fill={d.fill} 
+                    fill={state == 'cases' ? d.fill : d.deathFill} 
                 />)
-            )
-                .call(enter => enter.style('opacity', 0).transition(t).style('opacity', 1)),
-            update => update.call(update => update.transition(t).style('fill', d => d.fill)),
+            ),
+            update => update.call(update => update.transition(t).style('fill', d => state == 'cases' ? d.fill : d.deathFill)),
             exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
         )
     }
 
     const totals = casesMapped.map(d => sum(d[1], d => d.total))
+    const deathTotals =  casesMapped.map(d => sum(d[1], d => d.totalDeaths))
 
     const getCasesDay = (counter, t) => {
+        lastCounter = counter
         const pair = casesMapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
-        const dateLabel = selectAll(`.${styles.dateLabel}`).text()
+        const dateLabel = selectAll(`#${styles.dateLabel}`).text()
 
         if (date != dateLabel) {
-            selectAll(`.${styles.totalLabel}`)
+            selectAll(`#${styles.totalLabel}`)
             .transition(t)
             .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
-
-            selectAll(`.${styles.dateLabel}`)
+            
+            selectAll(`#${styles.deathLabel}`)
+                .transition(t)
+                .tween('text', () => textTween(deathTotals[counter-1] || 0, deathTotals[counter]))
+                
+            selectAll(`#${styles.dateLabel}`)
                 .text(date)
         }
         return pair[1]
@@ -131,15 +152,54 @@ const cases = async (states, counties, population) => {
 
 const ConfirmedCases = () => (
     <>
-        <h1>US Confirmed COVID-19 Cases</h1>
-        <h1 className={styles.dateLabel}>1/22/2020</h1>
-        <h1 className={styles.totalLabel}>0</h1>
+        <h1 id={styles.title}>COVID-19</h1>
+        <h1 id={styles.dateLabel}>1/22/2020</h1>
+        <div id={styles.legends}>
+            <div className={styles.control}>
+                <label className={styles.label}>Cases</label>
+                <h1 id={styles.totalLabel}>0</h1>
+                <button 
+                    id={styles.caseSwitch}
+                    className={`${styles.switches} ${styles.selected}`}
+                    eventListener={['click', function() {
+                        select(this).classed(styles.selected, true)
+                        select(`#${styles.deathSwitch}`).classed(styles.selected, false)
+                        state = 'cases'
+                        const t = transition().ease(easeLinear)
+                        const detail = { detail: { counter: lastCounter, t }}
+                        window.dispatchEvent(new CustomEvent('tick', detail))
+                    }]}
+                >Cases</button>
+                <Legend
+                    domain={domain}
+                    width={320}
+                    color={interpolateBuPu}
+                    label='COVID-19 cases per 100k' 
+                />
+            </div>
+            <div className={styles.control}>
+                <label className={styles.label}>Deaths</label>
+                <h1 id={styles.deathLabel}>0</h1>
+                <button 
+                    id={styles.deathSwitch}
+                    className={`${styles.switches}`}
+                    eventListener={['click', function() {
+                        select(this).classed(styles.selected, true)
+                        select(`#${styles.caseSwitch}`).classed(styles.selected, false)
+                        state = 'deaths'
+                        const t = transition().ease(easeLinear)
+                        const detail = { detail: { counter: lastCounter, t }}
+                        window.dispatchEvent(new CustomEvent('tick', detail))
+                    }]}
+                >Deaths</button>
+                <Legend
+                    domain={[1, 1000]}
+                    width={320}
+                    color={interpolatePuRd}
+                    label='COVID-19 deaths per 100k' />
+            </div>
+        </div>
         { svg.node() }
-        <Legend
-            domain={domain}
-            width={320}
-            color={interpolateBuPu}
-            label='COVID-19 cases per 100k' />
     </>
 )
 

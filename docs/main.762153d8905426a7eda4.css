@@ -1,6 +1,0 @@
-@import url(https://rsms.me/inter/inter.css);
-html{font-family:Inter,sans-serif}@supports (font-variation-settings:normal){html{font-family:Inter var,sans-serif}}#app__2q9tN{display:flex;flex-direction:column;max-width:1024px;margin-left:auto;margin-right:auto}p{margin-left:2rem;margin-right:2rem}h1{padding:.25rem;margin:1rem .25rem .25rem}svg{max-height:100%;max-width:100%;margin:1rem}.footer__k4FgR{margin:3rem 1rem}
-.dateLabel__2lKsz,.totalLabel__dpsbi{padding:.25rem;margin:.25rem}
-.legend__1KYfF{overflow:visible}
-.dateLabel__2RrZE,.totalLabel__OW1vx{padding:.25rem;margin:0}
-#controls__1EvwY{max-width:32rem;display:flex;padding-top:1.5rem;padding-bottom:1.5rem}#controls__1EvwY,#slider__1u-nx{overflow:visible}.button__3VipA{display:inline-block;background:transparent;box-sizing:border-box;width:0;height:74px;transition:all .1s ease;cursor:pointer;border-color:transparent transparent transparent #202020;border-style:solid;border-width:37px 0 37px 60px}.button__3VipA:hover{border-color:transparent transparent transparent #404040}.paused__avWib{border-style:double;border-width:0 0 0 60px}

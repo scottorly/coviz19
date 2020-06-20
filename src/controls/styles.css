@@ -1,6 +1,6 @@
 
 #controls {
-    @apply max-w-lg flex py-6 overflow-visible
+    @apply flex py-6 overflow-visible
 }
 
 #slider {

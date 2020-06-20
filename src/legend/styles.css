@@ -1,5 +1,5 @@
 /* Copyright © 2020 Scott Orlyck. **/
 
 .legend {
-    @apply overflow-visible
+    @apply overflow-visible m-4
 }
