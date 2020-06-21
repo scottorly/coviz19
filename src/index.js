@@ -7,12 +7,13 @@ import Controls from './controls'
 
 document.body.appendChild(
     <div id={styles.app}>
+        <h1>COVIZ-19</h1>
         <div>
             <ConfirmedCases />
         </div>
         <Controls /> 
 
-        <StatesDaily />
+        {/* <StatesDaily /> */}
         <div className={styles.footer}>
             <h4>Datasources:</h4>
             <p>
@@ -28,4 +29,4 @@ document.body.appendChild(
         </div>
     </div>
 )
-daily()
+// daily()

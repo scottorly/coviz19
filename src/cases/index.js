@@ -6,10 +6,10 @@ import Legend from './legend'
 import { select } from 'd3-selection'
 import { interpolateBuPu, interpolatePuRd } from 'd3-scale-chromatic'
 
+let state = 'cases'
+
 const ConfirmedCases = () => (
     <>
-        <h1 id={styles.title}>COVID-19</h1>
-        <h1 id={styles.dateLabel}>1/22/2020</h1>
         <div id={styles.legends}>
             <div className={styles.control}>
                 <label className={styles.label}>Cases</label>
@@ -18,9 +18,11 @@ const ConfirmedCases = () => (
                     id={styles.caseSwitch}
                     className={`${styles.switches} ${styles.selected}`}
                     eventListener={['click', function() {
+                        if (state == 'cases') return
+                        state = 'cases'
                         select(this).classed(styles.selected, true)
                         select(`#${styles.deathSwitch}`).classed(styles.selected, false)
-                        window.dispatchEvent(new CustomEvent('toggle'))
+                        window.dispatchEvent(new CustomEvent('toggle', { detail: { state }}))
                     }]}
                 >Cases</button>
                 <Legend
@@ -30,6 +32,7 @@ const ConfirmedCases = () => (
                     label='COVID-19 cases per 100k' 
                 />
             </div>
+            <h1 id={styles.dateLabel}>1/22/2020</h1>
             <div className={styles.control}>
                 <label className={styles.label}>Deaths</label>
                 <h1 id={styles.deathLabel}>0</h1>
@@ -37,9 +40,11 @@ const ConfirmedCases = () => (
                     id={styles.deathSwitch}
                     className={`${styles.switches}`}
                     eventListener={['click', function() {
+                        if (state == 'deaths') return
+                        state = 'deaths'
                         select(this).classed(styles.selected, true)
                         select(`#${styles.caseSwitch}`).classed(styles.selected, false)
-                        window.dispatchEvent(new CustomEvent('toggle'))
+                        window.dispatchEvent(new CustomEvent('toggle', { detail: { state }}))
                     }]}
                 >Deaths</button>
                 <Legend
@@ -49,7 +54,7 @@ const ConfirmedCases = () => (
                     label='COVID-19 deaths per 100k' />
             </div>
         </div>
-        { svg.node() }
+        { svg }
     </>
 )
 

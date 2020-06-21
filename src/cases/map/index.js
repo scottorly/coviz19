@@ -78,7 +78,7 @@ fetch(countiesUrl).then(async (featuresRequest) => {
             const state = d.Province_State
             const label = `${county} County, ${state}`
             const fill = color(cases)
-            const totalDeaths = deathsGroup.get(id)[0][key] || 0
+            const totalDeaths = +deathsGroup.get(id)[0][key] || 0
             const deathsPerCap = (totalDeaths / pop) * 1e5
             const deathFill = deathsColor(deathsPerCap)
             return {
@@ -111,7 +111,9 @@ fetch(countiesUrl).then(async (featuresRequest) => {
                     fill={state == 'cases' ? d.fill : d.deathFill} 
                 />)
             ),
-            update => update.call(update => update.transition(t).style('fill', d => state == 'cases' ? d.fill : d.deathFill)),
+            update => update.call(update => 
+                update.transition(t).style('fill', d => state == 'cases' ? d.fill : d.deathFill)
+            ),
             exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
         )
     }
@@ -150,10 +152,10 @@ fetch(countiesUrl).then(async (featuresRequest) => {
         updateCases(casesDay, t)
     })
 
-    window.addEventListener('toggle', e => {
-        state = state == 'cases' ? 'deaths' : 'cases'
+    window.addEventListener('toggle', (e) => {
+        state = e.detail.state
         const t = transition().ease(easeLinear)
-        const detail = { detail: { counter: lastCounter }}
+        const detail = { detail: { counter: lastCounter, t }}
         window.dispatchEvent(new CustomEvent('tick', detail))
     })
 
@@ -169,4 +171,4 @@ fetch(countiesUrl).then(async (featuresRequest) => {
     )
 })
 
-export default svg
+export default <> { svg.node() } </>

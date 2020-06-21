@@ -5,7 +5,7 @@ import { csvParse } from 'd3-dsv'
 import { timeParse, timeFormat } from 'd3-time-format'
 import { group, extent, max } from 'd3-array'
 import { timeDay } from 'd3-time'
-import { select , selectAll } from 'd3-selection'
+import { select  } from 'd3-selection'
 import { scaleUtc, scaleLinear } from 'd3-scale'
 import { line } from 'd3-shape'
 
@@ -17,7 +17,7 @@ const template = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/mast
 const width = 400
 const height = 80
 
-const container = <div />
+const container = select(<div />)
 
 const filter = ({ Province_State }) => Province_State != 'Diamond Princess' && Province_State != 'Grand Princess' && Province_State != 'Recovered'
 
@@ -47,7 +47,6 @@ const daily = async () => {
     )
 
     const flatGroup = group(flattened, d => d.Province_State)
-    console.log(flatGroup)
 
     const paths = [...flatGroup].map(([k ,v]) =>  {
         const domain = extent(v, d => +d.Confirmed)
@@ -119,32 +118,31 @@ const daily = async () => {
     })
 
     const ys = new Map([...paths])
+    console.log(flatGroup)
+   const rows = container
+        .selectAll('ul')
+        .data([...flatGroup], d => d[0])
+        
+    const rowsUpdate = rows
+        .join(enter => enter.append(([state, d]) => <ul />))
 
-    select(container).selectAll('svg')
-        .data([...flatGroup])
+    rowsUpdate.selectAll('li')
+        .data(([_, d]) => d)
         .join(
-            enter => enter
-                .append(([state, d]) => (
-                <svg width={width} height={height} viewBox={[0, 0, width, height]}> 
-                    <g>
-                        <text transform='translate(0, 20)'>{ state } </text>
-                        <path 
-                            stroke='#ccc' 
-                            stroke-linejoin='round'
-                            fill='none'
-                        
-                            d={ys.get(state).get('deaths')(d)}/>
-                    </g>
-                </svg>)
-            )
+            enter => enter.append(d => <li>
+                <svg>
+                    <g />
+                </svg>
+            </li>)
         )
+
 }
 
 const StatesDaily = () => (<>
     <h1> US States daily reports</h1>
     <h1 className={styles.dateLabel} />
     <h1 className={styles.totalLabel} />
-    { container }
+    { container.node() }
 </>)
 
 export { StatesDaily as default, daily }
