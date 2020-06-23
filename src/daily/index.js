@@ -6,7 +6,7 @@ import { timeParse, timeFormat } from 'd3-time-format'
 import { group, extent, max } from 'd3-array'
 import { timeDay } from 'd3-time'
 import { select  } from 'd3-selection'
-import { scaleUtc, scaleLinear } from 'd3-scale'
+import { scaleUtc, scaleLinear, scaleBand } from 'd3-scale'
 import { line } from 'd3-shape'
 
 const format = '%m-%d-%Y'
@@ -117,9 +117,11 @@ const daily = async () => {
         return [k, pathMap]
     })
 
+    const row = scaleBand().domain(['confirmed', 'deaths', 'active', 'recovered','incidence',])
     const ys = new Map([...paths])
-    console.log(flatGroup)
-   const rows = container
+
+
+    const rows = container
         .selectAll('ul')
         .data([...flatGroup], d => d[0])
         
