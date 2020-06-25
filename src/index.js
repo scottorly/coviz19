@@ -12,6 +12,8 @@ document.body.appendChild(
             <ConfirmedCases />
         </div>
         <Controls /> 
+
+        <StatesDaily />
         <div className={styles.footer}>
             <h4>Datasources:</h4>
             <p>
@@ -27,4 +29,4 @@ document.body.appendChild(
         </div>
     </div>
 )
-
+daily()
