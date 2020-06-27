@@ -37,11 +37,6 @@ fetch(countiesUrl).then(async (featuresRequest) => {
    
     const states = feature(features, features.objects.states).features
     const counties = feature(features, features.objects.counties).features
-    
-    svg.append(() => <g />)
-        .selectAll('path')
-        .data(states)
-        .join(enter => enter.append(d => <StatePath d={d} />))
         
     const cases = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
     const covidCases = await cases.text()
@@ -169,6 +164,14 @@ fetch(countiesUrl).then(async (featuresRequest) => {
         .scaleExtent([1, 4])
         .on('zoom', zooms)
     )
+
+    const t = transition().ease(easeLinear)
+    const casesDay = getCasesDay(0, t)
+    updateCases(casesDay, t)
+
+    svg.append('g').selectAll('path')
+    .data(states)
+    .join(enter => enter.append(d => <StatePath d={d} />))
 })
 
 export default <> { svg.node() } </>

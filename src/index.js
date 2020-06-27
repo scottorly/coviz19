@@ -2,7 +2,7 @@
 
 import styles from './styles.css'
 import ConfirmedCases from './cases'
-import StatesDaily, { daily } from './daily'
+// import StatesDaily from './daily'
 import Controls from './controls'
 
 document.body.appendChild(
@@ -13,7 +13,7 @@ document.body.appendChild(
         </div>
         <Controls /> 
 
-        <StatesDaily />
+        {/* <StatesDaily /> */}
         <div className={styles.footer}>
             <h4>Datasources:</h4>
             <p>
@@ -29,4 +29,3 @@ document.body.appendChild(
         </div>
     </div>
 )
-daily()

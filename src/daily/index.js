@@ -22,9 +22,9 @@ const container = select(
     </div>
 )
 
-const filter = ({ Province_State }) => Province_State != 'Diamond Princess' && Province_State != 'Grand Princess' && Province_State != 'Recovered'
+const filter = ({ Province_State }) => Province_State != 'Diamond Princess' && Province_State != 'Grand Princess' && Province_State != 'Recovered';
 
-const daily = async () => {
+ (async () => {
 
     const fourTwelve = parseDate('4-12-2020')
     const now = new Date()
@@ -55,7 +55,7 @@ const daily = async () => {
                    <Multiple d={d} />
                 </li>
             ))
-}
+})()
 
 const StatesDaily = () => (<>
     <h1> US States daily reports</h1>
@@ -64,4 +64,4 @@ const StatesDaily = () => (<>
     { container.node() }
 </>)
 
-export { StatesDaily as default, daily }
+export default StatesDaily 

@@ -65,7 +65,7 @@ const MultipleGraph = ({ attributes: { d, row, graph }}) => {
             </text> 
         ))
 
-        g.append(() => <g fill={color} />)
+    g.append(() => <g fill={color} />)
     g.append(() => 
         <path 
             d={xLine(d)}    

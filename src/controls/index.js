@@ -1,7 +1,7 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from './styles.css'
-import { select, selectAll, event } from 'd3-selection'
+import { select, event } from 'd3-selection'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
 import { timeParse } from 'd3-time-format'
