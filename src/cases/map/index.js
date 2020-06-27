@@ -107,7 +107,9 @@ fetch(countiesUrl).then(async (featuresRequest) => {
                 />)
             ),
             update => update.call(update => 
-                update.transition(t).style('fill', d => state == 'cases' ? d.fill : d.deathFill)
+                update.transition(t)
+                .style('fill', d => state == 'cases' ? d.fill : d.deathFill)
+                .style('stroke', d => state == 'cases' ? d.fill : d.deathFill)
             ),
             exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
         )

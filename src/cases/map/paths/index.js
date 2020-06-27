@@ -11,7 +11,7 @@ const StatePath = ({ attributes: { d }}) => (
 
 const FeaturePath = ({ attributes: { d }}) => (
     <path 
-        stroke='' 
+        stroke={d.fill || ''}
         stroke-linejoin='round'
         stroke-width={0.5}
         fill={d.fill || ''}
