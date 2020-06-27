@@ -29,3 +29,5 @@ document.body.appendChild(
         </div>
     </div>
 )
+
+mixpanel.track("Page View");
