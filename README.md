@@ -1,7 +1,11 @@
-# [**COVIZ-19**](https://scottorly.github.io/coviz19/)
+# [**COVIZ-19**](https://coviz19.dev)
 
-Animated time lapse visualization of confirmed US COVID-19 cases and deaths from the JHU CSSE COVID-19 timeseries data.
+COVIZ-19 is an interactive animated choropleth visualization of the JHU CSSE COVID-19 timeseries data for the United States.
 
-[https://scottorly.github.io/coviz19/](https://scottorly.github.io/coviz19/)
+[COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
+
+[Population data from US Census](https://api.census.gov/data/2018/pep/population?get=POP&for=county)        
+
+[https://coviz19.dev](https://coviz19.dev)
 
 ![](coviz19.gif)
