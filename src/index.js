@@ -2,8 +2,8 @@
 
 import styles from './styles.css'
 import ConfirmedCases from './cases'
-// import StatesDaily from './daily'
 import Controls from './controls'
+import mixpanel from 'mixpanel-browser'
 
 document.body.appendChild(
     <div id={styles.app}>
@@ -13,7 +13,6 @@ document.body.appendChild(
         </div>
         <Controls /> 
 
-        {/* <StatesDaily /> */}
         <div className={styles.footer}>
             <h4>Datasources:</h4>
             <p>
@@ -30,4 +29,6 @@ document.body.appendChild(
     </div>
 )
 
+mixpanel.init('d5a4311d045c79b449719cd17223e378')
 mixpanel.track("Page View")
+window.mixpanel = mixpanel
