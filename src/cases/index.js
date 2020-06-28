@@ -19,6 +19,7 @@ const ConfirmedCases = () => (
                     className={`${styles.switches} ${styles.selected}`}
                     eventListener={['click', function() {
                         if (state == 'cases') return
+                        mixpanel.track("Cases View")
                         state = 'cases'
                         select(this).classed(styles.selected, true)
                         select(`#${styles.deathSwitch}`).classed(styles.selected, false)
@@ -41,6 +42,7 @@ const ConfirmedCases = () => (
                     className={`${styles.switches}`}
                     eventListener={['click', function() {
                         if (state == 'deaths') return
+                        mixpanel.track("Deaths View")
                         state = 'deaths'
                         select(this).classed(styles.selected, true)
                         select(`#${styles.caseSwitch}`).classed(styles.selected, false)

@@ -30,4 +30,4 @@ document.body.appendChild(
     </div>
 )
 
-mixpanel.track("Page View");
+mixpanel.track("Page View")

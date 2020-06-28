@@ -79,6 +79,7 @@ const Controls = () => {
                 className={styles.button}
                 eventListener={['click', function() {
                     state = state == 'play' ? 'pause' : 'play'
+                    mixpanel.track(state)
                     select(this).classed(styles.paused, state == 'play')
                 }]}/>
             <Slider 
