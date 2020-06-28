@@ -12,7 +12,7 @@ module.exports = {
     ],
     output: {
         path: __dirname + '/docs',
-        publicPath: '/coviz19',
+        publicPath: '/',
         filename: 'bundle.js'
     },
     optimization: {
