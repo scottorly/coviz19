@@ -1,19 +1,16 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from './styles.css'
-import ConfirmedCases from './cases'
-import Controls from './controls'
+import Choropleth from './choropleth'
+
 
 mixpanel.track("Page View")
 
 document.body.appendChild(
     <div id={styles.app}>
-        <h1>COVIZ-19</h1>
         <div>
-            <ConfirmedCases />
+            <Choropleth />
         </div>
-        <Controls /> 
-
         <div className={styles.footer}>
             <h4>Datasources:</h4>
             <p>

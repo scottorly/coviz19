@@ -3,17 +3,16 @@
 import styles from './styles.css'
 import svg from './map'
 import Legend from './legend'
+import Controls from './controls'
 import { select } from 'd3-selection'
 import { interpolateBuPu, interpolatePuRd } from 'd3-scale-chromatic'
 
 let state = 'cases'
 
-const ConfirmedCases = () => (
+const Choropleth = () => (
     <>
         <div id={styles.legends}>
             <div className={styles.control}>
-                <label className={styles.label}>Cases</label>
-                <h1 id={styles.totalLabel}>0</h1>
                 <button 
                     id={styles.caseSwitch}
                     className={`${styles.switches} ${styles.selected}`}
@@ -25,18 +24,20 @@ const ConfirmedCases = () => (
                         select(`#${styles.deathSwitch}`).classed(styles.selected, false)
                         window.dispatchEvent(new CustomEvent('toggle', { detail: { state }}))
                     }]}
-                >Cases</button>
-                <Legend
-                    domain={[1, 10000]}
-                    width={320}
-                    color={interpolateBuPu}
-                    label='COVID-19 cases per 100k' 
-                />
+                >
+                    <div className={styles.counter}>
+                        <h1>Cases</h1>
+                        <h1 id={styles.totalLabel}>0</h1>
+                    </div>
+                    <Legend
+                        domain={[1, 10000]}
+                        width={320}
+                        color={interpolateBuPu}
+                        label='COVID-19 cases per 100k' 
+                    />
+                </button>
             </div>
-            <h1 id={styles.dateLabel}>1/22/2020</h1>
             <div className={styles.control}>
-                <label className={styles.label}>Deaths</label>
-                <h1 id={styles.deathLabel}>0</h1>
                 <button 
                     id={styles.deathSwitch}
                     className={`${styles.switches}`}
@@ -48,16 +49,24 @@ const ConfirmedCases = () => (
                         select(`#${styles.caseSwitch}`).classed(styles.selected, false)
                         window.dispatchEvent(new CustomEvent('toggle', { detail: { state }}))
                     }]}
-                >Deaths</button>
-                <Legend
-                    domain={[1, 1000]}
-                    width={320}
-                    color={interpolatePuRd}
-                    label='COVID-19 deaths per 100k' />
+                >
+                    <div className={styles.counter}>
+                        <h1>Deaths</h1>
+                        <h1 id={styles.deathLabel}>0</h1>
+                    </div>
+                    <Legend
+                        domain={[1, 1000]}
+                        width={320}
+                        color={interpolatePuRd}
+                        label='COVID-19 deaths per 100k' />
+                    </button>
             </div>
         </div>
-        { svg }
+        <div id={styles.mapContainer}>
+            { svg }
+            <Controls />
+        </div>
     </>
 )
 
-export default ConfirmedCases
+export default Choropleth

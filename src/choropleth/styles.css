@@ -1,0 +1,108 @@
+/* Copyright © 2020 Scott Orlyck. **/
+
+.legend {
+    @apply overflow-visible m-4
+}
+
+#dateLabel {
+    @apply mt-2 text-center text-4xl
+}
+
+#title {
+    @apply mx-1
+}
+
+#totalLabel {
+    @apply inline-block mb-4 text-left
+}
+
+#deathLabel {
+    @apply inline-block mb-4 text-left
+}
+
+#deathSwitch {
+    background-color: rgb(213, 27, 106);
+}
+
+#caseSwitch {
+    background-color: rgb(125, 25, 126);
+}
+
+.switches {
+    @apply font-bold py-2 px-4 rounded border-none my-4 text-white opacity-25 max-w-sm mx-auto text-xl
+}
+
+.switches:hover {
+    @apply cursor-pointer
+}
+
+.selected {
+    opacity: 1;
+}
+
+#legends {
+    @apply p-1 mx-auto flex flex-col max-w-screen-lg justify-between
+}
+
+@screen xl {
+    #legends {
+      @apply flex-row
+    }
+}
+
+.control {
+    @apply flex flex-col
+}
+
+.label {
+    @apply p-1 mx-4
+}
+
+#map {
+    @apply w-full;
+}
+
+#controls {
+    @apply flex py-6 overflow-visible max-w-screen-lg mx-auto
+}
+
+@screen md {
+    #controls {
+        @apply flex py-6 overflow-visible w-full
+    }
+}
+
+#slider {
+    @apply overflow-visible
+}
+
+.button {
+    display: inline-block;
+    background: transparent;
+    box-sizing: border-box;
+    width: 0;
+    height: 80px;
+    border-color: transparent transparent transparent #202020;
+    transition: 100ms all ease;
+    cursor: pointer;
+    border-style: solid;
+    border-width: 37px 0 37px 60px;
+    @apply mr-4
+}
+
+.button:hover {
+    border-color: transparent transparent transparent #404040;
+}
+
+.paused {
+    border-style: double;
+    border-width: 0px 0 0px 60px;
+}
+  
+#mapContainer {
+    @apply max-w-screen-xl mx-auto
+}
+
+.counter {
+    @apply flex flex-col mx-4
+}

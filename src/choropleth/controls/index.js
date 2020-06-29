@@ -1,6 +1,6 @@
 //Copyright © 2020 Scott Orlyck.
 
-import styles from './styles.css'
+import styles from '../styles.css'
 import { select, event } from 'd3-selection'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
@@ -13,14 +13,14 @@ import { extent } from 'd3-array'
 
 const format = '%m-%d-%Y'
 const parseDate = timeParse(format)
-const jan = parseDate('1-22-2020')
+const jan = parseDate('3-1-2020')
 const now = new Date()
 const dates = timeDay.range(jan, now)
 const width = dates.length * 6
-const height = 50
+const height = 100
+const viewBox = [0,0, width, height]
 const props = {
-    width,
-    height,
+    viewBox,
     id: styles.slider
 }
 
@@ -34,9 +34,9 @@ const Slider = ({ attributes: { eventListener }}) => {
 
     const slider = svg.append(() => <g><line x1={x.range()[0]} x2={x.range()[1]} /></g>)
  
-    slider.append(() => <g transform='translate(0, 20)'/>).call(axisBottom(x).ticks(6))
+    slider.append(() => <g transform='translate(0, 28)'/>).call(axisBottom(x).ticks(6))
     
-    slider.insert(() => <circle className={styles.overlay} r={9}/>)
+    slider.insert(() => <circle transform='translate(0, 28)' className={styles.overlay} r={12}/>)
         .call(drag()
         .on("drag", function() {
             select(this).attr('cx', () => {
@@ -74,7 +74,11 @@ const Controls = () => {
     }, 500)
 
     return (
-        <div id={styles.controls}>  
+        <>
+        <div>
+            <h1 id={styles.dateLabel}/>
+        </div>
+        <div id={styles.controls}>
             <button 
                 className={styles.button}
                 eventListener={['click', function() {
@@ -82,6 +86,7 @@ const Controls = () => {
                     mixpanel.track(state)
                     select(this).classed(styles.paused, state == 'play')
                 }]}/>
+                
             <Slider 
                 eventListener={(value) => {
                     state = 'pause'
@@ -91,7 +96,9 @@ const Controls = () => {
                     const detail = { detail: { counter, t }}
                     window.dispatchEvent(new CustomEvent('tick', detail))
                 }}/>
+            
         </div>
+        </>
     )
 }
 

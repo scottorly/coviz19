@@ -22,7 +22,7 @@ const domain = [1, 10000]
 const parseDate = timeParse("%m/%d/%y")
 
 const props = {
-    viewBox: [0, 0, width, height], width, height
+    viewBox: [0, 0, width, height], id: styles.map
 }
 
 let state = 'cases'
@@ -56,7 +56,9 @@ fetch(countiesUrl).then(async (featuresRequest) => {
     const featuresById = group(counties, feature => feature.id)
 
     const sample = casesData[0]
-    const dates = Object.keys(sample).filter(parseDate)
+    const march = parseDate('3/1/20')
+    const dates = Object.keys(sample).filter(parseDate).filter(d => parseDate(d) > march)
+
     const color = scaleSequentialLog(interpolateBuPu).domain(domain)
     const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
 
