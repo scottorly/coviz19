@@ -43,6 +43,10 @@ module.exports = {
     devtool: isDEV ? 'inline-source-map': 'none',
     module: {
         rules: [
+            // {
+            //     test: /\.worker\.js$/,
+            //     use: ['worker-loader', 'babel-loader']
+            // },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,

@@ -1,6 +1,7 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from '../styles.css'
+import population from './population.json'
 import textTween from './tween'
 import { csvParse } from 'd3-dsv'
 import { select, selectAll, event } from 'd3-selection'
@@ -29,13 +30,46 @@ let state = 'cases'
 let updated = false
 let lastCounter = 0
 
+const color = scaleSequentialLog(interpolateBuPu).domain(domain)
+const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
+
 const svg = select(<svg {...props} />)
+const casesGroup = svg.append('g')
+
+const updateCases = (data, t) => {
+    updated = true
+    casesGroup
+    .selectAll('path')
+    .data(data, d => d.id)
+    .join(
+        enter => enter.append(d => (
+            <FeaturePath 
+                d={d}
+                fill={state == 'cases' ? d.fill : d.deathFill} 
+            />)
+        ),
+        update => update.call(update => 
+            update.transition(t)
+            .style('fill', d => state == 'cases' ? d.fill : d.deathFill)
+            .style('stroke', d => state == 'cases' ? d.fill : d.deathFill)
+        ),
+        exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
+    )
+}
 
 fetch(countiesUrl).then(async (featuresRequest) => {
 
     const features = await featuresRequest.json()
-   
     const states = feature(features, features.objects.states).features
+    
+    const t = transition().ease(easeLinear)
+    updateCases([], t)
+
+    svg.append('g')
+        .selectAll('path')
+        .data(states)
+        .join(enter => enter.append(d => <StatePath d={d} />))
+
     const counties = feature(features, features.objects.counties).features
         
     const cases = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
@@ -44,8 +78,6 @@ fetch(countiesUrl).then(async (featuresRequest) => {
     const deaths = await fetch('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv')
     const deathsCsv = await deaths.text()
     
-    const censusRequest = await fetch(`https://api.census.gov/data/2018/pep/population?get=POP&for=county`)
-    const population = await censusRequest.json()
     const rows = population.slice(1) 
         .map(([population, state, county]) => [`${state}${county}`, +population])
     const popByCounty = new Map(rows)
@@ -56,11 +88,8 @@ fetch(countiesUrl).then(async (featuresRequest) => {
     const featuresById = group(counties, feature => feature.id)
 
     const sample = casesData[0]
-    const march = parseDate('3/1/20')
+    const march = parseDate('2/29/20')
     const dates = Object.keys(sample).filter(parseDate).filter(d => parseDate(d) > march)
-
-    const color = scaleSequentialLog(interpolateBuPu).domain(domain)
-    const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
 
     const deathsGroup = group(deathsData, d => d.UID.slice(3))
 
@@ -94,29 +123,6 @@ fetch(countiesUrl).then(async (featuresRequest) => {
         })
     ]})
 
-    const casesGroup = svg.append(() => <g />)
-
-    const updateCases = (data, t) => {
-        updated = true
-        casesGroup
-        .selectAll('path')
-        .data(data, d => d.id)
-        .join(
-            enter => enter.append(d => (
-                <FeaturePath 
-                    d={d}
-                    fill={state == 'cases' ? d.fill : d.deathFill} 
-                />)
-            ),
-            update => update.call(update => 
-                update.transition(t)
-                .style('fill', d => state == 'cases' ? d.fill : d.deathFill)
-                .style('stroke', d => state == 'cases' ? d.fill : d.deathFill)
-            ),
-            exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
-        )
-    }
-
     const totals = casesMapped.map(d => sum(d[1], d => d.total))
     const deathTotals =  casesMapped.map(d => sum(d[1], d => d.totalDeaths))
 
@@ -140,6 +146,8 @@ fetch(countiesUrl).then(async (featuresRequest) => {
         return pair[1]
     }
     
+    updateCases(getCasesDay(0, t), t)
+
     window.addEventListener('tick', e => {
         const counter = e.detail.counter
         lastCounter = counter
@@ -168,14 +176,6 @@ fetch(countiesUrl).then(async (featuresRequest) => {
         .scaleExtent([1, 4])
         .on('zoom', zooms)
     )
-
-    const t = transition().ease(easeLinear)
-    const casesDay = getCasesDay(0, t)
-    updateCases(casesDay, t)
-
-    svg.append('g').selectAll('path')
-    .data(states)
-    .join(enter => enter.append(d => <StatePath d={d} />))
 })
 
 export default <> { svg.node() } </>
