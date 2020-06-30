@@ -11,6 +11,10 @@ let state = 'cases'
 
 const Choropleth = () => (
     <>
+        <div id={styles.mapContainer}>
+            <Controls />
+            { svg }
+        </div>
         <div id={styles.legends}>
             <div className={styles.control}>
                 <button 
@@ -62,10 +66,7 @@ const Choropleth = () => (
                     </button>
             </div>
         </div>
-        <div id={styles.mapContainer}>
-            { svg }
-            <Controls />
-        </div>
+
     </>
 )
 

@@ -3,7 +3,6 @@
 import styles from './styles.css'
 import Choropleth from './choropleth'
 
-
 mixpanel.track("Page View")
 
 document.body.appendChild(

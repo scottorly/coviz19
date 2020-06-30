@@ -34,9 +34,9 @@ const Slider = ({ attributes: { eventListener }}) => {
 
     const slider = svg.append(() => <g><line x1={x.range()[0]} x2={x.range()[1]} /></g>)
  
-    slider.append(() => <g transform='translate(0, 28)'/>).call(axisBottom(x).ticks(6))
-    
-    slider.insert(() => <circle transform='translate(0, 28)' className={styles.overlay} r={12}/>)
+    slider.append(() => <g transform='translate(0, 44)'/>).call(axisBottom(x).ticks(5))
+
+    slider.insert(() => <circle transform='translate(0, 44)' className={styles.circle} r={12}/>)
         .call(drag()
         .on("drag", function() {
             select(this).attr('cx', () => {
@@ -75,29 +75,29 @@ const Controls = () => {
 
     return (
         <>
-        <div>
-            <h1 id={styles.dateLabel}/>
-        </div>
-        <div id={styles.controls}>
-            <button 
-                className={styles.button}
-                eventListener={['click', function() {
-                    state = state == 'play' ? 'pause' : 'play'
-                    mixpanel.track(state)
-                    select(this).classed(styles.paused, state == 'play')
-                }]}/>
+            <div id={styles.controls}>
+                <button 
+                    className={styles.button}
+                    eventListener={['click', function() {
+                        state = state == 'play' ? 'pause' : 'play'
+                        mixpanel.track(state)
+                        select(this).classed(styles.paused, state == 'play')
+                    }]}/>
+                    
+                <Slider 
+                    eventListener={(value) => {
+                        state = 'pause'
+                        select(`.${styles.button}`).classed(styles.paused, state == 'play')
+                        counter = value
+                        const t = transition().ease(easeLinear)
+                        const detail = { detail: { counter, t }}
+                        window.dispatchEvent(new CustomEvent('tick', detail))
+                    }}/>
                 
-            <Slider 
-                eventListener={(value) => {
-                    state = 'pause'
-                    select(`.${styles.button}`).classed(styles.paused, state == 'play')
-                    counter = value
-                    const t = transition().ease(easeLinear)
-                    const detail = { detail: { counter, t }}
-                    window.dispatchEvent(new CustomEvent('tick', detail))
-                }}/>
-            
-        </div>
+            </div>
+            <div>
+                <h1 id={styles.dateLabel}/>
+            </div>
         </>
     )
 }

@@ -28,8 +28,13 @@
     background-color: rgb(125, 25, 126);
 }
 
+.circle {
+    @apply cursor-pointer
+}
+
 .switches {
-    @apply font-bold py-2 px-4 rounded border-none my-4 text-white opacity-25 max-w-sm mx-auto text-xl
+    width: 360px;
+    @apply py-2 px-4 rounded border-none my-4 text-white opacity-25 mx-auto
 }
 
 .switches:hover {
@@ -44,7 +49,7 @@
     @apply p-1 mx-auto flex flex-col max-w-screen-lg justify-between
 }
 
-@screen xl {
+@screen lg {
     #legends {
       @apply flex-row
     }
@@ -63,16 +68,17 @@
 }
 
 #controls {
-    @apply flex py-6 overflow-visible max-w-screen-lg mx-auto
+    @apply flex pt-6 overflow-visible max-w-screen-md mx-auto
 }
 
 @screen md {
     #controls {
-        @apply flex py-6 overflow-visible w-full
+        @apply flex pt-6 overflow-visible w-full
     }
 }
 
 #slider {
+    width: 600px;
     @apply overflow-visible
 }
 
@@ -87,7 +93,7 @@
     cursor: pointer;
     border-style: solid;
     border-width: 37px 0 37px 60px;
-    @apply mr-4
+    @apply mr-4 overflow-visible
 }
 
 .button:hover {
