@@ -12,8 +12,9 @@ let state = 'cases'
 const Choropleth = () => (
     <>
         <div id={styles.mapContainer}>
-            <Controls />
+            <h1 id={styles.dateLabel}/>
             { svg }
+            <Controls />
         </div>
         <div id={styles.legends}>
             <div className={styles.control}>

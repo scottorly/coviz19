@@ -95,9 +95,6 @@ const Controls = () => {
                     }}/>
                 
             </div>
-            <div>
-                <h1 id={styles.dateLabel}/>
-            </div>
         </>
     )
 }
