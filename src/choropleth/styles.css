@@ -8,23 +8,23 @@
     @apply mt-2 text-center text-4xl
 }
 
-#title {
-    @apply mx-1
-}
-
 #totalLabel {
+    color: rgb(125, 25, 126);
     @apply inline-block mb-4 text-left
 }
 
 #newCases {
+    color: rgb(125, 25, 126);
     @apply inline-block mb-4 text-left
 }
 
 #deathLabel {
+    color: rgb(213, 27, 106);
     @apply inline-block mb-4 text-left
 }
 
 #newDeaths {
+    color: rgb(213, 27, 106);
     @apply inline-block mb-4 text-left
 }
 
@@ -54,6 +54,7 @@
 }
 
 #legends {
+    max-width: 360px;
     @apply p-1 flex flex-col mt-12
 }
 
@@ -66,7 +67,7 @@
 }
 
 #mapSvg {
-    @apply w-full;
+    @apply w-full max-h-screen
 }
 
 #controls {
@@ -80,7 +81,7 @@
 }
 
 #slider {
-    @apply overflow-visible min-w-full
+    @apply overflow-visible mx-16 w-full 
 }
 
 .button {
@@ -110,16 +111,30 @@
     @apply w-full
 }
 
+#playback {
+    @apply w-full max-w-screen-xl mx-auto
+}
+
 .counter {
-    @apply flex flex-col mx-4
+    @apply flex flex-col mx-8
 }
 
 #map {
-    @apply flex flex-col min-w-full
-  }
-  
-  @screen xl {
-    #map {
-      @apply flex-row
+    @apply flex flex-col items-center min-w-full mx-auto
+}
+
+@screen xl {
+    #legends {
+        @apply mx-20
     }
-  }
+    #map {
+      @apply flex-row max-w-screen-xl
+    }
+    #mapSvg {
+        @apply max-w-screen-xl
+    }
+}
+
+#title {
+    @apply my-4
+}

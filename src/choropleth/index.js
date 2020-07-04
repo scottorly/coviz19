@@ -10,13 +10,15 @@ import { interpolateBuPu, interpolatePuRd } from 'd3-scale-chromatic'
 let state = 'cases'
 
 const Choropleth = () => (
+    <>
     <div id={styles.map}>
         <div id={styles.legends}>
             <div className={styles.counter}>
-                <label>total confirmed cases</label><h1 id={styles.totalLabel}>0</h1>
-                <label>new cases per day</label><h1 id={styles.newCases}>0</h1>
-            </div>
-            <div className={styles.counter}>
+                <h1 id={styles.title}>COVIZ-19</h1>
+                <label>total confirmed cases</label>
+                <h1 id={styles.totalLabel}>0</h1>
+                <label>new cases per day</label>
+                <h1 id={styles.newCases}>0</h1>
                 <label>total confirmed deaths</label>
                 <h1 id={styles.deathLabel}>0</h1>
                 <label>new deaths per day</label>
@@ -37,13 +39,13 @@ const Choropleth = () => (
                     }]}
                 >
                     <h1>Cases</h1>
-                    <Legend
-                        domain={[1, 10000]}
-                        width={320}
-                        color={interpolateBuPu}
-                        label='COVID-19 cases per 100k' 
-                    />
                 </button>
+                <Legend
+                    domain={[1, 10000]}
+                    width={320}
+                    color={interpolateBuPu}
+                    label='COVID-19 cases per 100k' 
+                />
             </div>
             <div className={styles.control}>
                 <button 
@@ -59,20 +61,25 @@ const Choropleth = () => (
                     }]}
                 >
                     <h1>Deaths</h1>
-                    <Legend
-                        domain={[1, 1000]}
-                        width={320}
-                        color={interpolatePuRd}
-                        label='COVID-19 deaths per 100k' />
-                    </button>
+                </button>
+ 
+                <Legend
+                    domain={[1, 1000]}
+                    width={320}
+                    color={interpolatePuRd}
+                    label='COVID-19 deaths per 100k' />
             </div>
         </div>
         <div id={styles.mapContainer}>
             { svg }
-            <h1 id={styles.dateLabel}>1/22/2020</h1>
-            <Controls />
         </div>
+        
     </div>
+    <div id={styles.playback}>
+        <h1 id={styles.dateLabel}>1/22/2020</h1>
+        <Controls />
+    </div>
+    </>
 )
 
 export default Choropleth

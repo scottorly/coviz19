@@ -7,7 +7,7 @@ html { font-family: 'Inter', sans-serif; }
 }
 
 #app {
-    @apply flex flex-col
+    @apply flex flex-col mt-16
 }
 
 h1:global { @apply m-0 }
