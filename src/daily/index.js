@@ -1,18 +1,9 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from './styles.css'
-import { csvParse } from 'd3-dsv'
-import { timeParse, timeFormat } from 'd3-time-format'
-import { group } from 'd3-array'
-import { timeDay } from 'd3-time'
 import { select  } from 'd3-selection'
 import Multiple from './multiples'
 import Worker from './workers/index.worker.js'
-
-const format = '%m-%d-%Y'
-const parseDate = timeParse(format)
-const formatDate = timeFormat(format)
-const template = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/'
 
 let flatGroup
 

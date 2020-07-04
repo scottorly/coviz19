@@ -12,7 +12,6 @@ const filter = ({ Province_State }) => Province_State != 'Diamond Princess' && P
 let flatGroup
 
 const promise = (async () => {
-   
     const fourTwelve = parseDate('4-12-2020')
     const now = new Date()
     const dates = timeDay.range(fourTwelve, now)
