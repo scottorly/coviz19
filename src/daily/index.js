@@ -7,61 +7,62 @@ import { group } from 'd3-array'
 import { timeDay } from 'd3-time'
 import { select  } from 'd3-selection'
 import Multiple from './multiples'
+import Worker from './workers/index.worker.js'
 
 const format = '%m-%d-%Y'
 const parseDate = timeParse(format)
 const formatDate = timeFormat(format)
 const template = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/'
 
+let flatGroup
+
+const worker = new Worker()
+
 const container = select(
-    <div>
-        <input type='text' eventListener={['input', function() {
-            console.log(this.value)
-        }]}/>
+    <div id={styles.daily}>
+        <div id={styles.header}>
+            <h1> US States Daily Reports</h1>
+            <h1 className={styles.dateLabel} />
+            <h1 className={styles.totalLabel} />
+            <label className={styles.filterLabel}>filter</label>
+            <input
+                className={styles.filter}
+                type='text' 
+                eventListener={['input', function() {
+                    const value = this.value
+                    const filtered = [...flatGroup].filter(([state, _]) => {
+                        return state.toLowerCase().includes(value)
+                    })
+                    update(filtered)
+                }]}
+            />
+        </div>
         <ul id={styles.states} />
     </div>
 )
 
-const filter = ({ Province_State }) => Province_State != 'Diamond Princess' && Province_State != 'Grand Princess' && Province_State != 'Recovered';
-
- (async () => {
-
-    const fourTwelve = parseDate('4-12-2020')
-    const now = new Date()
-    const dates = timeDay.range(fourTwelve, now)
-    const requests = dates.map(async date => {
-        const response = await fetch(`${template}${formatDate(date)}.csv`)
-        const csv = await response.text()
-        const parsed = csvParse(csv).filter(filter)
-        const grouped = group(parsed, d => d.Province_State)
-        return [date, grouped]
-    })
-
-    const data = await Promise.all(requests)
-    
-    const flattened = data.flatMap(([date, d]) => 
-        [...d].map(([_, v]) => {
-            return { date, ...v[0] }
-        }))
-
-    const flatGroup = group(flattened, d => d.Province_State)
-
+const update = (data) => {
     container.select('ul')
-        .selectAll('li')
-        .data([...flatGroup], ([state, _]) => state)
-        .join(
-            enter => enter.append(d => 
-                <li>
-                   <Multiple d={d} />
-                </li>
-            ))
-})()
+    .selectAll('li')
+    .data(data, ([state, _]) => state)
+    .join(
+        enter => enter.append(d => 
+            <li className={styles.state}>
+               <Multiple d={d} />
+            </li>
+        ), 
+        update => update,
+        exit => exit.call(exit => exit.transition().style('opacity', 0).remove())
+    )
+}
 
-const StatesDaily = () => (<>
-    <h1> US States daily reports</h1>
-    <h1 className={styles.dateLabel} />
-    <h1 className={styles.totalLabel} />
-    { container.node() }
-</>)
+worker.postMessage('load')
+
+worker.onmessage = async ({ data }) => {
+    flatGroup = data
+    update([...flatGroup])
+}
+
+const StatesDaily = () => container.node()
 
 export default StatesDaily 

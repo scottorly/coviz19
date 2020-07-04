@@ -1,7 +1,8 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from '../styles.css'
-import population from './population.json'
+import population from './json/population.json'
+import features from './json/counties-albers-10m.json'
 import textTween from './tween'
 import { csvParse } from 'd3-dsv'
 import { select, selectAll, event } from 'd3-selection'
@@ -15,7 +16,6 @@ import { zoom } from 'd3-zoom'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
 
-const countiesUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json'
 
 const width = 975
 const height = 610
@@ -26,40 +26,38 @@ const props = {
     viewBox: [0, 0, width, height], id: styles.map
 }
 
-let state = 'cases'
-let updated = false
-let lastCounter = 0
+const svg = select(<svg {...props} />);
 
-const color = scaleSequentialLog(interpolateBuPu).domain(domain)
-const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
-
-const svg = select(<svg {...props} />)
-const casesGroup = svg.append('g')
-
-const updateCases = (data, t) => {
-    updated = true
-    casesGroup
-    .selectAll('path')
-    .data(data, d => d.id)
-    .join(
-        enter => enter.append(d => (
-            <FeaturePath 
-                d={d}
-                fill={state == 'cases' ? d.fill : d.deathFill} 
-            />)
-        ),
-        update => update.call(update => 
-            update.transition(t)
-            .style('fill', d => state == 'cases' ? d.fill : d.deathFill)
-            .style('stroke', d => state == 'cases' ? d.fill : d.deathFill)
-        ),
-        exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
-    )
-}
-
-fetch(countiesUrl).then(async (featuresRequest) => {
-
-    const features = await featuresRequest.json()
+(async () => {
+    let state = 'cases'
+    let updated = false
+    let lastCounter = 0
+    
+    const color = scaleSequentialLog(interpolateBuPu).domain(domain)
+    const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
+    
+    const casesGroup = svg.append('g')
+    
+    const updateCases = (data, t) => {
+        updated = true
+        casesGroup
+        .selectAll('path')
+        .data(data, d => d.id)
+        .join(
+            enter => enter.append(d => (
+                <FeaturePath 
+                    d={d}
+                    fill={state == 'cases' ? d.fill : d.deathFill} 
+                />)
+            ),
+            update => update.call(update => 
+                update.transition(t)
+                .style('fill', d => state == 'cases' ? d.fill : d.deathFill)
+                .style('stroke', d => state == 'cases' ? d.fill : d.deathFill)
+            ),
+            exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
+        )
+    }
     const states = feature(features, features.objects.states).features
     
     const t = transition().ease(easeLinear)
@@ -146,7 +144,7 @@ fetch(countiesUrl).then(async (featuresRequest) => {
         return pair[1]
     }
     
-    updateCases(getCasesDay(0, t), t)
+    updateCases(getCasesDay(1, t), t)
 
     window.addEventListener('tick', e => {
         const counter = e.detail.counter
@@ -176,6 +174,6 @@ fetch(countiesUrl).then(async (featuresRequest) => {
         .scaleExtent([1, 4])
         .on('zoom', zooms)
     )
-})
+})()
 
 export default <> { svg.node() } </>

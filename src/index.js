@@ -2,6 +2,7 @@
 
 import styles from './styles.css'
 import Choropleth from './choropleth'
+import StatesDaily from './daily'
 
 mixpanel.track("Page View")
 
@@ -10,6 +11,7 @@ document.body.appendChild(
         <div>
             <Choropleth />
         </div>
+        <StatesDaily />
         <div className={styles.footer}>
             <h4>Datasources:</h4>
             <p>

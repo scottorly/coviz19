@@ -67,7 +67,6 @@ const Choropleth = () => (
                     </button>
             </div>
         </div>
-
     </>
 )
 

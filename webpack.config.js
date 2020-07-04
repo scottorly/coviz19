@@ -44,6 +44,10 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.worker\.js$/,
+                use: ['worker-loader', 'babel-loader']
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: "babel-loader"

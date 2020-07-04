@@ -1,4 +1,4 @@
-import { scaleLog } from 'd3-scale'
+import { scaleLinear } from 'd3-scale'
 import { line } from 'd3-shape'
 import { extent } from 'd3-array'
 import { axisLeft } from 'd3-axis'
@@ -7,7 +7,7 @@ import { schemeTableau10 } from 'd3-scale-chromatic'
 export const ys = (name, v, range, x) => {
 
     if (name == 'confirmed') {
-        const confirmedY = scaleLog()
+        const confirmedY = scaleLinear()
             .domain(extent(v, d => +d.Confirmed))
             .range(range)
     
@@ -15,12 +15,12 @@ export const ys = (name, v, range, x) => {
             .x(d => x(d.date))
             .y(d => confirmedY(+d.Confirmed))
     
-        const confirmedAxis = axisLeft(confirmedY).tickFormat(5, "")
+        const confirmedAxis = axisLeft(confirmedY).ticks(5)
         return [confirmed, confirmedAxis, schemeTableau10[0]]
     }
 
     if (name == 'deaths') {
-        const deathsY = scaleLog()
+        const deathsY = scaleLinear()
             .domain(extent(v, d => +d.Deaths))
             .range(range)
 
@@ -33,7 +33,7 @@ export const ys = (name, v, range, x) => {
     }
 
     if (name == 'active') {
-        const activeY = scaleLog()
+        const activeY = scaleLinear()
             .domain(extent(v, d => +d.Active))
             .range(range)
 
@@ -46,7 +46,7 @@ export const ys = (name, v, range, x) => {
     }
 
     if (name == 'recovered') {
-        const recoveredY = scaleLog()
+        const recoveredY = scaleLinear()
             .domain(extent(v, d => +d.Recovered))
             .range(range)
 
@@ -58,7 +58,7 @@ export const ys = (name, v, range, x) => {
         return [recovered, recoveredAxis, schemeTableau10[4]]
     }
     if (name == 'incidence') {
-        const incidenceY = scaleLog()
+        const incidenceY = scaleLinear()
             .domain(extent(v, d => +d.Incident_Rate))
             .range(range)
 
@@ -71,7 +71,7 @@ export const ys = (name, v, range, x) => {
     }
 
     if (name == 'hospitalization') {
-            const hospitalizationY = scaleLog()
+            const hospitalizationY = scaleLinear()
             .domain(extent(v, d => +d.Hospitalization_Rate))
             .range(range)
 
@@ -84,7 +84,7 @@ export const ys = (name, v, range, x) => {
     }
 
     if (name == 'mortality') {
-        const mortalityY = scaleLog()
+        const mortalityY = scaleLinear()
             .domain(extent(v, d => +d.Mortality_Rate))
             .range(range)
     
@@ -97,7 +97,7 @@ export const ys = (name, v, range, x) => {
     }
 
     if (name == 'testing') {
-        const testingY = scaleLog()
+        const testingY = scaleLinear()
             .domain(extent(v, d => +d.Testing_Rate))
             .range(range)
 

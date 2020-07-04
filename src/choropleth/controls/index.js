@@ -27,8 +27,8 @@ const props = {
 const Slider = ({ attributes: { eventListener }}) => {
 
     const x = scaleUtc()
-    .domain(extent(dates))
-    .range([0, width])
+        .domain(extent(dates))
+        .range([0, width])
 
     const svg = select(<svg {...props} />)
 
