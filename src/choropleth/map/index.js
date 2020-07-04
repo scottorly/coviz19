@@ -179,10 +179,10 @@ const svg = select(<svg {...props} />);
 
     window.addEventListener('tick', e => {
         const counter = e.detail.counter
-        lastCounter = counter
         if (counter >= casesMapped.length) {
             return
         }
+        lastCounter = counter
         const t = e.detail.t
         const casesDay = getCasesDay(counter, t)
         updateCases(casesDay, t)

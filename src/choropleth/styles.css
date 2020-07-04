@@ -125,7 +125,7 @@
 
 @screen xl {
     #legends {
-        @apply mx-20
+        @apply mx-4
     }
     #map {
       @apply flex-row max-w-screen-xl

@@ -98,10 +98,10 @@ const Multiple = ({ attributes: { d: [state, v] }}) => {
         .call(g => g.selectAll('.domain').remove())
 
     return (
-        <div className={styles.multiple}>
+        <>
             <p className={styles.stateLabel}>{ state }</p>
             { svg.node() }
-        </div>
+        </>
     )
 }
 
