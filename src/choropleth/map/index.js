@@ -23,7 +23,7 @@ const domain = [1, 10000]
 const parseDate = timeParse("%m/%d/%y")
 
 const props = {
-    viewBox: [0, 0, width, height], id: styles.map
+    viewBox: [0, 0, width, height], id: styles.mapSvg
 }
 
 const svg = select(<svg {...props} />);
@@ -124,9 +124,18 @@ const svg = select(<svg {...props} />);
     const totals = casesMapped.map(d => sum(d[1], d => d.total))
     const deathTotals =  casesMapped.map(d => sum(d[1], d => d.totalDeaths))
     
-    let newCasesYesterday = 0
-    let newDeathsYesterday = 0
-    
+    const newCases = totals.map((d,i) => { 
+        const yesterday = totals[i - 1] || 0
+        const newToday = d - yesterday
+        return newToday || 0
+    })
+
+    const newDeaths = deathTotals.map((d,i) => {
+        const yesterday = deathTotals[i - 1] || 0
+        const newToday = d - yesterday
+        return newToday || 0
+    })
+
     const getCasesDay = (counter, t) => {
         const pair = casesMapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
@@ -134,11 +143,14 @@ const svg = select(<svg {...props} />);
 
         const casesYesterday = totals[counter-1] || 0
         const casesToday = totals[counter] || 0
-        const newCases = casesToday - casesYesterday
+        const newCase = newCases[counter] || 0
+
+        const newCasesYesterday = newCases[counter - 1] || 0
 
         const deathsYesterday = deathTotals[counter-1] || 0
-        const deathsToday = deathTotals[counter]
-        const newDeaths = deathsToday - deathsYesterday
+        const deathsToday = deathTotals[counter] || 0
+        const newDeath = newDeaths[counter] || 0
+        const newDeathsYesterday = newDeaths[counter - 1] || 0
 
         if (date != dateLabel) {
             selectAll(`#${styles.dateLabel}`)
@@ -152,16 +164,14 @@ const svg = select(<svg {...props} />);
                 .transition(t)
                 .tween('text', () => textTween(deathsYesterday, deathsToday))
                 
-            // selectAll(`#${styles.newDeaths}`)
-            //     .transition(t)
-            //     .tween('text', () => textTween(+newDeathsYesterday, newDeaths))
+            selectAll(`#${styles.newDeaths}`)
+                .transition(t)
+                .tween('text', () => textTween(newDeathsYesterday, newDeath))
             
-            // selectAll(`#${styles.newCases}`)
-            //     .transition(t)
-            //     .tween('text', () => textTween(+newCasesYesterday, newCases))
+            selectAll(`#${styles.newCases}`)
+                .transition(t)
+                .tween('text', () => textTween(newCasesYesterday, newCase))
         }
-        // newCasesYesterday = newCases
-        // newDeathsYesterday = newDeaths
         return pair[1]
     }
     

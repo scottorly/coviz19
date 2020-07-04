@@ -8,9 +8,7 @@ mixpanel.track("Page View")
 
 document.body.appendChild(
     <div id={styles.app}>
-        <div>
-            <Choropleth />
-        </div>
+        <Choropleth />
         <StatesDaily />
         <div className={styles.footer}>
             <h4>Datasources:</h4>
