@@ -1,3 +1,5 @@
+//Copyright © 2020 Scott Orlyck.
+
 import { timeParse, timeFormat } from 'd3-time-format'
 import { group } from 'd3-array'
 import { timeDay } from 'd3-time'
@@ -8,8 +10,6 @@ const parseDate = timeParse(format)
 const formatDate = timeFormat(format)
 const template = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/'
 const filter = ({ Province_State }) => Province_State != 'Diamond Princess' && Province_State != 'Grand Princess' && Province_State != 'Recovered';
-
-let flatGroup
 
 const promise = (async () => {
     const fourTwelve = parseDate('4-12-2020')
@@ -29,7 +29,7 @@ const promise = (async () => {
         [...d].map(([_, v]) => {
             return { date, ...v[0] }
         }))
-    flatGroup = group(flattened, d => d.Province_State)
+    const flatGroup = group(flattened, d => d.Province_State)
     return flatGroup
 })()
 

@@ -123,24 +123,45 @@ const svg = select(<svg {...props} />);
 
     const totals = casesMapped.map(d => sum(d[1], d => d.total))
     const deathTotals =  casesMapped.map(d => sum(d[1], d => d.totalDeaths))
-
+    
+    let newCasesYesterday = 0
+    let newDeathsYesterday = 0
+    
     const getCasesDay = (counter, t) => {
         const pair = casesMapped[counter]
         const date = parseDate(pair[0]).toLocaleDateString()
         const dateLabel = selectAll(`#${styles.dateLabel}`).text()
 
+        const casesYesterday = totals[counter-1] || 0
+        const casesToday = totals[counter] || 0
+        const newCases = casesToday - casesYesterday
+
+        const deathsYesterday = deathTotals[counter-1] || 0
+        const deathsToday = deathTotals[counter]
+        const newDeaths = deathsToday - deathsYesterday
+
         if (date != dateLabel) {
-            selectAll(`#${styles.totalLabel}`)
-            .transition(t)
-            .tween('text', () => textTween(totals[counter-1] || 0, totals[counter]))
-            
-            selectAll(`#${styles.deathLabel}`)
-                .transition(t)
-                .tween('text', () => textTween(deathTotals[counter-1] || 0, deathTotals[counter]))
-                
             selectAll(`#${styles.dateLabel}`)
                 .text(date)
+
+            selectAll(`#${styles.totalLabel}`)
+                .transition(t)
+                .tween('text', () => textTween(casesYesterday, casesToday))
+
+            selectAll(`#${styles.deathLabel}`)
+                .transition(t)
+                .tween('text', () => textTween(deathsYesterday, deathsToday))
+                
+            // selectAll(`#${styles.newDeaths}`)
+            //     .transition(t)
+            //     .tween('text', () => textTween(+newDeathsYesterday, newDeaths))
+            
+            // selectAll(`#${styles.newCases}`)
+            //     .transition(t)
+            //     .tween('text', () => textTween(+newCasesYesterday, newCases))
         }
+        // newCasesYesterday = newCases
+        // newDeathsYesterday = newDeaths
         return pair[1]
     }
     

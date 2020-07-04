@@ -33,6 +33,7 @@ const Choropleth = () => (
                     <div className={styles.counter}>
                         <h1>Cases</h1>
                         <h1 id={styles.totalLabel}>0</h1>
+                        {/* <h1 id={styles.newCases}>0</h1> */}
                     </div>
                     <Legend
                         domain={[1, 10000]}
@@ -58,6 +59,7 @@ const Choropleth = () => (
                     <div className={styles.counter}>
                         <h1>Deaths</h1>
                         <h1 id={styles.deathLabel}>0</h1>
+                        {/* <h1 id={styles.newDeaths}>0</h1> */}
                     </div>
                     <Legend
                         domain={[1, 1000]}

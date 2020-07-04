@@ -1,4 +1,4 @@
-import styles from './styles.css'
+import styles from '../styles.css'
 import { select } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
 import { extent } from 'd3-array'
@@ -80,7 +80,8 @@ const MultipleGraph = ({ attributes: { d, row, graph }}) => {
 
 const Multiple = ({ attributes: { d: [state, v] }}) => {
 
-    const svg = select(<svg width={700} height={800}></svg>)
+    const props = { viewBox: [0, 0, 700, 800], className: styles.multiples}
+    const svg = select(<svg {...props}/>)
 
     const g  = svg.append(() => 
         <g transform={`translate(${margin.left}, ${margin.top})`}/>

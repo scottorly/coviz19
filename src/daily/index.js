@@ -43,7 +43,9 @@ const update = (data) => {
             </li>
         ), 
         update => update,
-        exit => exit.call(exit => exit.transition().style('opacity', 0).remove())
+        exit => exit.call(exit => 
+            exit.transition().style('opacity', 0).remove()
+        )
     )
 }
 

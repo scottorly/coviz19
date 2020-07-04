@@ -16,7 +16,15 @@
     @apply inline-block mb-4 text-left
 }
 
+#newCases {
+    @apply inline-block mb-4 text-left
+}
+
 #deathLabel {
+    @apply inline-block mb-4 text-left
+}
+
+#newDeaths {
     @apply inline-block mb-4 text-left
 }
 
@@ -106,7 +114,7 @@
 }
   
 #mapContainer {
-    @apply max-w-screen-xl mx-auto
+    @apply max-w-screen-lg mx-auto
 }
 
 .counter {
