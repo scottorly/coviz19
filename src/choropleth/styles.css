@@ -76,7 +76,7 @@
 }
 
 #controls {
-    @apply flex pt-6 overflow-visible max-w-screen-md mx-auto
+    @apply flex pt-6 overflow-visible mx-auto
 }
 
 @screen md {
@@ -86,7 +86,6 @@
 }
 
 #slider {
-    width: 600px;
     @apply overflow-visible
 }
 

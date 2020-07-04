@@ -87,7 +87,7 @@ const svg = select(<svg {...props} />);
 
     const sample = casesData[0]
     const march = parseDate('2/29/20')
-    const dates = Object.keys(sample).filter(parseDate).filter(d => parseDate(d) > march)
+    const dates = Object.keys(sample).filter(parseDate)
 
     const deathsGroup = group(deathsData, d => d.UID.slice(3))
 

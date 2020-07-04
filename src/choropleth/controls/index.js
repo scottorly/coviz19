@@ -13,7 +13,7 @@ import { extent } from 'd3-array'
 
 const format = '%m-%d-%Y'
 const parseDate = timeParse(format)
-const jan = parseDate('3-1-2020')
+const jan = parseDate('1-22-2020')
 const now = new Date()
 const dates = timeDay.range(jan, now)
 const width = dates.length * 6
