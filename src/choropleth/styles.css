@@ -1,7 +1,8 @@
 /* Copyright © 2020 Scott Orlyck. **/
 
 .legend {
-    @apply overflow-visible m-4
+    max-width: 240px;
+    @apply overflow-visible mt-1
 }
 
 #dateLabel {
@@ -41,7 +42,7 @@
 }
 
 .switches {
-    width: 360px;
+    width: 244px;
     @apply py-2 px-4 rounded border-none my-4 text-white opacity-25 mx-auto
 }
 
@@ -59,19 +60,15 @@
 }
 
 .control {
-    @apply flex flex-col
+    @apply p-1
 }
 
 .label {
     @apply p-1 mx-4
 }
 
-#mapSvg {
-    @apply w-full max-h-screen
-}
-
 #controls {
-    @apply flex pt-6 overflow-visible mx-auto
+    @apply pt-6 overflow-visible mx-auto
 }
 
 @screen md {
@@ -120,7 +117,12 @@
 }
 
 #map {
-    @apply flex flex-col items-center min-w-full mx-auto
+    max-width: 1800px;
+    @apply flex flex-col items-center w-full mx-auto
+}
+
+#mapSvg {
+    @apply w-full
 }
 
 @screen xl {
@@ -128,13 +130,18 @@
         @apply mx-4
     }
     #map {
-      @apply flex-row max-w-screen-xl
-    }
-    #mapSvg {
-        @apply max-w-screen-xl
+      @apply flex-row
     }
 }
 
 #title {
     @apply my-4
+}
+
+#popup {
+    @apply px-4 py-2 bg-gray-900 opacity-0 text-gray-100 inline-block absolute rounded
+}
+
+#popupLabel {
+    @apply p-1
 }
