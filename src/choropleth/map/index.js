@@ -15,7 +15,7 @@ import { StatePath, FeaturePath } from './paths'
 import { zoom } from 'd3-zoom'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
-
+import PopUp from './popup'
 
 const width = 975
 const height = 610
@@ -25,6 +25,8 @@ const parseDate = timeParse("%m/%d/%y")
 const props = {
     viewBox: [0, 0, width, height], id: styles.mapSvg
 }
+
+const popup = <PopUp />
 
 const svg = select(<svg {...props} />);
 
@@ -37,7 +39,7 @@ const svg = select(<svg {...props} />);
     const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
     
     const casesGroup = svg.append('g')
-    
+    document.body.appendChild(popup)
     const updateCases = (data, t) => {
         updated = true
         casesGroup
@@ -47,7 +49,8 @@ const svg = select(<svg {...props} />);
             enter => enter.append(d => (
                 <FeaturePath 
                     d={d}
-                    fill={state == 'cases' ? d.fill : d.deathFill} 
+                    fill={state == 'cases' ? d.fill : d.deathFill}
+                    eventListeners={popupListeners}
                 />)
             ),
             update => update.call(update => 
