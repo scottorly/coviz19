@@ -1,0 +1,5 @@
+/* Copyright © 2020 Scott Orlyck. **/
+
+.footer {
+    @apply my-12 mx-4
+}

@@ -38,10 +38,10 @@ const update = (data) => {
     .data(data, ([state, _]) => state)
     .join(
         enter => enter.append(d => 
-            <li className={styles.state}>
+            <li className={styles.state} style='opacity: 0'>
                <Multiple d={d} />
             </li>
-        ), 
+        ).call(enter => enter.transition().style('opacity', 1)), 
         update => update,
         exit => exit.call(exit => 
             exit.transition().style('opacity', 0).remove()

@@ -15,13 +15,13 @@ const Choropleth = () => (
         <div id={styles.legends}>
             <div className={styles.counter}>
                 <h1 id={styles.title}>COVIZ-19</h1>
-                <label>total confirmed cases</label>
+                <label>total cases</label>
                 <h1 id={styles.totalLabel}>0</h1>
-                <label>new cases per day</label>
+                <label>new cases</label>
                 <h1 id={styles.newCases}>0</h1>
-                <label>total confirmed deaths</label>
+                <label>total deaths</label>
                 <h1 id={styles.deathLabel}>0</h1>
-                <label>new deaths per day</label>
+                <label>new deaths</label>
                 <h1 id={styles.newDeaths}>0</h1>
             </div>
             <div className={styles.control}>
