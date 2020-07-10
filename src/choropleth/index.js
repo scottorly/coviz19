@@ -24,8 +24,7 @@ const Choropleth = () => (
                 <label>new deaths</label>
                 <h1 id={styles.newDeaths}>0</h1>
             </div>
-            <div className={styles.control}>
-               
+            <div className={styles.control}>   
                 <button 
                     id={styles.caseSwitch}
                     className={`${styles.switches} ${styles.selected}`}

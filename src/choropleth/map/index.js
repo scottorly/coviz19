@@ -50,7 +50,22 @@ const svg = select(<svg {...props} />);
                 <FeaturePath 
                     d={d}
                     fill={state == 'cases' ? d.fill : d.deathFill}
-                    eventListeners={popupListeners}
+                    eventListeners={
+                    [
+                        ['mouseleave', e => {
+                            select(popup).transition().style('opacity', 0)
+                        }],
+                        ['mouseover', function(e) {
+                            const county = select(this).data()
+                            select(popup)
+                                .transition().duration(0)
+                                .style('opacity', 0.75)
+                                .style('top', `${e.clientY - 100}px`)
+                                .style('left', `${e.clientX + 24 }px`)
+                                .select('p')
+                                .text(county[0].label)
+                        }]
+                    ]}
                 />)
             ),
             update => update.call(update => 
@@ -83,13 +98,12 @@ const svg = select(<svg {...props} />);
         .map(([population, state, county]) => [`${state}${county}`, +population])
     const popByCounty = new Map(rows)
 
-    const casesData = csvParse(covidCases).filter(d => d.UID.slice(3).length > 0)
-    const deathsData = csvParse(deathsCsv).filter(d => d.UID.slice(3).length > 0)
+    const casesData = csvParse(covidCases)
+    const deathsData = csvParse(deathsCsv)
 
     const featuresById = group(counties, feature => feature.id)
 
     const sample = casesData[0]
-    const march = parseDate('2/29/20')
     const dates = Object.keys(sample).filter(parseDate)
 
     const deathsGroup = group(deathsData, d => d.UID.slice(3))

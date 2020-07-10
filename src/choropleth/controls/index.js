@@ -10,6 +10,7 @@ import { scaleUtc } from 'd3-scale'
 import { drag } from 'd3-drag'
 import { axisBottom } from 'd3-axis'
 import { extent } from 'd3-array'
+import { interval } from 'd3-timer'
 
 const format = '%m-%d-%Y'
 const parseDate = timeParse(format)
@@ -59,7 +60,7 @@ const Controls = () => {
     var counter = -1
     let state = 'pause'
 
-    setInterval(() => {
+    interval(() => {
         if (state == 'play' && counter <= dates.length) {
             counter++
             const t = transition().duration(500).ease(easeLinear)
