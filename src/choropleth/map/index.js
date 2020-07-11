@@ -1,8 +1,7 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from '../styles.css'
-import population from './json/population.json'
-import features from './json/counties-albers-10m.json'
+
 import textTween from './tween'
 import { csvParse } from 'd3-dsv'
 import { select, selectAll, event } from 'd3-selection'
@@ -31,6 +30,8 @@ const popup = <PopUp />
 const svg = select(<svg {...props} />);
 
 (async () => {
+    const { default: population } = await import(/* webpackChunkName: "population" */ './json/population.json')
+    const { default: features } = await import(/* webpackChunkName: "features" */ './json/counties-albers-10m.json')
     let state = 'cases'
     let updated = false
     let lastCounter = 0

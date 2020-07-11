@@ -30,7 +30,6 @@ const promise = (async () => {
             return { date, ...v[0] }
         }))
     const flatGroup = group(flattened, d => d.Province_State)
-    console.log(flatGroup)
     return flatGroup
 })()
 

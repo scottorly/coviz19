@@ -9,7 +9,7 @@ import { timeDay } from 'd3-time'
 import { scaleUtc } from 'd3-scale'
 import { drag } from 'd3-drag'
 import { axisBottom } from 'd3-axis'
-import { extent } from 'd3-array'
+import { extent, bisector  } from 'd3-array'
 import { interval } from 'd3-timer'
 
 const format = '%m-%d-%Y'
@@ -31,9 +31,27 @@ const Slider = ({ attributes: { eventListener }}) => {
         .domain(extent(dates))
         .range([0, width])
 
-    const svg = select(<svg {...props} />)
+    const svg = select(<svg {...props} eventListener={['click', e => {
+        console.log(parseDate(x(e.clientX)))
+    }]}/>)
 
-    const slider = svg.append(() => <g><line x1={x.range()[0]} x2={x.range()[1]} /></g>)
+    // const formatTime = d3.timeFormat("%Y-%m-%d")
+    // const bisect = bisector(d => d)
+  
+    // const anon = () => {
+    //   const m = d3.mouse(this)
+    //   update(x.invert(m[0]))
+    //   function update(date) {
+    //     const i = bisect.right(data, date)
+    //     cons
+    //     if (i < data.length) {
+          
+    //     }
+    //     const lookup = new Date(date)
+    //   }
+    // }
+
+    const slider = svg.append(() => <g />)
  
     slider.append(() => <g transform='translate(0, 44)'/>).call(axisBottom(x).ticks(5))
 
