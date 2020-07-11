@@ -68,7 +68,7 @@
 }
 
 #controls {
-    @apply pt-6 overflow-visible mx-auto
+    @apply pt-6 overflow-visible mx-auto cursor-pointer
 }
 
 @screen md {

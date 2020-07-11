@@ -1,7 +1,7 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from '../styles.css'
-import { select, event } from 'd3-selection'
+import { select, event, mouse } from 'd3-selection'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
 import { timeParse } from 'd3-time-format'
@@ -25,31 +25,27 @@ const props = {
     id: styles.slider
 }
 
+const bisect = bisector(d => d)
+var counter = -1
 const Slider = ({ attributes: { eventListener }}) => {
 
     const x = scaleUtc()
         .domain(extent(dates))
         .range([0, width])
-
-    const svg = select(<svg {...props} eventListener={['click', e => {
-        console.log(parseDate(x(e.clientX)))
+        
+    const svg = select(<svg {...props} eventListener={['click', function(e) {
+        const pt = this.createSVGPoint()
+        pt.x = e.clientX
+        pt.y = e.clientY
+        const cursor = pt.matrixTransform(this.getScreenCTM().inverse())
+        const date = x.invert(cursor.x)
+        counter = bisect.right(dates, date)
+        const t = transition().ease(easeLinear)
+        const detail = { detail: { counter, t }}
+        window.dispatchEvent(new CustomEvent('tick', detail))
+        select('circle').transition(t).attr('cx', counter * 6)
     }]}/>)
 
-    // const formatTime = d3.timeFormat("%Y-%m-%d")
-    // const bisect = bisector(d => d)
-  
-    // const anon = () => {
-    //   const m = d3.mouse(this)
-    //   update(x.invert(m[0]))
-    //   function update(date) {
-    //     const i = bisect.right(data, date)
-    //     cons
-    //     if (i < data.length) {
-          
-    //     }
-    //     const lookup = new Date(date)
-    //   }
-    // }
 
     const slider = svg.append(() => <g />)
  
@@ -75,7 +71,7 @@ const Slider = ({ attributes: { eventListener }}) => {
 }
 
 const Controls = () => {
-    var counter = -1
+    
     let state = 'pause'
 
     interval(() => {

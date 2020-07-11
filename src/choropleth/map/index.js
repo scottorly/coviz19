@@ -193,7 +193,7 @@ const svg = select(<svg {...props} />);
         return pair[1]
     }
     
-    updateCases(getCasesDay(1, t), t)
+    updateCases(getCasesDay(0, t), t)
 
     window.addEventListener('tick', e => {
         const counter = e.detail.counter
