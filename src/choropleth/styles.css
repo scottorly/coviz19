@@ -1,5 +1,7 @@
 /* Copyright © 2020 Scott Orlyck. **/
 
+@import url('https://fonts.googleapis.com/css2?family=Recursive:wght,CRSV@500,0&display=swap');
+
 .legend {
     max-width: 240px;
     @apply overflow-visible mt-1
@@ -10,12 +12,12 @@
 }
 
 #totalLabel {
-    color: rgb(125, 25, 126);
+    color: rgb(140, 129, 188);
     @apply inline-block mb-4 text-left
 }
 
 #newCases {
-    color: rgb(125, 25, 126);
+    color: rgb(140, 129, 188);
     @apply inline-block mb-4 text-left
 }
 
@@ -34,7 +36,7 @@
 }
 
 #caseSwitch {
-    background-color: rgb(125, 25, 126);
+    background-color: rgb(140, 129, 188);
 }
 
 .circle {
@@ -52,6 +54,10 @@
 
     .button {
         @apply text-gray-100;
+    }
+
+    html {
+        @apply bg-gray-900 text-gray-300
     }
 }
 
@@ -100,9 +106,10 @@
 }
 
 .button {
+    font-family: 'Recursive', monospace;
     width: 100px;
     height: 44px;
-    @apply bg-green-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow text-lg
+    @apply bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow text-lg
 }
   
 #mapContainer {

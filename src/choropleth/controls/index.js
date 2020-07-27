@@ -84,7 +84,7 @@ const Controls = () => {
         }
         if (counter > dates.length) {
             state = 'pause'
-            select(`.${styles.button}`).classed(styles.paused, state == 'play')
+            select(`.${styles.button}`).text(state == 'play' ? 'pause' : 'play')
         }
     }, 500)
 
