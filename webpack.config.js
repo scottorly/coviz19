@@ -15,16 +15,10 @@ module.exports = {
         publicPath: '/',
         filename: 'bundle.js'
     },
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-        },
-    },
     plugins: [
         new HtmlWebpackPlugin({
             template: 'src/index.html',
-            chunksSortMode: "none",
-
+            chunksSortMode: "none"
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[hash].css',
@@ -40,12 +34,12 @@ module.exports = {
             },
         })
     ],
-    devtool: isDEV ? 'inline-source-map': 'none',
+    // devtool: isDEV ? 'inline-source-map': null,
     module: {
         rules: [
             {
                 test: /\.worker\.js$/,
-                use: ['worker-loader', 'babel-loader']
+                use: ['worker-loader']
             },
             {
                 test: /\.js$/,
