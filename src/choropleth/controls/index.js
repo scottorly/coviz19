@@ -91,18 +91,19 @@ const Controls = () => {
     return (
         <>
             <div id={styles.controls}>
-                <button 
-                    className={styles.button}
-                    eventListener={['click', function() {
-                        state = state == 'play' ? 'pause' : 'play'
-                        mixpanel.track(state)
-                        select(this).classed(styles.paused, state == 'play')
-                    }]}/>
-                    
+                <div id={styles.playContainer}>
+                    <button 
+                        className={styles.button}
+                        eventListener={['click', function() {
+                            state = state == 'play' ? 'pause' : 'play'
+                            mixpanel.track(state)
+                            select(this).text(state == 'play' ? 'pause' : 'play')
+                        }]}>play</button>
+                </div>
                 <Slider 
                     eventListener={(value) => {
                         state = 'pause'
-                        select(`.${styles.button}`).classed(styles.paused, state == 'play')
+                        select(`.${styles.button}`).text(state == 'play' ? 'pause' : 'play')
                         counter = value
                         const t = transition().ease(easeLinear)
                         const detail = { detail: { counter, t }}

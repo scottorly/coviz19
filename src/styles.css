@@ -6,6 +6,12 @@ html { font-family: 'Inter', sans-serif; }
   html { font-family: 'Inter var', sans-serif; }
 }
 
+@media (prefers-color-scheme: dark) {
+  html {
+      @apply bg-gray-900 text-gray-300
+  }
+}
+
 #app {
     @apply flex flex-col mt-16
 }

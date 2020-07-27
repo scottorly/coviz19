@@ -41,6 +41,20 @@
     @apply cursor-pointer
 }
 
+@media (prefers-color-scheme: dark) {
+    .circle {
+        fill: #f7fafc;
+    }
+
+    .legendLabel {
+        fill: #f7fafc;
+    }
+
+    .button {
+        @apply text-gray-100;
+    }
+}
+
 .switches {
     width: 244px;
     @apply py-2 px-4 rounded border-none my-4 text-white opacity-25 mx-auto
@@ -57,6 +71,10 @@
 #legends {
     max-width: 360px;
     @apply p-1 flex flex-col mt-12
+}
+
+.legendLabel {
+    @apply text-gray-100
 }
 
 .control {
@@ -82,26 +100,9 @@
 }
 
 .button {
-    display: inline-block;
-    background: transparent;
-    box-sizing: border-box;
-    width: 0;
-    height: 80px;
-    border-color: transparent transparent transparent #202020;
-    transition: 100ms all ease;
-    cursor: pointer;
-    border-style: solid;
-    border-width: 37px 0 37px 60px;
-    @apply mr-4 overflow-visible
-}
-
-.button:hover {
-    border-color: transparent transparent transparent #404040;
-}
-
-.paused {
-    border-style: double;
-    border-width: 0px 0 0px 60px;
+    width: 100px;
+    height: 44px;
+    @apply bg-green-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow text-lg
 }
   
 #mapContainer {
@@ -110,6 +111,10 @@
 
 #playback {
     @apply w-full max-w-screen-xl mx-auto
+}
+
+#playContainer {
+    @apply flex flex-col justify-center
 }
 
 .counter {

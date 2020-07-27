@@ -1,7 +1,7 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from '../styles.css'
-import { select  } from 'd3-selection'
+import { select } from 'd3-selection'
 import { scaleSequentialLog } from 'd3-scale'
 import { axisBottom } from 'd3-axis'
 
@@ -32,7 +32,7 @@ const Legend = ({ attributes: { domain, width, color, label }}) => {
 
     const x = scaleSequentialLog(color).domain(domain).range([0, width]).nice()
     legend.append(() => <g transform='translate(0, 20)'/>).call(axisBottom(x).ticks(5, ","))
-    legend.append(() => <g transform='translate(0, -8)'/>).append('text').text(label)
+    legend.append(() => <g transform='translate(0, -8)'/>).append(() => <text className={styles.legendLabel}/>).text(label)
     return legend.node()
 }
 
