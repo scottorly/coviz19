@@ -46,7 +46,6 @@ const Slider = ({ attributes: { eventListener }}) => {
         select('circle').transition(t).attr('cx', counter * 6)
     }]}/>)
 
-
     const slider = svg.append(() => <g />)
  
     slider.append(() => <g transform='translate(0, 44)'/>).call(axisBottom(x).ticks(5))
@@ -116,4 +115,12 @@ const Controls = () => {
     )
 }
 
-export default Controls
+const updateCounter = i => {
+    counter = i
+    const t = transition().ease(easeLinear)
+    const detail = { detail: { counter, t }}
+    window.dispatchEvent(new CustomEvent('tick', detail))
+    select('circle').transition(t).attr('cx', counter * 6)
+}
+
+export { Controls as default, updateCounter }

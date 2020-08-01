@@ -3,11 +3,15 @@ import { select } from 'd3-selection'
 import { timeWeek } from 'd3-time'
 import { axisLeft, axisBottom } from 'd3-axis'
 import { scaleUtc, scaleBand } from 'd3-scale'
-import { extent } from 'd3-array'
+import { extent, bisectLeft } from 'd3-array'
 import { timeFormat } from 'd3-time-format'
+import { transition } from 'd3-transition'
+import { easeLinear } from 'd3-ease'
 import PopUp from '../map/popup'
+import { updateCounter } from '../controls'
 
 const formatDate = timeFormat('%m/%d/%y')
+let dates
 
 const rectListeners = { eventListeners : [
     ['mouseleave', e => select(popup).transition().style('opacity', 0)],
@@ -22,6 +26,13 @@ const rectListeners = { eventListeners : [
             .style('left', `${rect.left + 32}px`)
             .select('p')
             .text(`${formatDate(date)} : ${total}`)
+    }],
+    ['click', function() {
+        const rect = select(this)
+        const [[date, _]] = rect.data()
+        const counter = bisectLeft(dates, date)
+
+        updateCounter(counter)
     }]
 ]}
 
@@ -35,8 +46,9 @@ const days = ['Sun','Mon','Tue','Wed','Th','Fri','Sat']
 const y = scaleBand().domain(days).range([0, 112])
 const yAxis = axisLeft(y).tickSize(0).ticks(7)
 
-const Calendar = ({ children, attributes: { d, color, title }}) => {
-    const justDates = extent(d.map(([date, _]) => date))
+const Calendar = ({ children, attributes: { d, color }}) => {
+    dates = d.map(([date, _]) => date)
+    const justDates = extent(dates)
     const weeks = timeWeek.count(...justDates) + 1
     const width = (weeks * cellSize) + 40
     const props = {
