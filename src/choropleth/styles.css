@@ -18,7 +18,7 @@
 
 #newCases {
     color: var(--purp);
-    @apply inline-block mb-4 text-left
+    @apply inline-block mb-4 text-left ml-4
 }
 
 #deathLabel {
@@ -28,7 +28,7 @@
 
 #newDeaths {
     color: var(--red);
-    @apply inline-block mb-4 text-left
+    @apply inline-block mb-4 text-left ml-4
 }
 
 #deathSwitch {
@@ -97,7 +97,7 @@
 }
 
 #controls {
-    @apply pt-6 overflow-visible mx-auto cursor-pointer
+    @apply overflow-visible mx-auto cursor-pointer
 }
 
 #calendarContainer {
@@ -127,6 +127,10 @@
     @apply flex flex-col justify-center
 }
 
+.calendarLabel {
+    @apply ml-6
+}
+
 .counter {
     @apply flex flex-col ml-1
 }
@@ -154,7 +158,7 @@
 
 @screen md {
     #controls {
-        @apply flex pt-6 overflow-visible w-full
+        @apply flex overflow-visible w-full
     }
     #calendarContainer {
         @apply flex-row

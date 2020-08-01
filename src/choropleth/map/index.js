@@ -241,15 +241,20 @@ const svg = select(<svg {...props} />);
     const newNewNew = zip(parsedDates, newDeaths)
     const newCasesColor = scaleSequentialLog(interpolateBuPu).domain([1, max(newCases)])
     const newDeathsColor = scaleSequentialLog(interpolatePuRd).domain([1, max(newDeaths)])
-    const zeroDates = parsedDates.map(date => [date, 0])
 
      const Calendars = () => (
          <>
             <div>
-                <Calendar dates={zeroDates} d={newNew} color={newCasesColor} title='new cases' />
+                <Calendar d={newNew} color={newCasesColor}>
+                    <label>new cases</label>
+                    <h1 id={styles.newCases}>0</h1>
+                </Calendar>
             </div>
             <div>   
-                <Calendar dates={zeroDates} d={newNewNew} color={newDeathsColor} title='new deaths' />
+                <Calendar d={newNewNew} color={newDeathsColor} title='new deaths'>
+                    <label>new deaths</label>
+                    <h1 id={styles.newDeaths}>0</h1>
+                </Calendar>
             </div>
         </>)
     select(`#${styles.calendarContainer}`).append(() => <Calendars />)

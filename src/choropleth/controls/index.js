@@ -105,7 +105,7 @@ const Controls = () => {
                         state = 'pause'
                         select(`.${styles.button}`).text(state == 'play' ? 'pause' : 'play')
                         counter = value
-                        const t = transition().ease(easeLinear)
+                        const t = null
                         const detail = { detail: { counter, t }}
                         window.dispatchEvent(new CustomEvent('tick', detail))
                     }}

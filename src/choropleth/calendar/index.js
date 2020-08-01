@@ -1,3 +1,4 @@
+import styles from '../styles.css'
 import { select } from 'd3-selection'
 import { timeWeek } from 'd3-time'
 import { axisLeft, axisBottom } from 'd3-axis'
@@ -13,9 +14,7 @@ const rectListeners = { eventListeners : [
     ['mouseover', function(e) {
         const cell = select(this)
         const rect = this.getBoundingClientRect()
-        console.log(rect)
         const [[date, total]] = cell.data()
-
         select(popup)
             .transition().duration(0)
             .style('opacity', 0.75)
@@ -36,7 +35,7 @@ const days = ['Sun','Mon','Tue','Wed','Th','Fri','Sat']
 const y = scaleBand().domain(days).range([0, 112])
 const yAxis = axisLeft(y).tickSize(0).ticks(7)
 
-const Calendar = ({ attributes: { d, color, title }}) => {
+const Calendar = ({ children, attributes: { d, color, title }}) => {
     const justDates = extent(d.map(([date, _]) => date))
     const weeks = timeWeek.count(...justDates) + 1
     const width = (weeks * cellSize) + 40
@@ -59,7 +58,7 @@ const Calendar = ({ attributes: { d, color, title }}) => {
         .select(".domain")
         .remove()
 
-    const update = (data) => {
+    const update = (data, t) => {
         rectz.selectAll('rect')
         .data(data, ([date, _]) => date)
         .join(enter => 
@@ -72,18 +71,32 @@ const Calendar = ({ attributes: { d, color, title }}) => {
                     y={date.getDay() * cellSize}
                     {...rectListeners}
                 />
-            ))
+            ).call(enter => {
+                if (t != null) {
+                    enter.transition(t).attr('opacity', 1)
+                } else {
+                    enter.attr('opacity', 1)
+                }
+                return enter
+            }),
+            update => update,
+            exit => exit.call(exit => exit.transition(t).attr('opacity', 0).remove()))
     }
 
-    update(d)
+    update([])
 
     window.addEventListener('tick', e => {
-        const counter = e.detail.counter
+        const counter = e.detail.counter + 1
         const t = e.detail.t
+        const data = [...d]
+        data.splice(counter)
+        update(data, t)
     })
 
     return <>
-        <p>{ title }</p>
+        <div className={styles.calendarLabel}>
+            { children }
+        </div>
         { svg.node() }
     </>
 }
