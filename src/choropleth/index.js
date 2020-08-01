@@ -61,7 +61,6 @@ const Choropleth = () => (
                 >
                     <h1>Deaths</h1>
                 </button>
- 
                 <Legend
                     domain={[1, 1000]}
                     width={320}

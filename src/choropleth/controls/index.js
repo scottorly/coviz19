@@ -108,9 +108,10 @@ const Controls = () => {
                         const t = transition().ease(easeLinear)
                         const detail = { detail: { counter, t }}
                         window.dispatchEvent(new CustomEvent('tick', detail))
-                    }}/>
-                
+                    }}
+                />
             </div>
+            <div id={styles.calendarContainer} />
         </>
     )
 }

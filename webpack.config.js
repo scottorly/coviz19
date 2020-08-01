@@ -34,7 +34,7 @@ module.exports = {
             },
         })
     ],
-    // devtool: isDEV ? 'inline-source-map': null,
+    devtool: isDEV ? 'inline-source-map': false,
     module: {
         rules: [
             {

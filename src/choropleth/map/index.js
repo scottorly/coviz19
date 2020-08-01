@@ -8,24 +8,41 @@ import { select, selectAll, event } from 'd3-selection'
 import { feature } from 'topojson-client'
 import { timeParse } from 'd3-time-format'
 import { scaleSequentialLog } from 'd3-scale'
-import { group, sum } from 'd3-array'
+import { group, sum, zip, max } from 'd3-array'
 import { interpolateBuPu, interpolatePuRd } from 'd3-scale-chromatic'
 import { StatePath, FeaturePath } from './paths'
 import { zoom } from 'd3-zoom'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
 import PopUp from './popup'
+import Calendar from '../calendar'
 
 const width = 975
 const height = 610
 const domain = [1, 10000]
 const parseDate = timeParse("%m/%d/%y")
 
-const props = {
-    viewBox: [0, 0, width, height], id: styles.mapSvg
-}
-
 const popup = <PopUp />
+document.body.appendChild(popup)
+
+const pathListeners = { eventListeners : [
+    ['mouseleave', e => select(popup).transition().style('opacity', 0)],
+    ['mouseover', function(e) {
+        const [county] = select(this).data()
+        select(popup)
+            .transition().duration(0)
+            .style('opacity', 0.75)
+            .style('top', `${e.clientY - 100}px`)
+            .style('left', `${e.clientX + 24 }px`)
+            .select('p')
+            .text(county.label)
+    }]
+]}
+
+const props = {
+    viewBox: [0, 0, width, height], 
+    id: styles.mapSvg
+}
 
 const svg = select(<svg {...props} />);
 
@@ -40,7 +57,7 @@ const svg = select(<svg {...props} />);
     const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
     
     const casesGroup = svg.append('g')
-    document.body.appendChild(popup)
+    
     const updateCases = (data, t) => {
         updated = true
         casesGroup
@@ -51,22 +68,7 @@ const svg = select(<svg {...props} />);
                 <FeaturePath 
                     d={d}
                     fill={state == 'cases' ? d.fill : d.deathFill}
-                    eventListeners={
-                    [
-                        ['mouseleave', e => {
-                            select(popup).transition().style('opacity', 0)
-                        }],
-                        ['mouseover', function(e) {
-                            const county = select(this).data()
-                            select(popup)
-                                .transition().duration(0)
-                                .style('opacity', 0.75)
-                                .style('top', `${e.clientY - 100}px`)
-                                .style('left', `${e.clientX + 24 }px`)
-                                .select('p')
-                                .text(county[0].label)
-                        }]
-                    ]}
+                    {...pathListeners}
                 />)
             ),
             update => update.call(update => 
@@ -77,15 +79,25 @@ const svg = select(<svg {...props} />);
             exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
         )
     }
-    const states = feature(features, features.objects.states).features
-    
+  
     const t = transition().ease(easeLinear)
     updateCases([], t)
-
+    
+    const states = feature(features, features.objects.states).features
+    
     svg.append('g')
         .selectAll('path')
-        .data(states)
-        .join(enter => enter.append(d => <StatePath d={d} />))
+        .data(states, d => d.properties.name)
+        .join(enter => enter.append(d => (<StatePath d={d} eventListeners={[
+            ['mouseover', function(e) {
+                const data = select(this).data()
+                const state = data[0].properties.name
+            }], 
+            ['mouseleave', function() {
+                const data = select(this).data()
+                const state = data[0].properties.name
+            }]
+        ]} />)))
 
     const counties = feature(features, features.objects.counties).features
         
@@ -223,6 +235,27 @@ const svg = select(<svg {...props} />);
         .scaleExtent([1, 4])
         .on('zoom', zooms)
     )
+
+    const parsedDates = dates.map(parseDate)
+    const newNew = zip(parsedDates, newCases)
+    const newNewNew = zip(parsedDates, newDeaths)
+    const newCasesColor = scaleSequentialLog(interpolateBuPu).domain([1, max(newCases)])
+    const newDeathsColor = scaleSequentialLog(interpolatePuRd).domain([1, max(newDeaths)])
+    const zeroDates = parsedDates.map(date => [date, 0])
+
+     const Calendars = () => (
+         <>
+            <div>
+                <Calendar dates={zeroDates} d={newNew} color={newCasesColor} title='new cases' />
+            </div>
+            <div>   
+                <Calendar dates={zeroDates} d={newNewNew} color={newDeathsColor} title='new deaths' />
+            </div>
+        </>)
+    select(`#${styles.calendarContainer}`).append(() => <Calendars />)
 })()
 
-export default <> { svg.node() } </>
+export default 
+    <> 
+        { svg.node() } 
+    </>

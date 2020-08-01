@@ -2,9 +2,9 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Recursive:wght,CRSV@500,0&display=swap');
 
-.legend {
-    max-width: 240px;
-    @apply overflow-visible mt-1
+:root {
+    --purp: rgb(139, 100, 174);
+    --red: rgb(213, 27, 106);
 }
 
 #dateLabel {
@@ -12,31 +12,31 @@
 }
 
 #totalLabel {
-    color: rgb(140, 129, 188);
+    color: var(--purp);
     @apply inline-block mb-4 text-left
 }
 
 #newCases {
-    color: rgb(140, 129, 188);
+    color: var(--purp);
     @apply inline-block mb-4 text-left
 }
 
 #deathLabel {
-    color: rgb(213, 27, 106);
+    color: var(--red);
     @apply inline-block mb-4 text-left
 }
 
 #newDeaths {
-    color: rgb(213, 27, 106);
+    color: var(--red);
     @apply inline-block mb-4 text-left
 }
 
 #deathSwitch {
-    background-color: rgb(213, 27, 106);
+    background-color: var(--red)
 }
 
 #caseSwitch {
-    background-color: rgb(140, 129, 188);
+    background-color: var(--purp);
 }
 
 .circle {
@@ -63,7 +63,7 @@
 
 .switches {
     width: 244px;
-    @apply py-2 px-4 rounded border-none my-4 text-white opacity-25 mx-auto
+    @apply py-2 px-4 rounded border-none mb-6 text-white opacity-25 mx-auto
 }
 
 .switches:hover {
@@ -74,9 +74,14 @@
     opacity: 1;
 }
 
+.legend {
+    max-width: 240px;
+    @apply overflow-visible
+}
+
 #legends {
-    max-width: 360px;
-    @apply p-1 flex flex-col mt-12
+    max-width: 270px;
+    @apply flex flex-col ml-8
 }
 
 .legendLabel {
@@ -95,10 +100,8 @@
     @apply pt-6 overflow-visible mx-auto cursor-pointer
 }
 
-@screen md {
-    #controls {
-        @apply flex pt-6 overflow-visible w-full
-    }
+#calendarContainer {
+    @apply flex flex-col
 }
 
 #slider {
@@ -125,25 +128,16 @@
 }
 
 .counter {
-    @apply flex flex-col mx-8
+    @apply flex flex-col ml-1
 }
 
 #map {
     max-width: 1800px;
-    @apply flex flex-col items-center w-full mx-auto
+    @apply flex flex-col items-start w-full mx-auto
 }
 
 #mapSvg {
     @apply w-full
-}
-
-@screen xl {
-    #legends {
-        @apply mx-4
-    }
-    #map {
-      @apply flex-row
-    }
 }
 
 #title {
@@ -156,4 +150,19 @@
 
 #popupLabel {
     @apply p-1
+}
+
+@screen md {
+    #controls {
+        @apply flex pt-6 overflow-visible w-full
+    }
+    #calendarContainer {
+        @apply flex-row
+    }
+}
+
+@screen sm {
+    #map {
+      @apply flex-row
+    }
 }
