@@ -13,11 +13,15 @@
 }
 
 #states {
-    @apply list-none p-1 mx-auto text-center
+    @apply list-none p-1 mx-auto text-center text-base
 }
 
 .state {
     @apply inline-block mx-auto p-4
+}
+
+.axis {
+    @apply text-xs
 }
 
 @screen md {

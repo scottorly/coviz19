@@ -50,7 +50,7 @@ const MultipleGraph = ({ attributes: { d, row, graph }}) => {
 
     const g = select(<g transform={`translate(0, ${row})`} />)
 
-    g.append(() => <g />)
+    g.append(() => <g className={styles.axis}/>)
         .call(xAxis)
         .call(g => g.selectAll('.domain').remove())
         .append(() => (
@@ -80,7 +80,7 @@ const MultipleGraph = ({ attributes: { d, row, graph }}) => {
 
 const Multiple = ({ attributes: { d: [state, v] }}) => {
 
-    const props = { viewBox: [0, 0, 700, 800], className: styles.multiples}
+    const props = { viewBox: [0, 0, 700, 800], className: styles.multiples }
     const svg = select(<svg {...props}/>)
 
     const g  = svg.append(() => 
@@ -93,7 +93,7 @@ const Multiple = ({ attributes: { d: [state, v] }}) => {
                 <MultipleGraph d={v} row={row(d)} graph={d} />
             ))
     
-    g.append(() => <g transform={`translate(0, ${vizHeight})`}/>)
+    g.append(() => <g transform={`translate(0, ${vizHeight})`} className={styles.axis}/>)
         .call(xAxis)
         .call(g => g.selectAll('.domain').remove())
 

@@ -97,7 +97,7 @@
 }
 
 .legendLabel {
-    @apply text-gray-100
+    @apply text-gray-100 text-base
 }
 
 .control {
