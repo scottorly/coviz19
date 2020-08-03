@@ -88,16 +88,7 @@ const svg = select(<svg {...props} />);
     svg.append('g')
         .selectAll('path')
         .data(states, d => d.properties.name)
-        .join(enter => enter.append(d => (<StatePath d={d} eventListeners={[
-            ['mouseover', function(e) {
-                const data = select(this).data()
-                const state = data[0].properties.name
-            }], 
-            ['mouseleave', function() {
-                const data = select(this).data()
-                const state = data[0].properties.name
-            }]
-        ]} />)))
+        .join(enter => enter.append(d => (<StatePath d={d} />)))
 
     const counties = feature(features, features.objects.counties).features
         
@@ -244,13 +235,13 @@ const svg = select(<svg {...props} />);
 
      const Calendars = () => (
          <>
-            <div>
+            <div className={styles.cal}>
                 <Calendar d={newNew} color={newCasesColor}>
                     <label>new cases</label>
                     <h1 id={styles.newCases}>0</h1>
                 </Calendar>
             </div>
-            <div>   
+            <div className={styles.cal}>   
                 <Calendar d={newNewNew} color={newDeathsColor} title='new deaths'>
                     <label>new deaths</label>
                     <h1 id={styles.newDeaths}>0</h1>

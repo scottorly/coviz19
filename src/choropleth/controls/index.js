@@ -9,7 +9,7 @@ import { timeDay } from 'd3-time'
 import { scaleUtc } from 'd3-scale'
 import { drag } from 'd3-drag'
 import { axisBottom } from 'd3-axis'
-import { extent, bisector  } from 'd3-array'
+import { extent, bisect  } from 'd3-array'
 import { interval } from 'd3-timer'
 
 const format = '%m-%d-%Y'
@@ -25,7 +25,6 @@ const props = {
     id: styles.slider
 }
 
-const bisect = bisector(d => d)
 var counter = -1
 const Slider = ({ attributes: { eventListener }}) => {
 
@@ -39,7 +38,7 @@ const Slider = ({ attributes: { eventListener }}) => {
         pt.y = e.clientY
         const cursor = pt.matrixTransform(this.getScreenCTM().inverse())
         const date = x.invert(cursor.x)
-        counter = bisect.right(dates, date)
+        counter = bisect(dates, date)
         const t = transition().ease(easeLinear)
         const detail = { detail: { counter, t }}
         window.dispatchEvent(new CustomEvent('tick', detail))
@@ -48,7 +47,7 @@ const Slider = ({ attributes: { eventListener }}) => {
 
     const slider = svg.append(() => <g />)
  
-    slider.append(() => <g transform='translate(0, 44)'/>).call(axisBottom(x).ticks(5))
+    slider.append(() => <g transform='translate(0, 44)' className={styles.axis}/>).call(axisBottom(x).ticks(5))
 
     slider.insert(() => <circle transform='translate(0, 44)' className={styles.circle} r={12}/>)
         .call(drag()

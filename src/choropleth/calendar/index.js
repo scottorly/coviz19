@@ -5,8 +5,6 @@ import { axisLeft, axisBottom } from 'd3-axis'
 import { scaleUtc, scaleBand } from 'd3-scale'
 import { extent, bisectLeft } from 'd3-array'
 import { timeFormat } from 'd3-time-format'
-import { transition } from 'd3-transition'
-import { easeLinear } from 'd3-ease'
 import PopUp from '../map/popup'
 import { updateCounter } from '../controls'
 
@@ -31,7 +29,6 @@ const rectListeners = { eventListeners : [
         const rect = select(this)
         const [[date, _]] = rect.data()
         const counter = bisectLeft(dates, date)
-
         updateCounter(counter)
     }]
 ]}
@@ -40,7 +37,7 @@ const popup = <PopUp />
 document.body.appendChild(popup)
 
 const cellSize = 16
-
+const height = 136
 const days = ['Sun','Mon','Tue','Wed','Th','Fri','Sat']
 
 const y = scaleBand().domain(days).range([0, 112])
@@ -53,19 +50,20 @@ const Calendar = ({ children, attributes: { d, color }}) => {
     const width = (weeks * cellSize) + 40
     const props = {
         width,
-        height: 136
+        height,
+        viewBox: [0,0, width, height]
     }
-    const svg = select(<svg {...props} />)
+    const svg = select(<svg {...props} className={styles.calendar}/>)
     const rectz = svg.append(() => <g transform={'translate(36, 0)'} />)
 
     const x = scaleUtc().domain(justDates).range([0, width - 40])
     const xAxis = axisBottom(x).tickSize(0).ticks(12)
 
-    svg.append(() => <g transform='translate(34, 0)'/>)
+    svg.append(() => <g transform='translate(34, 0)' className={styles.calAxis}/>)
         .call(yAxis)
         .select(".domain")
         .remove()
-    svg.append(() => <g transform='translate(36, 112)'/>)
+    svg.append(() => <g transform='translate(36, 112)' className={styles.calAxis}/>)
         .call(xAxis)
         .select(".domain")
         .remove()

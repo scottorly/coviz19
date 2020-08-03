@@ -19,7 +19,6 @@ const Choropleth = () => (
                 <h1 id={styles.totalLabel}>0</h1>
                 <label>total deaths</label>
                 <h1 id={styles.deathLabel}>0</h1>
-             
             </div>
             <div className={styles.control}>   
                 <button 

@@ -79,7 +79,7 @@ module.exports = {
                 use: ['file-loader']
             },
             {
-              test: /\.(woff(2)?|ttf|eot|svg|csv)(\?v=\d+\.\d+\.\d+)?$/,
+              test: /\.(woff(2)?|ttf|eot|csv)(\?v=\d+\.\d+\.\d+)?$/,
               use: [{
                   loader: 'file-loader',
                   options: {

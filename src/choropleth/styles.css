@@ -7,28 +7,32 @@
     --red: rgb(213, 27, 106);
 }
 
+.heading {
+    @apply text-5xl
+}
+
 #dateLabel {
-    @apply mt-2 text-center text-4xl
+    @apply mt-2 text-center heading
 }
 
 #totalLabel {
     color: var(--purp);
-    @apply inline-block mb-4 text-left
+    @apply inline-block mb-4 text-left heading
 }
 
 #newCases {
     color: var(--purp);
-    @apply inline-block mb-4 text-left ml-4
+    @apply inline-block mb-4 text-left ml-4 heading
 }
 
 #deathLabel {
     color: var(--red);
-    @apply inline-block mb-4 text-left
+    @apply inline-block mb-4 text-left heading
 }
 
 #newDeaths {
     color: var(--red);
-    @apply inline-block mb-4 text-left ml-4
+    @apply inline-block mb-4 text-left ml-4 heading
 }
 
 #deathSwitch {
@@ -41,6 +45,14 @@
 
 .circle {
     @apply cursor-pointer
+}
+
+.axis {
+    @apply text-base
+}
+
+.calAxis {
+    @apply text-sm
 }
 
 @media (prefers-color-scheme: dark) {
@@ -100,6 +112,18 @@
     @apply overflow-visible mx-auto cursor-pointer
 }
 
+.calendarLabel {
+    @apply ml-6
+}
+
+.cal {
+    @apply mx-6 overflow-visible
+}
+
+.calendar {
+    @apply w-full overflow-visible
+}
+
 #calendarContainer {
     @apply flex flex-col
 }
@@ -127,9 +151,6 @@
     @apply flex flex-col justify-center
 }
 
-.calendarLabel {
-    @apply ml-6
-}
 
 .counter {
     @apply flex flex-col ml-1
@@ -145,7 +166,7 @@
 }
 
 #title {
-    @apply my-4
+    @apply my-4 heading
 }
 
 #popup {
