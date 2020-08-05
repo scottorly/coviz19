@@ -92,7 +92,7 @@
 }
 
 #legends {
-    max-width: 270px;
+    min-width: 270px;
     @apply flex flex-col ml-8
 }
 
