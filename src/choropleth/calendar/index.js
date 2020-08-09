@@ -36,11 +36,11 @@ const rectListeners = { eventListeners : [
 const popup = <PopUp />
 document.body.appendChild(popup)
 
-const cellSize = 16
-const height = 136
+const cellSize = 18.5
+const height = cellSize * 8
 const days = ['Sun','Mon','Tue','Wed','Th','Fri','Sat']
 
-const y = scaleBand().domain(days).range([0, 112])
+const y = scaleBand().domain(days).range([0, 129])
 const yAxis = axisLeft(y).tickSize(0).ticks(7)
 
 const Calendar = ({ children, attributes: { d, color }}) => {
@@ -63,7 +63,7 @@ const Calendar = ({ children, attributes: { d, color }}) => {
         .call(yAxis)
         .select(".domain")
         .remove()
-    svg.append(() => <g transform='translate(36, 112)' className={styles.calAxis}/>)
+    svg.append(() => <g transform='translate(36, 132)' className={styles.calAxis}/>)
         .call(xAxis)
         .select(".domain")
         .remove()
@@ -75,8 +75,8 @@ const Calendar = ({ children, attributes: { d, color }}) => {
             enter.append(([date, total]) => 
                 <rect 
                     fill={color(total)}
-                    width={14}
-                    height={14}
+                    width={18}
+                    height={18}
                     x={timeWeek.count(justDates[0], date) * cellSize} 
                     y={date.getDay() * cellSize}
                     {...rectListeners}

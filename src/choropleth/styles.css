@@ -15,6 +15,10 @@
     @apply mt-2 text-center heading
 }
 
+.counter label {
+    @apply text-lg
+}
+
 #totalLabel {
     color: var(--purp);
     @apply inline-block mb-4 text-left heading
@@ -48,11 +52,11 @@
 }
 
 .axis {
-    @apply text-base
+    @apply text-lg
 }
 
 .calAxis {
-    @apply text-sm
+    @apply text-base
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,7 +101,7 @@
 }
 
 .legendLabel {
-    @apply text-gray-100 text-base
+    @apply text-gray-100 text-lg
 }
 
 .control {

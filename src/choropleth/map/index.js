@@ -104,7 +104,7 @@ const svg = select(<svg {...props} />);
 
     const casesData = csvParse(covidCases)
     const deathsData = csvParse(deathsCsv)
-
+    
     const featuresById = group(counties, feature => feature.id)
 
     const sample = casesData[0]
@@ -142,19 +142,29 @@ const svg = select(<svg {...props} />);
         })
     ]})
 
-    const totals = casesMapped.map(d => sum(d[1], d => d.total))
-    const deathTotals =  casesMapped.map(d => sum(d[1], d => d.totalDeaths))
-    
-    const newCases = totals.map((d,i) => { 
-        const yesterday = totals[i - 1] || 0
-        const newToday = d - yesterday
-        return newToday || 0
-    })
+    const totals = []
+    const newCases = []
+    const newDeaths = []
+    const deathTotals = []
+    const parsedDates = dates.map(parseDate)
+    const newNew = []
+    const newNewNew = []
+    casesMapped.forEach((d, i) => {
+        const cases = sum(d[1], d => d.total)
+        const deaths = sum(d[1], d => d.totalDeaths)
+        totals.push(cases)
+        deathTotals.push(deaths)
 
-    const newDeaths = deathTotals.map((d,i) => {
-        const yesterday = deathTotals[i - 1] || 0
-        const newToday = d - yesterday
-        return newToday || 0
+        const casesYesterday = totals[i - 1] || 0
+        const newCasesToday = cases - casesYesterday
+        newCases.push(newCasesToday)
+
+        const deathsYesterday = deathTotals[i - 1] || 0
+        const newDeathsToday = deaths - deathsYesterday
+        newDeaths.push(newDeathsToday)
+        const date = parsedDates[i]
+        newNew.push([date, newCasesToday])
+        newNewNew.push([date, newDeathsToday])
     })
 
     const getCasesDay = (counter, t) => {
@@ -227,9 +237,6 @@ const svg = select(<svg {...props} />);
         .on('zoom', zooms)
     )
 
-    const parsedDates = dates.map(parseDate)
-    const newNew = zip(parsedDates, newCases)
-    const newNewNew = zip(parsedDates, newDeaths)
     const newCasesColor = scaleSequentialLog(interpolateBuPu).domain([1, max(newCases)])
     const newDeathsColor = scaleSequentialLog(interpolatePuRd).domain([1, max(newDeaths)])
 
