@@ -42,7 +42,7 @@ const x = scaleUtc()
         .domain(extent(dates))
         .range([0, width])
     
-const xAxis = axisBottom(x)
+const xAxis = axisBottom(x).ticks(5)
 
 const MultipleGraph = ({ attributes: { d, row, graph }}) => {
 

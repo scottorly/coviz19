@@ -142,11 +142,11 @@ const svg = select(<svg {...props} />);
         })
     ]})
 
+    const parsedDates = dates.map(parseDate)
     const totals = []
     const newCases = []
     const newDeaths = []
     const deathTotals = []
-    const parsedDates = dates.map(parseDate)
     const newNew = []
     const newNewNew = []
     casesMapped.forEach((d, i) => {

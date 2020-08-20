@@ -12,7 +12,7 @@
 }
 
 #dateLabel {
-    @apply mt-2 text-center heading
+    @apply mt-2 text-center heading animate-ping
 }
 
 .counter label {
@@ -69,7 +69,7 @@
     }
 
     .button {
-        @apply text-gray-100;
+        @apply text-gray-100
     }
 
     html {
@@ -83,7 +83,7 @@
 }
 
 .switches:hover {
-    @apply cursor-pointer
+    @apply cursor-pointer animate-bounce
 }
 
 .selected {
@@ -154,7 +154,6 @@
 #playContainer {
     @apply flex flex-col justify-center
 }
-
 
 .counter {
     @apply flex flex-col ml-1

@@ -21,9 +21,9 @@ const container = select(
                 type='text' 
                 eventListener={['input', function() {
                     const value = this.value
-                    const filtered = [...flatGroup].filter(([state, _]) => {
-                        return state.toLowerCase().includes(value)
-                    })
+                    const filtered = [...flatGroup].filter(([state, _]) =>
+                        state.toLowerCase().includes(value)
+                    )
                     update(filtered)
                 }]}
             />
