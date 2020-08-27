@@ -1,7 +1,7 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from '../styles.css'
-import { select, event, mouse } from 'd3-selection'
+import { select } from 'd3-selection'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
 import { timeParse } from 'd3-time-format'
@@ -51,7 +51,7 @@ const Slider = ({ attributes: { eventListener }}) => {
 
     slider.insert(() => <circle transform='translate(0, 44)' className={styles.circle} r={12}/>)
         .call(drag()
-        .on("drag", function() {
+        .on("drag", function(event) {
             select(this).attr('cx', () => {
                 const value = event.x
                 if (value < 0) { 

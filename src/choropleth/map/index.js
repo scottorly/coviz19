@@ -4,11 +4,11 @@ import styles from '../styles.css'
 
 import textTween from './tween'
 import { csvParse } from 'd3-dsv'
-import { select, selectAll, event } from 'd3-selection'
+import { select, selectAll } from 'd3-selection'
 import { feature } from 'topojson-client'
 import { timeParse } from 'd3-time-format'
 import { scaleSequentialLog } from 'd3-scale'
-import { group, sum, zip, max } from 'd3-array'
+import { group, sum, max } from 'd3-array'
 import { interpolateBuPu, interpolatePuRd } from 'd3-scale-chromatic'
 import { StatePath, FeaturePath } from './paths'
 import { zoom } from 'd3-zoom'
@@ -226,7 +226,7 @@ const svg = select(<svg {...props} />);
         window.dispatchEvent(new CustomEvent('tick', detail))
     })
 
-    const zooms = () => {
+    const zooms = (event) => {
         if (updated == true) {
             svg.selectAll('path').attr('transform', event.transform)
         }
