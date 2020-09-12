@@ -70,10 +70,10 @@ const Slider = ({ attributes: { eventListener }}) => {
 
 const Controls = () => {
     
-    let state = 'pause'
+    let state = 'stop'
 
     interval(() => {
-        if (state == 'play' && counter <= dates.length) {
+        if (state == 'start' && counter <= dates.length) {
             counter++
             const t = transition().duration(500).ease(easeLinear)
             select('circle').transition(t).attr('cx', counter * 6)
@@ -81,27 +81,27 @@ const Controls = () => {
             window.dispatchEvent(new CustomEvent('tick', detail))
         }
         if (counter > dates.length) {
-            state = 'pause'
-            select(`.${styles.button}`).text(state == 'play' ? 'pause' : 'play')
+            state = 'stop'
+            select(`.${styles.button}`).text(state == 'start' ? 'stop' : 'start')
         }
     }, 500)
 
     return (
         <>
             <div id={styles.controls}>
-                <div id={styles.playContainer}>
+                <div id={styles.startContainer}>
                     <button 
                         className={styles.button}
                         eventListener={['click', function() {
-                            state = state == 'play' ? 'pause' : 'play'
+                            state = state == 'start' ? 'stop' : 'start'
                             mixpanel.track(state)
-                            select(this).text(state == 'play' ? 'pause' : 'play')
-                        }]}>play</button>
+                            select(this).text(state == 'start' ? 'stop' : 'start')
+                        }]}>start</button>
                 </div>
                 <Slider 
                     eventListener={(value) => {
-                        state = 'pause'
-                        select(`.${styles.button}`).text(state == 'play' ? 'pause' : 'play')
+                        state = 'stop'
+                        select(`.${styles.button}`).text(state == 'start' ? 'stop' : 'start')
                         counter = value
                         const t = null
                         const detail = { detail: { counter, t }}

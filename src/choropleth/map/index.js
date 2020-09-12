@@ -56,7 +56,8 @@ const svg = select(<svg {...props} />);
     const color = scaleSequentialLog(interpolateBuPu).domain(domain)
     const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
     
-    const casesGroup = svg.append('g')
+    const g = svg.append('g')
+    const casesGroup = g.append('g')
     
     const updateCases = (data, t) => {
         updated = true
@@ -85,7 +86,7 @@ const svg = select(<svg {...props} />);
     
     const states = feature(features, features.objects.states).features
     
-    svg.append('g')
+    g.append('g')
         .selectAll('path')
         .data(states, d => d.properties.name)
         .join(enter => enter.append(d => (<StatePath d={d} />)))
@@ -226,14 +227,14 @@ const svg = select(<svg {...props} />);
         window.dispatchEvent(new CustomEvent('tick', detail))
     })
 
-    const zooms = (event) => {
+    const zooms = ({ transform }) => {
         if (updated == true) {
-            svg.selectAll('path').attr('transform', event.transform)
+            g.attr('transform', transform)
         }
     }
 
     svg.call(zoom()
-        .scaleExtent([1, 4])
+        .scaleExtent([1, 8])
         .on('zoom', zooms)
     )
 

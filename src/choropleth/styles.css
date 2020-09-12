@@ -48,6 +48,7 @@
 }
 
 .circle {
+    fill: #f7fafc;
     @apply cursor-pointer
 }
 
@@ -60,21 +61,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .circle {
-        fill: #f7fafc;
-    }
 
-    .legendLabel {
-        fill: #f7fafc;
-    }
-
-    .button {
-        @apply text-gray-100
-    }
-
-    html {
-        @apply bg-gray-900 text-gray-300
-    }
 }
 
 .switches {
@@ -101,7 +88,8 @@
 }
 
 .legendLabel {
-    @apply text-gray-100 text-lg
+    fill: #f7fafc;
+    @apply text-lg
 }
 
 .control {
