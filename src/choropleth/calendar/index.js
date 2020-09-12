@@ -51,6 +51,7 @@ const Calendar = ({ children, attributes: { d, color }}) => {
     const props = {
         width,
         height,
+        preserveAspectRatio: 'xMidYMid meet',
         viewBox: [0,0, width, height]
     }
     const svg = select(<svg {...props} className={styles.calendar}/>)

@@ -117,7 +117,7 @@
 }
 
 #calendarContainer {
-    @apply flex flex-col
+    @apply flex flex-col 
 }
 
 #slider {

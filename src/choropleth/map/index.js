@@ -188,19 +188,19 @@ const svg = select(<svg {...props} />);
             selectAll(`#${styles.dateLabel}`)
                 .text(date)
 
-            selectAll(`#${styles.totalLabel}`)
+            select(`#${styles.totalLabel}`)
                 .transition(t)
                 .tween('text', () => textTween(casesYesterday, casesToday))
 
-            selectAll(`#${styles.deathLabel}`)
+            select(`#${styles.deathLabel}`)
                 .transition(t)
                 .tween('text', () => textTween(deathsYesterday, deathsToday))
                 
-            selectAll(`#${styles.newDeaths}`)
+            select(`#${styles.newDeaths}`)
                 .transition(t)
                 .tween('text', () => textTween(newDeathsYesterday, newDeath))
             
-            selectAll(`#${styles.newCases}`)
+            select(`#${styles.newCases}`)
                 .transition(t)
                 .tween('text', () => textTween(newCasesYesterday, newCase))
         }
@@ -257,6 +257,7 @@ const svg = select(<svg {...props} />);
             </div>
         </>)
     select(`#${styles.calendarContainer}`).append(() => <Calendars />)
+    console.log(styles.calendar)
 })()
 
 export default 

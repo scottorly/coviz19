@@ -3,3 +3,7 @@
 .footer {
     @apply my-12 mx-4
 }
+
+.footer a {
+    @apply text-gray-100
+}
