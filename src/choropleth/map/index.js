@@ -62,23 +62,23 @@ const svg = select(<svg {...props} />);
     const updateCases = (data, t) => {
         updated = true
         casesGroup
-        .selectAll('path')
-        .data(data, d => d.id)
-        .join(
-            enter => enter.append(d => (
-                <FeaturePath 
-                    d={d}
-                    fill={state == 'cases' ? d.fill : d.deathFill}
-                    {...pathListeners}
-                />)
-            ),
-            update => update.call(update => 
-                update.transition(t)
-                .style('fill', d => state == 'cases' ? d.fill : d.deathFill)
-                .style('stroke', d => state == 'cases' ? d.fill : d.deathFill)
-            ),
-            exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
-        )
+            .selectAll('path')
+            .data(data, d => d.id)
+            .join(
+                enter => enter.append(d => (
+                    <FeaturePath 
+                        d={d}
+                        fill={state == 'cases' ? d.fill : d.deathFill}
+                        {...pathListeners}
+                    />)
+                ),
+                update => update.call(update => 
+                    update.transition(t)
+                        .style('fill', d => state == 'cases' ? d.fill : d.deathFill)
+                        .style('stroke', d => state == 'cases' ? d.fill : d.deathFill)
+                ),
+                exit => exit.call(exit => exit.transition(t).style('opacity', 0).remove())
+            )
     }
   
     const t = transition().ease(easeLinear)
@@ -230,7 +230,6 @@ const svg = select(<svg {...props} />);
     const zooms = ({ transform }) => {
         if (updated == true) {
             g.attr('transform', transform)
-            statesG.attr('stroke-width', 1 / transform.k)
         }
     }
 
