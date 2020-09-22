@@ -86,7 +86,7 @@ const svg = select(<svg {...props} />);
     
     const states = feature(features, features.objects.states).features
     
-    g.append('g')
+    const statesG = g.append('g')
         .selectAll('path')
         .data(states, d => d.properties.name)
         .join(enter => enter.append(d => (<StatePath d={d} />)))
@@ -230,6 +230,7 @@ const svg = select(<svg {...props} />);
     const zooms = ({ transform }) => {
         if (updated == true) {
             g.attr('transform', transform)
+            statesG.attr('stroke-width', 1 / transform.k)
         }
     }
 
