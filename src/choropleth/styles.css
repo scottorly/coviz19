@@ -5,6 +5,7 @@
 :root {
     --purp: rgb(139, 100, 174);
     --red: rgb(213, 27, 106);
+    --border: #718096;
 }
 
 .heading {
@@ -21,21 +22,33 @@
 
 #totalLabel {
     color: var(--purp);
+    -webkit-text-stroke: var(--border) 2px;
+    -webkit-text-fill-color: var(--purp);
+    paint-order: stroke fill;
     @apply inline-block mb-4 text-left heading
 }
 
 #newCases {
     color: var(--purp);
+    -webkit-text-stroke: var(--border) 2px;
+    -webkit-text-fill-color: var(--purp);
+    paint-order: stroke fill;
     @apply inline-block mb-4 text-left ml-4 heading
 }
 
 #deathLabel {
     color: var(--red);
+    -webkit-text-stroke: var(--border) 2px;
+    -webkit-text-fill-color: var(--red);
+    paint-order: stroke fill;
     @apply inline-block mb-4 text-left heading
 }
 
 #newDeaths {
     color: var(--red);
+    -webkit-text-stroke: var(--border) 2px;
+    -webkit-text-fill-color: var(--red);
+    paint-order: stroke fill;
     @apply inline-block mb-4 text-left ml-4 heading
 }
 
@@ -66,7 +79,7 @@
 
 .switches {
     width: 244px;
-    @apply py-2 px-4 rounded border-none mb-6 text-white opacity-25 mx-auto
+    @apply py-2 px-4 rounded border-double mb-6 text-white opacity-25 mx-auto
 }
 
 .switches:hover {
