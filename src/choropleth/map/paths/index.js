@@ -19,8 +19,8 @@ const StatePath = ({ attributes: { d, eventListeners }}) => (
 
 const FeaturePath = ({ attributes: { d, eventListeners }}) => (
     <path
-        stroke-width={0}
-        shape-rendering="crispEdges"
+        vector-effect='non-scaling-stroke'
+        stroke='none'
         fill={d.fill || ''}
         d={path(d.feature) || ''}
         eventListeners={eventListeners}

@@ -73,10 +73,6 @@
     @apply text-base
 }
 
-@media (prefers-color-scheme: dark) {
-
-}
-
 .switches {
     width: 244px;
     @apply py-2 px-4 rounded border-double mb-6 text-white opacity-25 mx-auto
