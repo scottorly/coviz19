@@ -47,7 +47,7 @@ const Slider = ({ attributes: { eventListener }}) => {
 
     const slider = svg.append(() => <g />)
  
-    slider.append(() => <g transform='translate(0, 44)' className={styles.axis}/>).call(axisBottom(x).ticks(5))
+    slider.append(() => <g transform='translate(0, 44)' className={styles.axis}/>).call(axisBottom(x).ticks())
 
     slider.insert(() => <circle transform='translate(0, 44)' className={styles.circle} r={12}/>)
         .call(drag()

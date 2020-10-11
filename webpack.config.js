@@ -7,9 +7,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const isDEV = process.env.NODE_ENV == 'development'
 
 module.exports = {
-    entry: [
-        './src/index.js'
-    ],
     output: {
         path: __dirname + '/docs',
         publicPath: '/',
@@ -93,6 +90,7 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         compress: true,
-        historyApiFallback: true
+        historyApiFallback: true,
+        hot: true
     }
 }
