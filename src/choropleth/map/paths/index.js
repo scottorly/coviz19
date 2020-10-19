@@ -7,6 +7,7 @@ const path = geoPath()
 
 const StatePath = ({ attributes: { d, eventListeners }}) => (
     <path 
+        className='states'
         stroke='#ccc' 
         stroke-width={1} 
         stroke-linejoin='round'
@@ -19,6 +20,7 @@ const StatePath = ({ attributes: { d, eventListeners }}) => (
 
 const FeaturePath = ({ attributes: { d, eventListeners }}) => (
     <path
+        className={'counties'}
         vector-effect='non-scaling-stroke'
         stroke='none'
         fill={d.fill || ''}

@@ -4,18 +4,21 @@ import styles from '../styles.css'
 
 import textTween from './tween'
 import { csvParse } from 'd3-dsv'
-import { select, selectAll } from 'd3-selection'
+import { select, selectAll, pointer } from 'd3-selection'
 import { feature } from 'topojson-client'
 import { timeParse } from 'd3-time-format'
 import { scaleSequentialLog } from 'd3-scale'
 import { group, sum, max } from 'd3-array'
 import { interpolateBuPu, interpolatePuRd } from 'd3-scale-chromatic'
 import { StatePath, FeaturePath } from './paths'
-import { zoom } from 'd3-zoom'
+import { zoom, zoomIdentity } from 'd3-zoom'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
 import PopUp from './popup'
 import Calendar from '../calendar'
+import { geoPath } from 'd3-geo'
+
+const path = geoPath()
 
 const width = 975
 const height = 610
@@ -25,7 +28,39 @@ const parseDate = timeParse("%m/%d/%y")
 const popup = <PopUp />
 document.body.appendChild(popup)
 
+
+const props = {
+    viewBox: [0, 0, width, height], 
+    id: styles.mapSvg
+}
+
+const svg = select(<svg {...props} />)
+
+const g = svg.append('g');
+
+const zooms = ({ transform }) => {
+    g.attr('transform', transform)
+}
+
+const zoommer = zoom()
+    .scaleExtent([1, 12])
+    .on('zoom', zooms)
+
+svg.call(zoommer)
+
 const pathListeners = { eventListeners : [
+    ['click', function(e) {
+        const d = select(this).data()[0]
+        const feature = d.feature   
+        const [[x0, y0], [x1, y1]] = path.bounds(feature)
+        svg.transition().duration(750).call(
+            zoommer.transform,
+            zoomIdentity
+            .translate(width / 2, height / 2)
+            .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+            .translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
+        )
+    }],
     ['mouseleave', e => select(popup).transition().style('opacity', 0)],
     ['mouseover', function(e) {
         const [county] = select(this).data()
@@ -37,32 +72,19 @@ const pathListeners = { eventListeners : [
             .select('p')
             .text(county.label)
     }]
-]}
-
-const props = {
-    viewBox: [0, 0, width, height], 
-    id: styles.mapSvg
-}
-
-const svg = select(<svg {...props} />);
+]};
 
 (async () => {
     const { default: population } = await import(/* webpackChunkName: "population" */ './json/population.json')
     const { default: features } = await import(/* webpackChunkName: "features" */ './json/counties-albers-10m.json')
     let state = 'cases'
-    let updated = false
     let lastCounter = 0
     
     const color = scaleSequentialLog(interpolateBuPu).domain(domain)
     const deathsColor = scaleSequentialLog(interpolatePuRd).domain([1,1000])
     
-    const g = svg.append('g')
-    const casesGroup = g.append('g')
-    
     const updateCases = (data, t) => {
-        updated = true
-        casesGroup
-            .selectAll('path')
+        g.selectAll('path.counties')
             .data(data, d => d.id)
             .join(
                 enter => enter.append(d => (
@@ -85,11 +107,9 @@ const svg = select(<svg {...props} />);
     updateCases([], t)
     
     const states = feature(features, features.objects.states).features
-    
-    const statesG = g.append('g')
-        .selectAll('path')
+    g.selectAll('path.states')
         .data(states, d => d.properties.name)
-        .join(enter => enter.append(d => (<StatePath d={d} />)))
+        .join(enter => enter.append(d => (<StatePath d={d} eventListeners={[['click', e => console.log(e)]]}/>)))
 
     const counties = feature(features, features.objects.counties).features
         
@@ -209,6 +229,8 @@ const svg = select(<svg {...props} />);
     
     updateCases(getCasesDay(0, t), t)
 
+    g.selectAll('path.states').raise()
+
     window.addEventListener('tick', e => {
         const counter = e.detail.counter
         if (counter >= casesMapped.length) {
@@ -227,19 +249,10 @@ const svg = select(<svg {...props} />);
         window.dispatchEvent(new CustomEvent('tick', detail))
     })
 
-    const zooms = ({ transform }) => {
-        if (updated == true) {
-            g.attr('transform', transform)
-        }
-    }
-
-    svg.call(zoom()
-        .scaleExtent([1, 8])
-        .on('zoom', zooms)
-    )
-
-    const newCasesColor = scaleSequentialLog(interpolateBuPu).domain([1, max(newCases)])
-    const newDeathsColor = scaleSequentialLog(interpolatePuRd).domain([1, max(newDeaths)])
+    const newCasesColor = scaleSequentialLog(interpolateBuPu)
+        .domain([1, max(newCases)])
+    const newDeathsColor = scaleSequentialLog(interpolatePuRd)
+        .domain([1, max(newDeaths)])
 
      const Calendars = () => (
          <>

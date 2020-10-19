@@ -22,33 +22,26 @@
 
 #totalLabel {
     color: var(--purp);
-    -webkit-text-stroke: var(--border) 2px;
-    -webkit-text-fill-color: var(--purp);
-    paint-order: stroke fill;
     @apply inline-block mb-4 text-left heading
 }
 
 #newCases {
     color: var(--purp);
-    -webkit-text-stroke: var(--border) 2px;
-    -webkit-text-fill-color: var(--purp);
-    paint-order: stroke fill;
     @apply inline-block mb-4 text-left ml-4 heading
 }
 
 #deathLabel {
     color: var(--red);
-    -webkit-text-stroke: var(--border) 2px;
-    -webkit-text-fill-color: var(--red);
-    paint-order: stroke fill;
     @apply inline-block mb-4 text-left heading
 }
 
+
+/* -webkit-text-stroke: var(--border) 2px;
+-webkit-text-fill-color: var(--red);
+paint-order: stroke fill; */
+
 #newDeaths {
     color: var(--red);
-    -webkit-text-stroke: var(--border) 2px;
-    -webkit-text-fill-color: var(--red);
-    paint-order: stroke fill;
     @apply inline-block mb-4 text-left ml-4 heading
 }
 
@@ -190,4 +183,17 @@
     #map {
       @apply flex-row
     }
+}
+
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+    
+a:visited {
+    @apply text-gray-100
 }
