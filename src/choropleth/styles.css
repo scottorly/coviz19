@@ -188,6 +188,7 @@ paint-order: stroke fill; */
 
 a {
     text-decoration: none;
+    @apply text-gray-100
 }
 
 a:hover {
