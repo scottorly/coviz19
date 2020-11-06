@@ -54,10 +54,7 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     isDEV ? 'style-loader' :  {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            hmr: false
-                        }
+                        loader: MiniCssExtractPlugin.loader
                     },
                     {
                         loader: 'css-loader',
