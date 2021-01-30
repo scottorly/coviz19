@@ -1,19 +1,18 @@
 /* Copyright © 2020 Scott Orlyck. **/
 
-@import url('https://rsms.me/inter/inter.css');
+@font-face {
+  font-family: 'Golos-UI';
+  src: url('./fonts/Golos-UI_Medium.woff');
+}
+
 html { 
-  font-family: 'Inter', sans-serif;
+  font-family: 'Golos-UI', sans-serif, monospace; 
   background-color: rgb(30, 30, 30);
   @apply text-gray-300
 }
-@supports (font-variation-settings: normal) {
-  html { 
-    font-family: 'Inter var', sans-serif; 
-  }
-}
 
 #app {
-    @apply flex flex-col mt-16;
+    @apply flex flex-col mt-16
 }
 
 h1:global { @apply m-0 }

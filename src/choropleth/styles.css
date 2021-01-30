@@ -1,7 +1,5 @@
 /* Copyright © 2020 Scott Orlyck. **/
 
-@import url('https://fonts.googleapis.com/css2?family=Recursive:wght,CRSV@500,0&display=swap');
-
 :root {
     --purp: rgb(139, 100, 174);
     --red: rgb(213, 27, 106);
@@ -127,7 +125,6 @@ paint-order: stroke fill; */
 }
 
 .button {
-    font-family: 'Recursive', monospace;
     width: 100px;
     height: 44px;
     @apply bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow text-lg
