@@ -1,6 +1,6 @@
 //Copyright © 2020 Scott Orlyck.
 
-import styles from '../styles.css'
+import styles from '../styles.module.css'
 
 import textTween from './tween'
 import { csvParse } from 'd3-dsv'

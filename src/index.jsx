@@ -1,11 +1,9 @@
 //Copyright © 2020 Scott Orlyck.
 
-import styles from './styles.css'
+import styles from './styles.module.css'
 import Choropleth from './choropleth'
 import Footer from './footer'
-
-mixpanel.track("Page View")
-
+console.log('hello world')
 document.body.appendChild(
     <div id={styles.app}>
         <Choropleth />

@@ -1,6 +1,6 @@
 //Copyright © 2020 Scott Orlyck.
 
-import styles from './styles.css'
+import styles from './styles.module.css'
 import svg from './map'
 import Legend from './legend'
 import Controls from './controls'
@@ -26,7 +26,6 @@ const Choropleth = () => (
                         className={`${styles.switches} ${styles.selected}`}
                         eventListener={['click', function() {
                             if (state == 'cases') return
-                            mixpanel.track("Cases View")
                             state = 'cases'
                             select(this).classed(styles.selected, true)
                             select(`#${styles.deathSwitch}`).classed(styles.selected, false)
@@ -48,7 +47,6 @@ const Choropleth = () => (
                         className={`${styles.switches}`}
                         eventListener={['click', function() {
                             if (state == 'deaths') return
-                            mixpanel.track("Deaths View")
                             state = 'deaths'
                             select(this).classed(styles.selected, true)
                             select(`#${styles.caseSwitch}`).classed(styles.selected, false)

@@ -1,6 +1,6 @@
 //Copyright © 2020 Scott Orlyck.
 
-import styles from '../styles.css'
+import styles from '../styles.module.css'
 import { select } from 'd3-selection'
 import { scaleSequentialLog } from 'd3-scale'
 import { axisBottom } from 'd3-axis'

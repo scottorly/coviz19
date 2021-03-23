@@ -1,6 +1,6 @@
 //Copyright © 2020 Scott Orlyck.
 
-import styles from './styles.css'
+import styles from './styles.module.css'
 
 const git = 'https://github.com/ScottORLY/coviz19'
 const jhu = 'https://github.com/CSSEGISandData/COVID-19'

@@ -1,4 +1,4 @@
-import styles from '../styles.css'
+import styles from '../styles.module.css'
 import { select } from 'd3-selection'
 import { timeWeek } from 'd3-time'
 import { axisLeft, axisBottom } from 'd3-axis'

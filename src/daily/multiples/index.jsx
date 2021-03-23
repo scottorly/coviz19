@@ -1,4 +1,4 @@
-import styles from '../styles.css'
+import styles from '../styles.module.css'
 import { select } from 'd3-selection'
 import { timeParse } from 'd3-time-format'
 import { extent } from 'd3-array'

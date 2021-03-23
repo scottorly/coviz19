@@ -1,6 +1,6 @@
 //Copyright © 2020 Scott Orlyck.
 
-import styles from '../styles.css'
+import styles from '../styles.module.css'
 import { select } from 'd3-selection'
 import { transition } from 'd3-transition'
 import { easeLinear } from 'd3-ease'
@@ -94,7 +94,6 @@ const Controls = () => {
                         className={styles.button}
                         eventListener={['click', function() {
                             state = state == 'start' ? 'stop' : 'start'
-                            mixpanel.track(state)
                             select(this).text(state == 'start' ? 'stop' : 'start')
                         }]}>start</button>
                 </div>

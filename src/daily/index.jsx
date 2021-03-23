@@ -1,6 +1,6 @@
 //Copyright © 2020 Scott Orlyck.
 
-import styles from './styles.css'
+import styles from './styles.module.css'
 import { select  } from 'd3-selection'
 import Multiple from './multiples'
 import Worker from './workers/index.worker.js'
