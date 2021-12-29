@@ -35,7 +35,7 @@ const Choropleth = () => (
                         <h1>Cases</h1>
                     </button>
                     <Legend
-                        domain={[1, 10000]}
+                        domain={[1, 100000]}
                         width={320}
                         color={interpolateBuPu}
                         label='COVID-19 cases per 100k' 

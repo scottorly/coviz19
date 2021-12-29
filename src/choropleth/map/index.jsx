@@ -22,7 +22,7 @@ const path = geoPath()
 
 const width = 975
 const height = 610
-const domain = [1, 10000]
+const domain = [1, 100000]
 const parseDate = timeParse("%m/%d/%y")
 
 const popup = <PopUp />
@@ -262,8 +262,8 @@ const pathListeners = { eventListeners : [
                     <h1 id={styles.newCases}>0</h1>
                 </Calendar>
             </div>
-            <div className={styles.cal}>   
-                <Calendar d={newNewNew} color={newDeathsColor} title='new deaths'>
+            <div className={styles.cal}>
+                <Calendar d={newNewNew} color={newDeathsColor}>
                     <label>new deaths</label>
                     <h1 id={styles.newDeaths}>0</h1>
                 </Calendar>

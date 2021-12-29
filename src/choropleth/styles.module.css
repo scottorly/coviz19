@@ -1,4 +1,11 @@
 /* Copyright © 2020 Scott Orlyck. **/
+@tailwind components;
+
+@layer components {
+    .heading {
+        @apply text-5xl
+    }
+}
 
 :root {
     --purp: rgb(139, 100, 174);
@@ -6,12 +13,9 @@
     --border: #718096;
 }
 
-.heading {
-    @apply text-5xl
-}
 
 #dateLabel {
-    @apply mt-2 text-center heading animate-ping
+    @apply mt-2 text-center heading
 }
 
 .counter label {
@@ -70,7 +74,7 @@ paint-order: stroke fill; */
 }
 
 .switches:hover {
-    @apply cursor-pointer animate-bounce
+    @apply cursor-pointer
 }
 
 .selected {
@@ -171,9 +175,7 @@ paint-order: stroke fill; */
     #controls {
         @apply flex overflow-visible w-full
     }
-    #calendarContainer {
-        @apply flex-row
-    }
+    
 }
 
 @screen sm {
