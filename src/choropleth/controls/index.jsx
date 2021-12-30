@@ -49,7 +49,7 @@ const Slider = ({ attributes: { eventListener }}) => {
  
     slider.append(() => <g 
         transform='translate(0, 44)' 
-        className={styles.axis}
+        className={styles.sliderAxis}
     />)
     .call(axisBottom(x).tickSize(0).ticks(12))
 

@@ -60,6 +60,10 @@ paint-order: stroke fill; */
     @apply cursor-pointer
 }
 
+.sliderAxis {
+    @apply text-5xl
+}
+
 .axis {
     @apply text-lg
 }
@@ -125,7 +129,7 @@ paint-order: stroke fill; */
 }
 
 #slider {
-    @apply overflow-visible mx-16 w-full 
+    @apply overflow-visible mx-16
 }
 
 .button {
