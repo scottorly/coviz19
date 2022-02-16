@@ -75,6 +75,7 @@ const pathListeners = { eventListeners : [
 ]};
 
 (async () => {
+    const casesMappedJson = await import(/* webpackChuckName: cases */ '../../../cases.json')
     const { default: population } = await import(/* webpackChunkName: "population" */ './json/population.json')
     const { default: features } = await import(/* webpackChunkName: "features" */ './json/counties-albers-10m.json')
     let state = 'cases'
