@@ -1,0 +1,18 @@
+name: Process JHU COVID 19 data
+on: [push]
+jobs:
+  process-jhu-covid-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+        - run: npm install
+        - run: node ./src/datasource/index.mjs
+        - run: |
+            git config user.name github-actions
+            git config user.email scott@coviz19.com
+            git add src/datasource
+            git commit -m "update datasources"
+            git push
