@@ -1,13 +1,14 @@
 //Copyright © 2020 Scott Orlyck.
 
 import styles from './styles.module.css'
-import { select  } from 'd3-selection'
+import { select } from 'd3-selection'
 import Multiple from './multiples'
-import Worker from './workers/index.worker.js'
 
 let flatGroup
 
-const worker = new Worker()
+const worker = new Worker(new URL('./workers/worker.js', import.meta.url), {
+    type: 'module'
+  })
 
 const container = select(
     <div id={styles.daily}>

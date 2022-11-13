@@ -1,5 +1,3 @@
-//Copyright © 2020 Scott Orlyck.
-
 import { timeParse, timeFormat } from 'd3-time-format'
 import { group } from 'd3-array'
 import { timeDay } from 'd3-time'

@@ -53,7 +53,7 @@ const Slider = ({ attributes: { eventListener }}) => {
     />)
     .call(axisBottom(x).tickSize(0).ticks(12))
 
-    slider.insert(() => <circle transform='translate(0, 44)' className={styles.circle} r={12}/>)
+    slider.insert(() => <circle transform='translate(0, 44)' className={styles.circle} r={48}/>)
         .call(drag()
         .on("drag", function(event) {
             select(this).attr('cx', () => {
