@@ -32,80 +32,80 @@ export const ys = (name, v, range, x) => {
         return [deaths, deathsAxis, schemeTableau10[2]]
     }
 
-    if (name == 'active') {
-        const activeY = scaleLinear()
-            .domain(extent(v, d => +d.Active))
-            .range(range)
+    // if (name == 'active') {
+    //     const activeY = scaleLinear()
+    //         .domain(extent(v, d => +d.Active))
+    //         .range(range)
 
-        const active = line()
-            .x(d => x(d.date))
-            .y(d => activeY(+d.Active))
+    //     const active = line()
+    //         .x(d => x(d.date))
+    //         .y(d => activeY(+d.Active))
 
-        const activeAxis = axisLeft(activeY).ticks(5)
-        return [active, activeAxis, schemeTableau10[1]]
-    }
+    //     const activeAxis = axisLeft(activeY).ticks(5)
+    //     return [active, activeAxis, schemeTableau10[1]]
+    // }
 
-    if (name == 'recovered') {
-        const recoveredY = scaleLinear()
-            .domain(extent(v, d => +d.Recovered))
-            .range(range)
+    // if (name == 'recovered') {
+    //     const recoveredY = scaleLinear()
+    //         .domain(extent(v, d => +d.Recovered))
+    //         .range(range)
 
-        const recovered = line()
-            .x(d => x(d.date))
-            .y(d => recoveredY(+d.Recovered))
+    //     const recovered = line()
+    //         .x(d => x(d.date))
+    //         .y(d => recoveredY(+d.Recovered))
 
-        const recoveredAxis = axisLeft(recoveredY).ticks(5)
-        return [recovered, recoveredAxis, schemeTableau10[4]]
-    }
-    if (name == 'incidence') {
-        const incidenceY = scaleLinear()
-            .domain(extent(v, d => +d.Incident_Rate))
-            .range(range)
+    //     const recoveredAxis = axisLeft(recoveredY).ticks(5)
+    //     return [recovered, recoveredAxis, schemeTableau10[4]]
+    // }
+    // if (name == 'incidence') {
+    //     const incidenceY = scaleLinear()
+    //         .domain(extent(v, d => +d.Incident_Rate))
+    //         .range(range)
 
-        const incidence = line()
-            .x(d => x(d.date))
-            .y(d => incidenceY(+d.Incident_Rate))
+    //     const incidence = line()
+    //         .x(d => x(d.date))
+    //         .y(d => incidenceY(+d.Incident_Rate))
 
-        const incidenceAxis = axisLeft(incidenceY).ticks(5)
-        return [incidence, incidenceAxis, schemeTableau10[3]]
-    }
+    //     const incidenceAxis = axisLeft(incidenceY).ticks(5)
+    //     return [incidence, incidenceAxis, schemeTableau10[3]]
+    // }
 
-    if (name == 'hospitalization') {
-            const hospitalizationY = scaleLinear()
-            .domain(extent(v, d => +d.Hospitalization_Rate))
-            .range(range)
+    // if (name == 'hospitalization') {
+    //         const hospitalizationY = scaleLinear()
+    //         .domain(extent(v, d => +d.Hospitalization_Rate))
+    //         .range(range)
 
-        const hospitalization = line()
-            .x(d => x(d.date))
-            .y(d => hospitalizationY(+d.Hospitalization_Rate))
+    //     const hospitalization = line()
+    //         .x(d => x(d.date))
+    //         .y(d => hospitalizationY(+d.Hospitalization_Rate))
 
-        const hospitalizationAxis = axisLeft(hospitalizationY).ticks(5)
-        return [hospitalization, hospitalizationAxis, schemeTableau10[5]]
-    }
+    //     const hospitalizationAxis = axisLeft(hospitalizationY).ticks(5)
+    //     return [hospitalization, hospitalizationAxis, schemeTableau10[5]]
+    // }
 
-    if (name == 'mortality') {
-        const mortalityY = scaleLinear()
-            .domain(extent(v, d => +d.Mortality_Rate))
-            .range(range)
+    // if (name == 'mortality') {
+    //     const mortalityY = scaleLinear()
+    //         .domain(extent(v, d => +d.Mortality_Rate))
+    //         .range(range)
     
-        const mortality = line()
-            .x(d => x(d.date))
-            .y(d => mortalityY(+d.Mortality_Rate))
+    //     const mortality = line()
+    //         .x(d => x(d.date))
+    //         .y(d => mortalityY(+d.Mortality_Rate))
     
-        const mortalityAxis = axisLeft(mortalityY).ticks(5)
-        return [mortality, mortalityAxis, schemeTableau10[6]]
-    }
+    //     const mortalityAxis = axisLeft(mortalityY).ticks(5)
+    //     return [mortality, mortalityAxis, schemeTableau10[6]]
+    // }
 
-    if (name == 'testing') {
-        const testingY = scaleLinear()
-            .domain(extent(v, d => +d.Testing_Rate))
-            .range(range)
+    // if (name == 'testing') {
+    //     const testingY = scaleLinear()
+    //         .domain(extent(v, d => +d.Testing_Rate))
+    //         .range(range)
 
-        const testing = line()
-            .x(d => x(d.date))
-            .y(d => testingY(+d.Testing_Rate))
+    //     const testing = line()
+    //         .x(d => x(d.date))
+    //         .y(d => testingY(+d.Testing_Rate))
 
-        const testingAxis = axisLeft(testingY).ticks(5)
-        return [testing, testingAxis, schemeTableau10[7]]
-    }
+    //     const testingAxis = axisLeft(testingY).ticks(5)
+    //     return [testing, testingAxis, schemeTableau10[7]]
+    // }
 }

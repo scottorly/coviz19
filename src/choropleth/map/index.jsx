@@ -134,6 +134,7 @@ const pathListeners = { eventListeners : [
 
     const deathsGroup = group(deathsData, d => d.UID.slice(3))
 
+    console.log("started")
     const casesMapped = dates.map(key => {
         return [key, casesData.map(d => {
             const id = d.UID.slice(3)
@@ -163,6 +164,7 @@ const pathListeners = { eventListeners : [
             }
         })
     ]})
+    console.log("finished")
 
     const parsedDates = dates.map(parseDate)
     const totals = []

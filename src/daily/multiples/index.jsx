@@ -9,13 +9,7 @@ import { ys } from './ys'
 
 const domain = [
     'confirmed',
-    'deaths',
-    'active',
-    'recovered',
-    'incidence',
-    'hospitalization',
-    'mortality',
-    'testing'
+    'deaths'
 ]
 
 const margin = { top: 20, right: 30, bottom: 20, left: 60}
