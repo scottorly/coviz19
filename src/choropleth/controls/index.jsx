@@ -15,7 +15,7 @@ import { interval } from 'd3-timer'
 const format = '%m-%d-%Y'
 const parseDate = timeParse(format)
 const jan = parseDate('1-22-2020')
-const now = new Date()
+const now = parseDate('3-9-2023')
 const dates = timeDay.range(jan, now)
 const width = dates.length * 6
 const height = 100
@@ -51,7 +51,7 @@ const Slider = ({ attributes: { eventListener }}) => {
         transform='translate(0, 44)' 
         className={styles.sliderAxis}
     />)
-    .call(axisBottom(x).tickSize(0).ticks(12))
+    .call(axisBottom(x).tickSize(10).ticks(12))
 
     slider.insert(() => <circle transform='translate(0, 44)' className={styles.circle} r={48}/>)
         .call(drag()
